@@ -1,4 +1,4 @@
-add_library(sr_platform)
+﻿add_library(sr_platform)
 
 target_sources(sr_platform
     PRIVATE
@@ -18,13 +18,17 @@ target_compile_definitions(sr_platform
 
 target_link_libraries(sr_platform
     PRIVATE
-        user32)
+        user32
+        gdi32)
 
 add_library(sr_engine)
 
 target_sources(sr_engine
     PRIVATE
-        app/Application.cpp)
+        app/Application.cpp
+        base/Math.cpp
+        render/Framebuffer.cpp
+        render/Renderer.cpp)
 
 target_include_directories(sr_engine
     PUBLIC

@@ -1,7 +1,10 @@
-#pragma once
+﻿#pragma once
 
-#include <memory>
 #include <string>
+
+namespace sr::render {
+class Framebuffer;
+}
 
 namespace sr::platform {
 
@@ -14,6 +17,11 @@ public:
     Window& operator=(const Window&) = delete;
 
     bool Create();
+    void Show();
+    bool ProcessEvents();
+    bool Present(const render::Framebuffer& framebuffer) const;
+
+    bool IsClosed() const { return m_Closed; }
 
     const std::string& Title() const { return m_Title; }
     int Width() const { return m_Width; }
@@ -24,6 +32,7 @@ private:
     int m_Width;
     int m_Height;
     void* m_Handle;
+    bool m_Closed;
 };
 
 } // namespace sr::platform

@@ -167,6 +167,30 @@ app/Application.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/Application.cpp.s
 .PHONY : app/Application.cpp.s
 
+base/Math.obj: base/Math.cpp.obj
+.PHONY : base/Math.obj
+
+# target to build an object file
+base/Math.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj
+.PHONY : base/Math.cpp.obj
+
+base/Math.i: base/Math.cpp.i
+.PHONY : base/Math.i
+
+# target to preprocess a source file
+base/Math.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/base/Math.cpp.i
+.PHONY : base/Math.cpp.i
+
+base/Math.s: base/Math.cpp.s
+.PHONY : base/Math.s
+
+# target to generate assembly for a file
+base/Math.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/base/Math.cpp.s
+.PHONY : base/Math.cpp.s
+
 platform/Platform.obj: platform/Platform.cpp.obj
 .PHONY : platform/Platform.obj
 
@@ -215,6 +239,54 @@ platform/Window.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/platform/Window.cpp.s
 .PHONY : platform/Window.cpp.s
 
+render/Framebuffer.obj: render/Framebuffer.cpp.obj
+.PHONY : render/Framebuffer.obj
+
+# target to build an object file
+render/Framebuffer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj
+.PHONY : render/Framebuffer.cpp.obj
+
+render/Framebuffer.i: render/Framebuffer.cpp.i
+.PHONY : render/Framebuffer.i
+
+# target to preprocess a source file
+render/Framebuffer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.i
+.PHONY : render/Framebuffer.cpp.i
+
+render/Framebuffer.s: render/Framebuffer.cpp.s
+.PHONY : render/Framebuffer.s
+
+# target to generate assembly for a file
+render/Framebuffer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s
+.PHONY : render/Framebuffer.cpp.s
+
+render/Renderer.obj: render/Renderer.cpp.obj
+.PHONY : render/Renderer.obj
+
+# target to build an object file
+render/Renderer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj
+.PHONY : render/Renderer.cpp.obj
+
+render/Renderer.i: render/Renderer.cpp.i
+.PHONY : render/Renderer.i
+
+# target to preprocess a source file
+render/Renderer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.i
+.PHONY : render/Renderer.cpp.i
+
+render/Renderer.s: render/Renderer.cpp.s
+.PHONY : render/Renderer.s
+
+# target to generate assembly for a file
+render/Renderer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.s
+.PHONY : render/Renderer.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -228,12 +300,21 @@ help:
 	@echo ... app/Application.obj
 	@echo ... app/Application.i
 	@echo ... app/Application.s
+	@echo ... base/Math.obj
+	@echo ... base/Math.i
+	@echo ... base/Math.s
 	@echo ... platform/Platform.obj
 	@echo ... platform/Platform.i
 	@echo ... platform/Platform.s
 	@echo ... platform/Window.obj
 	@echo ... platform/Window.i
 	@echo ... platform/Window.s
+	@echo ... render/Framebuffer.obj
+	@echo ... render/Framebuffer.i
+	@echo ... render/Framebuffer.s
+	@echo ... render/Renderer.obj
+	@echo ... render/Renderer.i
+	@echo ... render/Renderer.s
 .PHONY : help
 
 

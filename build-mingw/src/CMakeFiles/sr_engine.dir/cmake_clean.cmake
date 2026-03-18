@@ -3,6 +3,12 @@ file(REMOVE_RECURSE
   "../lib/libsr_engine.pdb"
   "CMakeFiles/sr_engine.dir/app/Application.cpp.obj"
   "CMakeFiles/sr_engine.dir/app/Application.cpp.obj.d"
+  "CMakeFiles/sr_engine.dir/base/Math.cpp.obj"
+  "CMakeFiles/sr_engine.dir/base/Math.cpp.obj.d"
+  "CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj"
+  "CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj.d"
+  "CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj"
+  "CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj.d"
 )
 
 # Per-language clean rules from dependency scanning.

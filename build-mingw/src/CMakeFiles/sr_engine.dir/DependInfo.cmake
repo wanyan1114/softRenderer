@@ -9,6 +9,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/TimePlan/2026-2/softRanderer/src/app/Application.cpp" "src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj.d"
+  "D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj.d"
+  "D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.cpp" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj.d"
+  "D:/TimePlan/2026-2/softRanderer/src/render/Renderer.cpp" "src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

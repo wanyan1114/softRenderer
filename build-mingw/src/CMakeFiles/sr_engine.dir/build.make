@@ -86,17 +86,68 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/Application.cpp.s"
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\Application.cpp -o CMakeFiles\sr_engine.dir\app\Application.cpp.s
 
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj -MF CMakeFiles\sr_engine.dir\base\Math.cpp.obj.d -o CMakeFiles\sr_engine.dir\base\Math.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\base\Math.cpp
+
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/base/Math.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\base\Math.cpp > CMakeFiles\sr_engine.dir\base\Math.cpp.i
+
+src/CMakeFiles/sr_engine.dir/base/Math.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/base/Math.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\base\Math.cpp -o CMakeFiles\sr_engine.dir\base\Math.cpp.s
+
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.cpp
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj -MF CMakeFiles\sr_engine.dir\render\Framebuffer.cpp.obj.d -o CMakeFiles\sr_engine.dir\render\Framebuffer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\render\Framebuffer.cpp
+
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\render\Framebuffer.cpp > CMakeFiles\sr_engine.dir\render\Framebuffer.cpp.i
+
+src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\render\Framebuffer.cpp -o CMakeFiles\sr_engine.dir\render\Framebuffer.cpp.s
+
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/render/Renderer.cpp
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj -MF CMakeFiles\sr_engine.dir\render\Renderer.cpp.obj.d -o CMakeFiles\sr_engine.dir\render\Renderer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\render\Renderer.cpp
+
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/render/Renderer.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\render\Renderer.cpp > CMakeFiles\sr_engine.dir\render\Renderer.cpp.i
+
+src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/render/Renderer.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\render\Renderer.cpp -o CMakeFiles\sr_engine.dir\render\Renderer.cpp.s
+
 # Object files for target sr_engine
 sr_engine_OBJECTS = \
-"CMakeFiles/sr_engine.dir/app/Application.cpp.obj"
+"CMakeFiles/sr_engine.dir/app/Application.cpp.obj" \
+"CMakeFiles/sr_engine.dir/base/Math.cpp.obj" \
+"CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj" \
+"CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj"
 
 # External object files for target sr_engine
 sr_engine_EXTERNAL_OBJECTS =
 
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/build.make
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library ..\lib\libsr_engine.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library ..\lib\libsr_engine.a"
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && $(CMAKE_COMMAND) -P CMakeFiles\sr_engine.dir\cmake_clean_target.cmake
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\sr_engine.dir\link.txt --verbose=$(VERBOSE)
 
