@@ -1,0 +1,9 @@
+D:/TimePlan/2026-2/softRanderer/build-mingw/CMakeFiles/edit_cache.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/CMakeFiles/rebuild_cache.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/src/CMakeFiles/sr_platform.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/src/CMakeFiles/sr_engine.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/src/CMakeFiles/edit_cache.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/src/CMakeFiles/rebuild_cache.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/apps/viewer/CMakeFiles/sr_viewer.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/apps/viewer/CMakeFiles/edit_cache.dir
+D:/TimePlan/2026-2/softRanderer/build-mingw/apps/viewer/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/TimePlan/2026-2/softRanderer/build-mingw/cmake_install.cmake",
+		"D:/TimePlan/2026-2/softRanderer/build-mingw/src/cmake_install.cmake",
+		"D:/TimePlan/2026-2/softRanderer/build-mingw/apps/viewer/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
