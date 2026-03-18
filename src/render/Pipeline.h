@@ -38,18 +38,31 @@ public:
             return;
         }
 
+        const std::vector<typename Mesh<vertex_t>::index_t>& indices = mesh.Indices();
+        if (indices.size() < 3 || indices.size() % 3 != 0) {
+            return;
+        }
+
+        const std::vector<vertex_t>& vertices = mesh.Vertices();
         const int width = framebuffer.Width();
         const int height = framebuffer.Height();
         StagedFrame stagedFrame = InitializeStagedFrame(framebuffer, width, height);
 
-        for (const Triangle<vertex_t>& triangle : mesh.Triangles()) {
+        for (std::size_t triangleIndex = 0; triangleIndex < indices.size(); triangleIndex += 3) {
+            const typename Mesh<vertex_t>::index_t i0 = indices[triangleIndex + 0];
+            const typename Mesh<vertex_t>::index_t i1 = indices[triangleIndex + 1];
+            const typename Mesh<vertex_t>::index_t i2 = indices[triangleIndex + 2];
+            if (!AreIndicesValid(vertices, i0, i1, i2)) {
+                continue;
+            }
+
             ScreenVertex sv0;
             ScreenVertex sv1;
             ScreenVertex sv2;
 
-            m_Program.vertexShader(sv0.varyings, triangle.vertices[0], m_Uniforms);
-            m_Program.vertexShader(sv1.varyings, triangle.vertices[1], m_Uniforms);
-            m_Program.vertexShader(sv2.varyings, triangle.vertices[2], m_Uniforms);
+            m_Program.vertexShader(sv0.varyings, vertices[i0], m_Uniforms);
+            m_Program.vertexShader(sv1.varyings, vertices[i1], m_Uniforms);
+            m_Program.vertexShader(sv2.varyings, vertices[i2], m_Uniforms);
 
             if (!FinalizeVertex(framebuffer, sv0)
                 || !FinalizeVertex(framebuffer, sv1)
@@ -100,6 +113,17 @@ private:
     static std::size_t PixelIndex(int width, int x, int y)
     {
         return static_cast<std::size_t>(y * width + x);
+    }
+
+    static bool AreIndicesValid(const std::vector<vertex_t>& vertices,
+        typename Mesh<vertex_t>::index_t i0,
+        typename Mesh<vertex_t>::index_t i1,
+        typename Mesh<vertex_t>::index_t i2)
+    {
+        const std::size_t vertexCount = vertices.size();
+        return static_cast<std::size_t>(i0) < vertexCount
+            && static_cast<std::size_t>(i1) < vertexCount
+            && static_cast<std::size_t>(i2) < vertexCount;
     }
 
     static float EdgeFunction(const math::Vec2& a,

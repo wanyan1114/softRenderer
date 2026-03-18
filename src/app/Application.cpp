@@ -78,34 +78,34 @@ int Application::Run()
             program,
             makeUniforms(render::Color{ 221, 103, 255 }));
 
-    const render::Mesh<render::FlatColorVertex> leftBackMesh{
-        render::Triangle<render::FlatColorVertex>{
+    const render::Mesh<render::FlatColorVertex> leftBackMesh(
+        {
             render::FlatColorVertex{ math::Vec3{ -0.90f, -0.66f, -0.30f } },
             render::FlatColorVertex{ math::Vec3{ -0.20f, -0.56f, -0.30f } },
             render::FlatColorVertex{ math::Vec3{ -0.58f, 0.24f, -0.30f } },
         },
-    };
-    const render::Mesh<render::FlatColorVertex> leftFrontMesh{
-        render::Triangle<render::FlatColorVertex>{
+        { 0, 1, 2 });
+    const render::Mesh<render::FlatColorVertex> leftFrontMesh(
+        {
             render::FlatColorVertex{ math::Vec3{ -0.78f, -0.36f, 0.10f } },
             render::FlatColorVertex{ math::Vec3{ -0.10f, -0.22f, 0.10f } },
             render::FlatColorVertex{ math::Vec3{ -0.42f, 0.56f, 0.10f } },
         },
-    };
-    const render::Mesh<render::FlatColorVertex> rightBackMesh{
-        render::Triangle<render::FlatColorVertex>{
+        { 0, 1, 2 });
+    const render::Mesh<render::FlatColorVertex> rightBackMesh(
+        {
             render::FlatColorVertex{ math::Vec3{ 0.04f, -0.62f, -0.05f } },
             render::FlatColorVertex{ math::Vec3{ 0.84f, -0.68f, -0.05f } },
             render::FlatColorVertex{ math::Vec3{ 0.48f, 0.18f, -0.05f } },
         },
-    };
-    const render::Mesh<render::FlatColorVertex> rightFrontMesh{
-        render::Triangle<render::FlatColorVertex>{
+        { 0, 1, 2 });
+    const render::Mesh<render::FlatColorVertex> rightFrontMesh(
+        {
             render::FlatColorVertex{ math::Vec3{ 0.18f, -0.30f, 0.22f } },
             render::FlatColorVertex{ math::Vec3{ 0.92f, -0.18f, 0.22f } },
             render::FlatColorVertex{ math::Vec3{ 0.56f, 0.62f, 0.22f } },
         },
-    };
+        { 0, 1, 2 });
 
     std::cout << "SoftRenderer overlap scene started on "
               << platform::Platform::Name() << " with window \"" << m_Title

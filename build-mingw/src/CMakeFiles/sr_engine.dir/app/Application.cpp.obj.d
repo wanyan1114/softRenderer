@@ -130,6 +130,8 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+ C:/msys64/mingw64/include/c++/15.2.0/utility \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h \
  C:/msys64/mingw64/include/c++/15.2.0/cmath \
  C:/msys64/mingw64/include/math.h \
@@ -147,8 +149,6 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/utility \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
  C:/msys64/mingw64/include/c++/15.2.0/chrono \
  C:/msys64/mingw64/include/c++/15.2.0/bits/chrono.h \
  C:/msys64/mingw64/include/c++/15.2.0/ratio \
