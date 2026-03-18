@@ -27,8 +27,7 @@ target_sources(sr_engine
     PRIVATE
         app/Application.cpp
         base/Math.cpp
-        render/Framebuffer.cpp
-        render/Renderer.cpp)
+        render/Framebuffer.cpp)
 
 target_include_directories(sr_engine
     PUBLIC

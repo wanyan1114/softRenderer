@@ -263,30 +263,6 @@ render/Framebuffer.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s
 .PHONY : render/Framebuffer.cpp.s
 
-render/Renderer.obj: render/Renderer.cpp.obj
-.PHONY : render/Renderer.obj
-
-# target to build an object file
-render/Renderer.cpp.obj:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj
-.PHONY : render/Renderer.cpp.obj
-
-render/Renderer.i: render/Renderer.cpp.i
-.PHONY : render/Renderer.i
-
-# target to preprocess a source file
-render/Renderer.cpp.i:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.i
-.PHONY : render/Renderer.cpp.i
-
-render/Renderer.s: render/Renderer.cpp.s
-.PHONY : render/Renderer.s
-
-# target to generate assembly for a file
-render/Renderer.cpp.s:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.s
-.PHONY : render/Renderer.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -312,9 +288,6 @@ help:
 	@echo ... render/Framebuffer.obj
 	@echo ... render/Framebuffer.i
 	@echo ... render/Framebuffer.s
-	@echo ... render/Renderer.obj
-	@echo ... render/Renderer.i
-	@echo ... render/Renderer.s
 .PHONY : help
 
 

@@ -1,2 +1,2 @@
-C:\msys64\mingw64\bin\ar.exe qc ..\lib\libsr_engine.a CMakeFiles/sr_engine.dir/app/Application.cpp.obj CMakeFiles/sr_engine.dir/base/Math.cpp.obj CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj
+C:\msys64\mingw64\bin\ar.exe qc ..\lib\libsr_engine.a CMakeFiles/sr_engine.dir/app/Application.cpp.obj CMakeFiles/sr_engine.dir/base/Math.cpp.obj CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj
 C:\msys64\mingw64\bin\ranlib.exe ..\lib\libsr_engine.a

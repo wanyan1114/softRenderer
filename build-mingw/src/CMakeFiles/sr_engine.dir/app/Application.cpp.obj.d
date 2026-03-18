@@ -130,11 +130,28 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h \
+ C:/msys64/mingw64/include/c++/15.2.0/cmath \
+ C:/msys64/mingw64/include/math.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/specfun.h \
+ C:/msys64/mingw64/include/c++/15.2.0/limits \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/gamma.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/special_function_util.h \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/bessel_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/beta_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/ell_integral.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/exp_integral.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/hypergeometric.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/legendre_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/modified_bessel_func.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/utility \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
  C:/msys64/mingw64/include/c++/15.2.0/chrono \
  C:/msys64/mingw64/include/c++/15.2.0/bits/chrono.h \
  C:/msys64/mingw64/include/c++/15.2.0/ratio \
- C:/msys64/mingw64/include/c++/15.2.0/limits \
  C:/msys64/mingw64/include/c++/15.2.0/ctime \
  C:/msys64/mingw64/include/time.h C:/msys64/mingw64/include/sys/timeb.h \
  C:/msys64/mingw64/include/sec_api/sys/timeb_s.h \
@@ -224,6 +241,4 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/semaphore_base.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/atomic_timed_wait.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/this_thread_sleep.h \
- C:/msys64/mingw64/include/semaphore.h \
- C:/msys64/mingw64/include/c++/15.2.0/utility \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h
+ C:/msys64/mingw64/include/semaphore.h
