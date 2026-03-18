@@ -227,9 +227,9 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: D:/TimePlan/2026-2/softRan
   D:/TimePlan/2026-2/softRanderer/src/app/Application.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h \
-  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
 
@@ -517,6 +517,7 @@ src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj: D:/TimePlan/2026-2/softRan
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
 
@@ -644,6 +645,8 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/cxxabi_init_exception.h:
 C:/msys64/mingw64/include/c++/15.2.0/bits/enable_special_members.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/exception.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/new_allocator.h:
 
@@ -824,8 +827,6 @@ C:/msys64/mingw64/include/c++/15.2.0/cwctype:
 C:/msys64/mingw64/include/c++/15.2.0/debug/debug.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/exception:
-
-D:/TimePlan/2026-2/softRanderer/src/platform/Window.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/ext/aligned_buffer.h:
 

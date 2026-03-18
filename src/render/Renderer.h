@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "render/Framebuffer.h"
+#include "render/Mesh.h"
 #include "render/Vertex.h"
 
 namespace sr::render {
@@ -10,6 +11,7 @@ public:
     explicit Renderer(Framebuffer& framebuffer);
 
     void Clear(const Color& color);
+    void Draw(const Mesh& mesh);
     void DrawTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2);
 
 private:

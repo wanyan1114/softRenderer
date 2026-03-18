@@ -128,8 +128,9 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
- D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h \
  C:/msys64/mingw64/include/c++/15.2.0/chrono \
  C:/msys64/mingw64/include/c++/15.2.0/bits/chrono.h \
  C:/msys64/mingw64/include/c++/15.2.0/ratio \

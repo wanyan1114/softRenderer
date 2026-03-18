@@ -15,6 +15,20 @@ void Renderer::Clear(const Color& color)
     m_Framebuffer.Clear(color);
 }
 
+void Renderer::Draw(const Mesh& mesh)
+{
+    if (mesh.Empty()) {
+        return;
+    }
+
+    for (const Triangle& triangle : mesh.Triangles()) {
+        DrawTriangle(
+            triangle.vertices[0],
+            triangle.vertices[1],
+            triangle.vertices[2]);
+    }
+}
+
 void Renderer::DrawTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2)
 {
     RasterizeTriangle(

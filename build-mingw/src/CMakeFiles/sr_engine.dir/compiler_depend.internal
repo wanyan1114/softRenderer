@@ -228,9 +228,9 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj
  D:/TimePlan/2026-2/softRanderer/src/app/Application.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h
- D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h
+ D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
 
@@ -521,6 +521,7 @@ src/CMakeFiles/sr_engine.dir/render/Renderer.cpp.obj
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h
+ D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Renderer.h
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
 

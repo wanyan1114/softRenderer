@@ -3,6 +3,7 @@
 #include "base/Math.h"
 #include "platform/Platform.h"
 #include "render/Framebuffer.h"
+#include "render/Mesh.h"
 #include "render/Renderer.h"
 #include "render/Vertex.h"
 
@@ -32,10 +33,12 @@ int Application::Run()
     render::Framebuffer framebuffer(m_Width, m_Height);
     render::Renderer renderer(framebuffer);
 
-    const render::Vertex triangle[3] = {
-        { math::Vec2{ -0.65f, -0.55f }, render::Color{ 255, 119, 71 } },
-        { math::Vec2{  0.65f, -0.55f }, render::Color{ 255, 119, 71 } },
-        { math::Vec2{  0.0f,   0.70f }, render::Color{ 255, 119, 71 } },
+    const render::Mesh mesh{
+        render::Triangle{
+            { math::Vec2{ -0.65f, -0.55f }, render::Color{ 255, 119, 71 } },
+            { math::Vec2{  0.65f, -0.55f }, render::Color{ 255, 119, 71 } },
+            { math::Vec2{  0.0f,   0.70f }, render::Color{ 255, 119, 71 } },
+        },
     };
 
     std::cout << "SoftRenderer skeleton started on " << platform::Platform::Name()
@@ -46,7 +49,7 @@ int Application::Run()
 
     while (platform::Platform::ProcessEvents()) {
         renderer.Clear(render::Color{ 18, 24, 38 });
-        renderer.DrawTriangle(triangle[0], triangle[1], triangle[2]);
+        renderer.Draw(mesh);
 
         if (!platform::Platform::Present(framebuffer)) {
             std::cerr << "Failed to present framebuffer to window.\n";
