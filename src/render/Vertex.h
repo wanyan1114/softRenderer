@@ -5,6 +5,11 @@
 
 namespace sr::render {
 
+enum class FaceCullMode {
+    None,
+    Back,
+};
+
 struct VertexBase {
     math::Vec3 positionModel;
 
@@ -24,9 +29,9 @@ struct UniformsBase {
 };
 
 struct VaryingsBase {
-    math::Vec4 clipPos;
-    math::Vec4 ndcPos;
-    math::Vec4 fragPos;
+    math::Vec4 clipPos{};
+    math::Vec4 ndcPos{};
+    math::Vec4 fragPos{};
 };
 
 template<typename vertex_t, typename uniforms_t, typename varyings_t>
@@ -36,6 +41,7 @@ struct Program {
 
     vertex_shader_t vertexShader = nullptr;
     fragment_shader_t fragmentShader = nullptr;
+    FaceCullMode faceCullMode = FaceCullMode::Back;
 };
 
 struct FlatColorVertex : public VertexBase {

@@ -43,11 +43,14 @@ int Application::Run()
         0.1f,
         10.0f);
 
-    const render::Program<render::FlatColorVertex,
-        render::FlatColorUniforms,
-        render::FlatColorVaryings> program{
-        &render::FlatColorVertexShader,
-        &render::FlatColorFragmentShader,
+    const auto makeProgram = [](render::FaceCullMode faceCullMode) {
+        render::Program<render::FlatColorVertex,
+            render::FlatColorUniforms,
+            render::FlatColorVaryings> program{};
+        program.vertexShader = &render::FlatColorVertexShader;
+        program.fragmentShader = &render::FlatColorFragmentShader;
+        program.faceCullMode = faceCullMode;
+        return program;
     };
 
     const auto makeUniforms = [&](const render::Color& color) {
@@ -57,57 +60,58 @@ int Application::Run()
         return uniforms;
     };
 
-    render::Pipeline<render::FlatColorVertex,
-        render::FlatColorUniforms,
-        render::FlatColorVaryings> leftBackPipeline(
-            program,
-            makeUniforms(render::Color{ 58, 134, 255 }));
-    render::Pipeline<render::FlatColorVertex,
-        render::FlatColorUniforms,
-        render::FlatColorVaryings> leftFrontPipeline(
-            program,
-            makeUniforms(render::Color{ 255, 119, 71 }));
-    render::Pipeline<render::FlatColorVertex,
-        render::FlatColorUniforms,
-        render::FlatColorVaryings> rightBackPipeline(
-            program,
-            makeUniforms(render::Color{ 80, 200, 120 }));
-    render::Pipeline<render::FlatColorVertex,
-        render::FlatColorUniforms,
-        render::FlatColorVaryings> rightFrontPipeline(
-            program,
-            makeUniforms(render::Color{ 221, 103, 255 }));
+    const auto makePipeline = [&](const render::Color& color,
+                                  render::FaceCullMode faceCullMode = render::FaceCullMode::Back) {
+        return render::Pipeline<render::FlatColorVertex,
+            render::FlatColorUniforms,
+            render::FlatColorVaryings>(
+                makeProgram(faceCullMode),
+                makeUniforms(color));
+    };
 
-    const render::Mesh<render::FlatColorVertex> leftBackMesh(
-        {
-            render::FlatColorVertex{ math::Vec3{ -0.90f, -0.66f, -0.30f } },
-            render::FlatColorVertex{ math::Vec3{ -0.20f, -0.56f, -0.30f } },
-            render::FlatColorVertex{ math::Vec3{ -0.58f, 0.24f, -0.30f } },
-        },
-        { 0, 1, 2 });
-    const render::Mesh<render::FlatColorVertex> leftFrontMesh(
-        {
-            render::FlatColorVertex{ math::Vec3{ -0.78f, -0.36f, 0.10f } },
-            render::FlatColorVertex{ math::Vec3{ -0.10f, -0.22f, 0.10f } },
-            render::FlatColorVertex{ math::Vec3{ -0.42f, 0.56f, 0.10f } },
-        },
-        { 0, 1, 2 });
-    const render::Mesh<render::FlatColorVertex> rightBackMesh(
-        {
-            render::FlatColorVertex{ math::Vec3{ 0.04f, -0.62f, -0.05f } },
-            render::FlatColorVertex{ math::Vec3{ 0.84f, -0.68f, -0.05f } },
-            render::FlatColorVertex{ math::Vec3{ 0.48f, 0.18f, -0.05f } },
-        },
-        { 0, 1, 2 });
-    const render::Mesh<render::FlatColorVertex> rightFrontMesh(
-        {
-            render::FlatColorVertex{ math::Vec3{ 0.18f, -0.30f, 0.22f } },
-            render::FlatColorVertex{ math::Vec3{ 0.92f, -0.18f, 0.22f } },
-            render::FlatColorVertex{ math::Vec3{ 0.56f, 0.62f, 0.22f } },
-        },
-        { 0, 1, 2 });
+    auto clippedPipeline = makePipeline(render::Color{ 58, 134, 255 });
+    auto overlapBackPipeline = makePipeline(render::Color{ 80, 200, 120 });
+    auto overlapFrontPipeline = makePipeline(render::Color{ 255, 119, 71 });
+    auto culledPipeline = makePipeline(render::Color{ 221, 103, 255 });
+    auto doubleSidedPipeline = makePipeline(render::Color{ 255, 210, 74 }, render::FaceCullMode::None);
 
-    std::cout << "SoftRenderer overlap scene started on "
+    const render::Mesh<render::FlatColorVertex> clippedMesh(
+        {
+            render::FlatColorVertex{ math::Vec3{ -2.60f, -0.46f, -0.10f } },
+            render::FlatColorVertex{ math::Vec3{ -1.10f, 0.74f, -0.10f } },
+            render::FlatColorVertex{ math::Vec3{ 0.10f, -0.28f, -0.10f } },
+        },
+        { 0, 2, 1 });
+    const render::Mesh<render::FlatColorVertex> overlapBackMesh(
+        {
+            render::FlatColorVertex{ math::Vec3{ -0.48f, -0.62f, -0.28f } },
+            render::FlatColorVertex{ math::Vec3{ -0.02f, 0.18f, -0.28f } },
+            render::FlatColorVertex{ math::Vec3{ 0.42f, -0.56f, -0.28f } },
+        },
+        { 0, 2, 1 });
+    const render::Mesh<render::FlatColorVertex> overlapFrontMesh(
+        {
+            render::FlatColorVertex{ math::Vec3{ -0.36f, -0.34f, 0.12f } },
+            render::FlatColorVertex{ math::Vec3{ -0.02f, 0.54f, 0.12f } },
+            render::FlatColorVertex{ math::Vec3{ 0.32f, -0.18f, 0.12f } },
+        },
+        { 0, 2, 1 });
+    const render::Mesh<render::FlatColorVertex> culledMesh(
+        {
+            render::FlatColorVertex{ math::Vec3{ 0.28f, -0.46f, 0.02f } },
+            render::FlatColorVertex{ math::Vec3{ 0.88f, -0.24f, 0.02f } },
+            render::FlatColorVertex{ math::Vec3{ 0.56f, 0.52f, 0.02f } },
+        },
+        { 0, 2, 1 });
+    const render::Mesh<render::FlatColorVertex> doubleSidedMesh(
+        {
+            render::FlatColorVertex{ math::Vec3{ 0.18f, 0.10f, -0.06f } },
+            render::FlatColorVertex{ math::Vec3{ 0.86f, 0.18f, -0.06f } },
+            render::FlatColorVertex{ math::Vec3{ 0.48f, 0.72f, -0.06f } },
+        },
+        { 0, 2, 1 });
+
+    std::cout << "SoftRenderer clipping/culling scene started on "
               << platform::Platform::Name() << " with window \"" << m_Title
               << "\" (" << m_Width << "x" << m_Height << ")\n";
 
@@ -117,10 +121,11 @@ int Application::Run()
         framebuffer.Clear(render::Color{ 18, 24, 38 });
         framebuffer.ClearDepth();
 
-        leftBackPipeline.Run(framebuffer, leftBackMesh);
-        leftFrontPipeline.Run(framebuffer, leftFrontMesh);
-        rightBackPipeline.Run(framebuffer, rightBackMesh);
-        rightFrontPipeline.Run(framebuffer, rightFrontMesh);
+        clippedPipeline.Run(framebuffer, clippedMesh);
+        overlapBackPipeline.Run(framebuffer, overlapBackMesh);
+        overlapFrontPipeline.Run(framebuffer, overlapFrontMesh);
+        culledPipeline.Run(framebuffer, culledMesh);
+        doubleSidedPipeline.Run(framebuffer, doubleSidedMesh);
 
         if (!platform::Platform::Present(framebuffer)) {
             std::cerr << "Failed to present framebuffer to window.\n";

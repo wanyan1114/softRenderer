@@ -6,6 +6,7 @@
 #include "render/Vertex.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <type_traits>
@@ -27,6 +28,10 @@ public:
             "uniforms_t must derive from UniformsBase");
         static_assert(std::is_base_of_v<VaryingsBase, varyings_t>,
             "varyings_t must derive from VaryingsBase");
+        static_assert(std::is_standard_layout_v<varyings_t>,
+            "varyings_t must be standard layout");
+        static_assert(sizeof(varyings_t) % sizeof(float) == 0,
+            "varyings_t must contain only float-compatible fields");
     }
 
     uniforms_t& Uniforms() { return m_Uniforms; }
@@ -56,37 +61,60 @@ public:
                 continue;
             }
 
-            ScreenVertex sv0;
-            ScreenVertex sv1;
-            ScreenVertex sv2;
+            varyings_t v0{};
+            varyings_t v1{};
+            varyings_t v2{};
 
-            m_Program.vertexShader(sv0.varyings, vertices[i0], m_Uniforms);
-            m_Program.vertexShader(sv1.varyings, vertices[i1], m_Uniforms);
-            m_Program.vertexShader(sv2.varyings, vertices[i2], m_Uniforms);
+            m_Program.vertexShader(v0, vertices[i0], m_Uniforms);
+            m_Program.vertexShader(v1, vertices[i1], m_Uniforms);
+            m_Program.vertexShader(v2, vertices[i2], m_Uniforms);
 
-            if (!FinalizeVertex(framebuffer, sv0)
-                || !FinalizeVertex(framebuffer, sv1)
-                || !FinalizeVertex(framebuffer, sv2)) {
+            const std::vector<varyings_t> clippedPolygon = ClipTriangleAgainstFrustum(v0, v1, v2);
+            if (clippedPolygon.size() < 3) {
                 continue;
             }
 
-            const std::vector<Fragment> fragments = RasterizeTriangle(framebuffer, sv0, sv1, sv2);
-            ShadeFragments(fragments, width, stagedFrame);
+            for (std::size_t i = 1; i + 1 < clippedPolygon.size(); ++i) {
+                ScreenVertex sv0{ clippedPolygon[0], {} };
+                ScreenVertex sv1{ clippedPolygon[i], {} };
+                ScreenVertex sv2{ clippedPolygon[i + 1], {} };
+
+                if (!FinalizeVertex(framebuffer, sv0)
+                    || !FinalizeVertex(framebuffer, sv1)
+                    || !FinalizeVertex(framebuffer, sv2)) {
+                    continue;
+                }
+
+                const std::vector<Fragment> fragments = RasterizeTriangle(framebuffer, sv0, sv1, sv2);
+                ShadeFragments(fragments, width, stagedFrame);
+            }
         }
 
         WriteInFramebuffer(framebuffer, width, height, stagedFrame);
     }
 
 private:
+    static constexpr float kAreaEpsilon = 1e-6f;
+    static constexpr float kClipEpsilon = 1e-6f;
+
+    enum class ClipPlane {
+        Left,
+        Right,
+        Bottom,
+        Top,
+        Near,
+        Far,
+    };
+
     struct ScreenPoint {
         math::Vec2 position;
-        float depth;
-        float reciprocalW;
+        float depth = 0.0f;
+        float reciprocalW = 0.0f;
     };
 
     struct ScreenVertex {
-        varyings_t varyings;
-        ScreenPoint screen;
+        varyings_t varyings{};
+        ScreenPoint screen{};
     };
 
     struct RasterBounds {
@@ -135,7 +163,10 @@ private:
 
     static bool ValidateClipPosition(const math::Vec4& clipPosition)
     {
-        return clipPosition.w > 0.0f && std::isfinite(clipPosition.w);
+        return std::isfinite(clipPosition.x)
+            && std::isfinite(clipPosition.y)
+            && std::isfinite(clipPosition.z)
+            && std::isfinite(clipPosition.w);
     }
 
     static math::Vec4 CalculateNdcPosition(const math::Vec4& clipPosition)
@@ -150,7 +181,8 @@ private:
     {
         return std::isfinite(ndcPosition.x)
             && std::isfinite(ndcPosition.y)
-            && std::isfinite(ndcPosition.z);
+            && std::isfinite(ndcPosition.z)
+            && std::isfinite(ndcPosition.w);
     }
 
     static math::Vec4 CalculateFragPosition(const Framebuffer& framebuffer,
@@ -175,7 +207,7 @@ private:
         };
     }
 
-    static StagedFrame InitializeStagedFrame(Framebuffer& framebuffer, int width, int height)
+    static StagedFrame InitializeStagedFrame(const Framebuffer& framebuffer, int width, int height)
     {
         StagedFrame stagedFrame{
             std::vector<float>(static_cast<std::size_t>(width * height), 1.0f),
@@ -192,10 +224,131 @@ private:
         return stagedFrame;
     }
 
-    bool FinalizeVertex(Framebuffer& framebuffer, ScreenVertex& vertex) const
+    static varyings_t LerpWholeVaryings(const varyings_t& start,
+        const varyings_t& end,
+        float t)
+    {
+        constexpr std::size_t floatCount = sizeof(varyings_t) / sizeof(float);
+
+        varyings_t out{};
+        float* outFloats = reinterpret_cast<float*>(&out);
+        const float* startFloats = reinterpret_cast<const float*>(&start);
+        const float* endFloats = reinterpret_cast<const float*>(&end);
+
+        for (std::size_t i = 0; i < floatCount; ++i) {
+            outFloats[i] = math::Lerp(startFloats[i], endFloats[i], t);
+        }
+
+        return out;
+    }
+
+    static float ClipDistance(const math::Vec4& clipPosition, ClipPlane plane)
+    {
+        switch (plane) {
+        case ClipPlane::Left:
+            return clipPosition.x + clipPosition.w;
+        case ClipPlane::Right:
+            return clipPosition.w - clipPosition.x;
+        case ClipPlane::Bottom:
+            return clipPosition.y + clipPosition.w;
+        case ClipPlane::Top:
+            return clipPosition.w - clipPosition.y;
+        case ClipPlane::Near:
+            return clipPosition.z + clipPosition.w;
+        case ClipPlane::Far:
+            return clipPosition.w - clipPosition.z;
+        }
+
+        return -1.0f;
+    }
+
+    static bool IsInsideClipPlane(const math::Vec4& clipPosition, ClipPlane plane)
+    {
+        return ClipDistance(clipPosition, plane) >= 0.0f;
+    }
+
+    static varyings_t IntersectClipEdge(const varyings_t& start,
+        const varyings_t& end,
+        float startDistance,
+        float endDistance)
+    {
+        const float denominator = startDistance - endDistance;
+        if (std::abs(denominator) <= kClipEpsilon) {
+            return start;
+        }
+
+        const float t = math::Clamp(startDistance / denominator, 0.0f, 1.0f);
+        return LerpWholeVaryings(start, end, t);
+    }
+
+    std::vector<varyings_t> ClipPolygonAgainstPlane(const std::vector<varyings_t>& input,
+        ClipPlane plane) const
+    {
+        std::vector<varyings_t> output;
+        if (input.empty()) {
+            return output;
+        }
+
+        output.reserve(input.size() + 1);
+
+        varyings_t previous = input.back();
+        float previousDistance = ClipDistance(previous.clipPos, plane);
+        bool previousInside = IsInsideClipPlane(previous.clipPos, plane);
+
+        for (const varyings_t& current : input) {
+            const float currentDistance = ClipDistance(current.clipPos, plane);
+            const bool currentInside = IsInsideClipPlane(current.clipPos, plane);
+
+            if (previousInside != currentInside) {
+                output.push_back(IntersectClipEdge(previous, current, previousDistance, currentDistance));
+            }
+
+            if (currentInside) {
+                output.push_back(current);
+            }
+
+            previous = current;
+            previousDistance = currentDistance;
+            previousInside = currentInside;
+        }
+
+        return output;
+    }
+
+    std::vector<varyings_t> ClipTriangleAgainstFrustum(const varyings_t& v0,
+        const varyings_t& v1,
+        const varyings_t& v2) const
+    {
+        if (!ValidateClipPosition(v0.clipPos)
+            || !ValidateClipPosition(v1.clipPos)
+            || !ValidateClipPosition(v2.clipPos)) {
+            return {};
+        }
+
+        std::vector<varyings_t> polygon{ v0, v1, v2 };
+        constexpr std::array<ClipPlane, 6> kClipPlanes{
+            ClipPlane::Left,
+            ClipPlane::Right,
+            ClipPlane::Bottom,
+            ClipPlane::Top,
+            ClipPlane::Near,
+            ClipPlane::Far,
+        };
+
+        for (const ClipPlane plane : kClipPlanes) {
+            polygon = ClipPolygonAgainstPlane(polygon, plane);
+            if (polygon.size() < 3) {
+                return {};
+            }
+        }
+
+        return polygon;
+    }
+
+    bool FinalizeVertex(const Framebuffer& framebuffer, ScreenVertex& vertex) const
     {
         const math::Vec4& clipPosition = vertex.varyings.clipPos;
-        if (!ValidateClipPosition(clipPosition)) {
+        if (!ValidateClipPosition(clipPosition) || std::abs(clipPosition.w) <= kClipEpsilon) {
             return false;
         }
 
@@ -211,7 +364,7 @@ private:
         return true;
     }
 
-    varyings_t InterpolateVaryings(Framebuffer& framebuffer,
+    varyings_t InterpolateVaryings(const Framebuffer& framebuffer,
         const ScreenVertex& v0,
         const ScreenVertex& v1,
         const ScreenVertex& v2,
@@ -219,19 +372,14 @@ private:
         float w1,
         float w2) const
     {
-        static_assert(std::is_standard_layout_v<varyings_t>,
-            "varyings_t must be standard layout");
-        static_assert(sizeof(varyings_t) % sizeof(float) == 0,
-            "varyings_t must contain only float-compatible fields");
-
         const float correctedW0 = w0 * v0.screen.reciprocalW;
         const float correctedW1 = w1 * v1.screen.reciprocalW;
         const float correctedW2 = w2 * v2.screen.reciprocalW;
         const float sum = correctedW0 + correctedW1 + correctedW2;
 
-        const float normalizedW0 = sum == 0.0f ? w0 : correctedW0 / sum;
-        const float normalizedW1 = sum == 0.0f ? w1 : correctedW1 / sum;
-        const float normalizedW2 = sum == 0.0f ? w2 : correctedW2 / sum;
+        const float normalizedW0 = std::abs(sum) <= kAreaEpsilon ? w0 : correctedW0 / sum;
+        const float normalizedW1 = std::abs(sum) <= kAreaEpsilon ? w1 : correctedW1 / sum;
+        const float normalizedW2 = std::abs(sum) <= kAreaEpsilon ? w2 : correctedW2 / sum;
 
         varyings_t out{};
         out.clipPos = normalizedW0 * v0.varyings.clipPos
@@ -239,7 +387,7 @@ private:
             + normalizedW2 * v2.varyings.clipPos;
 
         const float clipW = out.clipPos.w;
-        if (clipW > 0.0f && std::isfinite(clipW)) {
+        if (std::abs(clipW) > kClipEpsilon && std::isfinite(clipW)) {
             out.ndcPos = CalculateNdcPosition(out.clipPos);
             out.fragPos = CalculateFragPosition(framebuffer, out.ndcPos);
         }
@@ -272,7 +420,16 @@ private:
 
     static bool IsDegenerateTriangle(float area)
     {
-        return area == 0.0f;
+        return std::abs(area) <= kAreaEpsilon;
+    }
+
+    bool ShouldCullTriangle(float area) const
+    {
+        if (m_Program.faceCullMode == FaceCullMode::None) {
+            return false;
+        }
+
+        return area <= kAreaEpsilon;
     }
 
     static RasterBounds CalculateRasterBounds(const Framebuffer& framebuffer,
@@ -313,7 +470,7 @@ private:
         return e0 <= 0.0f && e1 <= 0.0f && e2 <= 0.0f;
     }
 
-    std::vector<Fragment> RasterizeTriangle(Framebuffer& framebuffer,
+    std::vector<Fragment> RasterizeTriangle(const Framebuffer& framebuffer,
         const ScreenVertex& v0,
         const ScreenVertex& v1,
         const ScreenVertex& v2) const
@@ -321,7 +478,7 @@ private:
         std::vector<Fragment> fragments;
 
         const float area = CalculateTriangleArea(v0, v1, v2);
-        if (IsDegenerateTriangle(area)) {
+        if (IsDegenerateTriangle(area) || ShouldCullTriangle(area)) {
             return fragments;
         }
 
