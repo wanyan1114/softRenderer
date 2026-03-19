@@ -246,6 +246,8 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: D:/TimePlan/2026-2/softRan
   D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/PipelineMathHelper.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/PipelineStages.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
 
 src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp \
@@ -574,6 +576,8 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/ostream_insert.h:
 C:/msys64/mingw64/include/c++/15.2.0/bits/locale_facets_nonio.tcc:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/memory_resource.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/PipelineStages.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/memoryfwd.h:
 
@@ -908,6 +912,8 @@ D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h:
 D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/PipelineMathHelper.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h:
 
