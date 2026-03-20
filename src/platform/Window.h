@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "platform/Input.h"
+
+#include <array>
 #include <string>
 
 namespace sr::render {
@@ -20,6 +23,8 @@ public:
     void Show();
     bool ProcessEvents();
     bool Present(const render::Framebuffer& framebuffer) const;
+    bool IsKeyDown(Key key) const;
+    bool OnMessage(unsigned int message, unsigned long long wParam, long long lParam, long long& result);
 
     bool IsClosed() const { return m_Closed; }
 
@@ -28,11 +33,15 @@ public:
     int Height() const { return m_Height; }
 
 private:
+    void SetKeyState(Key key, bool isDown);
+    void ResetInput();
+
     std::string m_Title;
     int m_Width;
     int m_Height;
     void* m_Handle;
     bool m_Closed;
+    std::array<bool, static_cast<std::size_t>(Key::Count)> m_KeyStates;
 };
 
 } // namespace sr::platform

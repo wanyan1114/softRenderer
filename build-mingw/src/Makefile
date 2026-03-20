@@ -167,6 +167,30 @@ app/Application.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/Application.cpp.s
 .PHONY : app/Application.cpp.s
 
+app/CameraLayer.obj: app/CameraLayer.cpp.obj
+.PHONY : app/CameraLayer.obj
+
+# target to build an object file
+app/CameraLayer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj
+.PHONY : app/CameraLayer.cpp.obj
+
+app/CameraLayer.i: app/CameraLayer.cpp.i
+.PHONY : app/CameraLayer.i
+
+# target to preprocess a source file
+app/CameraLayer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.i
+.PHONY : app/CameraLayer.cpp.i
+
+app/CameraLayer.s: app/CameraLayer.cpp.s
+.PHONY : app/CameraLayer.s
+
+# target to generate assembly for a file
+app/CameraLayer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.s
+.PHONY : app/CameraLayer.cpp.s
+
 base/Math.obj: base/Math.cpp.obj
 .PHONY : base/Math.obj
 
@@ -239,6 +263,30 @@ platform/Window.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/platform/Window.cpp.s
 .PHONY : platform/Window.cpp.s
 
+render/Camera.obj: render/Camera.cpp.obj
+.PHONY : render/Camera.obj
+
+# target to build an object file
+render/Camera.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj
+.PHONY : render/Camera.cpp.obj
+
+render/Camera.i: render/Camera.cpp.i
+.PHONY : render/Camera.i
+
+# target to preprocess a source file
+render/Camera.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Camera.cpp.i
+.PHONY : render/Camera.cpp.i
+
+render/Camera.s: render/Camera.cpp.s
+.PHONY : render/Camera.s
+
+# target to generate assembly for a file
+render/Camera.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Camera.cpp.s
+.PHONY : render/Camera.cpp.s
+
 render/Framebuffer.obj: render/Framebuffer.cpp.obj
 .PHONY : render/Framebuffer.obj
 
@@ -263,6 +311,30 @@ render/Framebuffer.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s
 .PHONY : render/Framebuffer.cpp.s
 
+resource/loaders/ObjMeshLoader.obj: resource/loaders/ObjMeshLoader.cpp.obj
+.PHONY : resource/loaders/ObjMeshLoader.obj
+
+# target to build an object file
+resource/loaders/ObjMeshLoader.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj
+.PHONY : resource/loaders/ObjMeshLoader.cpp.obj
+
+resource/loaders/ObjMeshLoader.i: resource/loaders/ObjMeshLoader.cpp.i
+.PHONY : resource/loaders/ObjMeshLoader.i
+
+# target to preprocess a source file
+resource/loaders/ObjMeshLoader.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.i
+.PHONY : resource/loaders/ObjMeshLoader.cpp.i
+
+resource/loaders/ObjMeshLoader.s: resource/loaders/ObjMeshLoader.cpp.s
+.PHONY : resource/loaders/ObjMeshLoader.s
+
+# target to generate assembly for a file
+resource/loaders/ObjMeshLoader.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.s
+.PHONY : resource/loaders/ObjMeshLoader.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -276,6 +348,9 @@ help:
 	@echo ... app/Application.obj
 	@echo ... app/Application.i
 	@echo ... app/Application.s
+	@echo ... app/CameraLayer.obj
+	@echo ... app/CameraLayer.i
+	@echo ... app/CameraLayer.s
 	@echo ... base/Math.obj
 	@echo ... base/Math.i
 	@echo ... base/Math.s
@@ -285,9 +360,15 @@ help:
 	@echo ... platform/Window.obj
 	@echo ... platform/Window.i
 	@echo ... platform/Window.s
+	@echo ... render/Camera.obj
+	@echo ... render/Camera.i
+	@echo ... render/Camera.s
 	@echo ... render/Framebuffer.obj
 	@echo ... render/Framebuffer.i
 	@echo ... render/Framebuffer.s
+	@echo ... resource/loaders/ObjMeshLoader.obj
+	@echo ... resource/loaders/ObjMeshLoader.i
+	@echo ... resource/loaders/ObjMeshLoader.s
 .PHONY : help
 
 

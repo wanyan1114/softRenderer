@@ -53,6 +53,15 @@ bool Platform::Present(const render::Framebuffer& framebuffer)
     return g_MainWindow->Present(framebuffer);
 }
 
+bool Platform::IsKeyDown(Key key)
+{
+    if (!g_MainWindow) {
+        return false;
+    }
+
+    return g_MainWindow->IsKeyDown(key);
+}
+
 void Platform::Close()
 {
     g_MainWindow.reset();

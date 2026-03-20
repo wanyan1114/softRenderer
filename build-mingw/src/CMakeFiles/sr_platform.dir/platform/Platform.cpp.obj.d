@@ -1,6 +1,7 @@
 src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: \
  D:\TimePlan\2026-2\softRanderer\src\platform\Platform.cpp \
  D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h \
+ D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
  C:/msys64/mingw64/include/c++/15.2.0/string \
  C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -107,6 +108,7 @@ src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/tuple \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_util.h \
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
+ C:/msys64/mingw64/include/c++/15.2.0/array \
  C:/msys64/mingw64/include/windows.h \
  C:/msys64/mingw64/include/sdkddkver.h C:/msys64/mingw64/include/excpt.h \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \

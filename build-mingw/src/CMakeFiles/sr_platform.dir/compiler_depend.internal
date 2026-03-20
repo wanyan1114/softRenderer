@@ -15,6 +15,7 @@ src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj
  C:/msys64/mingw64/include/apisetcconv.h
  C:/msys64/mingw64/include/basetsd.h
  C:/msys64/mingw64/include/bemapiset.h
+ C:/msys64/mingw64/include/c++/15.2.0/array
  C:/msys64/mingw64/include/c++/15.2.0/backward/auto_ptr.h
  C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h
  C:/msys64/mingw64/include/c++/15.2.0/bit
@@ -378,6 +379,7 @@ src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsaveoptintrin.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsavesintrin.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xtestintrin.h
+ D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
 
@@ -395,6 +397,7 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj
  C:/msys64/mingw64/include/basetsd.h
  C:/msys64/mingw64/include/bemapiset.h
  C:/msys64/mingw64/include/c++/15.2.0/algorithm
+ C:/msys64/mingw64/include/c++/15.2.0/array
  C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h
  C:/msys64/mingw64/include/c++/15.2.0/bit
  C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h
@@ -710,6 +713,7 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsaveoptintrin.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsavesintrin.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xtestintrin.h
+ D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h

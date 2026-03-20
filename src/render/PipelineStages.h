@@ -9,6 +9,7 @@
 #include <array>
 #include <cmath>
 #include <cstddef>
+#include <utility>
 #include <vector>
 
 namespace sr::render::detail {
@@ -32,19 +33,6 @@ struct RasterBounds {
     int endY = -1;
     float area = 0.0f;
     bool positiveArea = true;
-};
-
-template<typename varyings_t>
-struct Fragment {
-    int x = 0;
-    int y = 0;
-    varyings_t varyings{};
-};
-
-struct StagedFrame {
-    std::vector<float> depth;
-    std::vector<Color> color;
-    std::vector<bool> coverage;
 };
 
 template<typename vertex_t, typename uniforms_t, typename varyings_t>
@@ -243,14 +231,15 @@ struct RasterStage {
     using Math = PipelineMathHelper;
     using Triangle = std::array<varyings_t, 3>;
     using ScreenVertex = detail::ScreenVertex<varyings_t>;
-    using Fragment = detail::Fragment<varyings_t>;
 
     static constexpr std::size_t kBaseFloatCount = sizeof(VaryingsBase) / sizeof(float);
     static constexpr std::size_t kTotalFloatCount = sizeof(varyings_t) / sizeof(float);
 
-    static std::vector<Fragment> Execute(const Framebuffer& framebuffer,
+    template<typename fragment_consumer_t>
+    static void Execute(const Framebuffer& framebuffer,
         const Triangle& triangle,
-        FaceCullMode faceCullMode)
+        FaceCullMode faceCullMode,
+        fragment_consumer_t&& consumeFragment)
     {
         ScreenVertex v0{ triangle[0], {} };
         ScreenVertex v1{ triangle[1], {} };
@@ -259,10 +248,16 @@ struct RasterStage {
         if (!FinalizeVertex(framebuffer, v0)
             || !FinalizeVertex(framebuffer, v1)
             || !FinalizeVertex(framebuffer, v2)) {
-            return {};
+            return;
         }
 
-        return RasterizeTriangle(framebuffer, v0, v1, v2, faceCullMode);
+        RasterizeTriangle(
+            framebuffer,
+            v0,
+            v1,
+            v2,
+            faceCullMode,
+            std::forward<fragment_consumer_t>(consumeFragment));
     }
 
 private:
@@ -401,21 +396,22 @@ private:
         };
     }
 
-    static std::vector<Fragment> RasterizeTriangle(const Framebuffer& framebuffer,
+    template<typename fragment_consumer_t>
+    static void RasterizeTriangle(const Framebuffer& framebuffer,
         const ScreenVertex& v0,
         const ScreenVertex& v1,
         const ScreenVertex& v2,
-        FaceCullMode faceCullMode)
+        FaceCullMode faceCullMode,
+        fragment_consumer_t&& consumeFragment)
     {
-        std::vector<Fragment> fragments;
-
         const float area = Math::CalculateTriangleArea(v0.screen.position, v1.screen.position, v2.screen.position);
         if (Math::IsDegenerateTriangle(area) || ShouldCullTriangle(area, faceCullMode)) {
-            return fragments;
+            return;
         }
 
         const RasterBounds bounds = CalculateRasterBounds(framebuffer, v0, v1, v2, area);
         for (int y = bounds.startY; y <= bounds.endY; ++y) {
+            const std::size_t rowStartIndex = framebuffer.PixelIndexUnchecked(bounds.startX, y);
             for (int x = bounds.startX; x <= bounds.endX; ++x) {
                 const math::Vec2 samplePoint = Math::CalculateSamplePoint(x, y);
                 const float e0 = Math::EdgeFunction(v1.screen.position, v2.screen.position, samplePoint);
@@ -428,41 +424,34 @@ private:
                 const float w0 = e0 / bounds.area;
                 const float w1 = e1 / bounds.area;
                 const float w2 = e2 / bounds.area;
-                fragments.push_back(Fragment{
-                    x,
-                    y,
-                    InterpolateVaryings(framebuffer, v0, v1, v2, w0, w1, w2),
-                });
+                consumeFragment(
+                    rowStartIndex + static_cast<std::size_t>(x - bounds.startX),
+                    InterpolateVaryings(framebuffer, v0, v1, v2, w0, w1, w2));
             }
         }
-
-        return fragments;
     }
 };
 
 template<typename vertex_t, typename uniforms_t, typename varyings_t>
 struct FragmentStage {
-    using Fragment = detail::Fragment<varyings_t>;
-
-    static void Execute(const std::vector<Fragment>& fragments,
+    static void Execute(std::size_t pixelIndex,
+        const varyings_t& varyings,
         const Program<vertex_t, uniforms_t, varyings_t>& program,
         const uniforms_t& uniforms,
-        int width,
-        StagedFrame& stagedFrame)
+        Framebuffer& framebuffer)
     {
-        for (const Fragment& fragment : fragments) {
-            const std::size_t index = static_cast<std::size_t>(fragment.y * width + fragment.x);
-            const float depth = fragment.varyings.fragPos.z;
-            if (depth >= stagedFrame.depth[index]) {
-                continue;
-            }
+        float* const depthBuffer = framebuffer.MutableDepthData();
+        std::uint32_t* const pixelBuffer = framebuffer.MutablePixelData();
 
-            const Color shadedColor = program.fragmentShader(fragment.varyings, uniforms);
-            stagedFrame.depth[index] = depth;
-            stagedFrame.color[index] = shadedColor;
-            stagedFrame.coverage[index] = true;
+        const float depth = varyings.fragPos.z;
+        if (depth >= depthBuffer[pixelIndex]) {
+            return;
         }
+
+        depthBuffer[pixelIndex] = depth;
+        pixelBuffer[pixelIndex] = program.fragmentShader(varyings, uniforms).ToBgra8();
     }
 };
 
 } // namespace sr::render::detail
+

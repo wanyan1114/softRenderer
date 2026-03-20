@@ -6,7 +6,7 @@
 
 它服务两个目标：
 
-- 在开始新功能前，先建立“入口、调度、平台、渲染、数学”的整体地图。
+- 在开始新功能前，先建立“入口、调度、资源、平台、渲染、数学”的整体地图。
 - 在功能开发影响模块职责、依赖方向或关键数据流时，作为必须同步维护的架构基线。
 
 ## 2. 本次已阅读的笔记文件
@@ -33,9 +33,10 @@
 ```mermaid
 flowchart LR
     viewer["apps/viewer/main.cpp"]
-    app["src/app/Application"]
+    app["src/app/Application + CameraLayer"]
+    resource["src/resource\nOBJ Loader"]
     base["src/base\nMath"]
-    render["src/render\nColor / Vertex / Mesh / Pipeline / Framebuffer"]
+    render["src/render\nCamera / Color / Vertex / Mesh / Pipeline / Framebuffer"]
     platform["src/platform/Platform"]
     window["src/platform/Window"]
     win32["Win32 + GDI"]
@@ -43,28 +44,33 @@ flowchart LR
 
     viewer --> app
     app --> base
+    app --> resource
     app --> render
     app --> platform
+    resource --> render
     platform --> window
     window --> win32
     render --> base
     window -.读取像素并显示.-> render
     docs -.开发前阅读/开发后必要时更新.-> app
+    docs -.约束模块边界.-> resource
     docs -.约束模块边界.-> platform
     docs -.约束模块边界.-> render
 ```
 
-可以把当前仓库理解成 5 个运行时层次：
+可以把当前仓库理解成 6 个运行时层次：
 
 1. `apps/viewer`
    程序入口层，只负责构造应用并交出控制权。
 2. `src/app`
-   应用调度层，负责生命周期、主循环、渲染调用编排。
-3. `src/platform`
-   平台适配层，负责窗口创建、消息泵和最终显示。
-4. `src/render`
+   应用调度层，负责生命周期、主循环、资源装配与渲染调用编排。
+3. `src/resource`
+   资源接入层，负责把磁盘资源解析成运行时可消费的数据结构。
+4. `src/platform`
+   平台适配层，负责窗口创建、消息泵、输入状态维护和最终显示。
+5. `src/render`
    软光栅核心层，负责 CPU 侧三角形处理与帧缓冲写入。
-5. `src/base`
+6. `src/base`
    基础数学层，负责向量、矩阵与变换工具。
 
 ## 5. 当前运行时主链路
@@ -77,12 +83,15 @@ sequenceDiagram
     participant App as Application
     participant Platform as platform::Platform
     participant Window as platform::Window
+    participant Loader as resource::LoadLitMesh
     participant FB as render::Framebuffer
 
     Main->>App: 构造 Application(title, width, height)
     Main->>App: Run()
     App->>Platform: Initialize(title, width, height)
     Platform->>Window: Create()
+    App->>Loader: 读取 assets/models/cube.obj(v + vn)
+    Loader-->>App: render::Mesh<LitVertex>
     App->>FB: 构造 Framebuffer(width, height)
     App->>Platform: Show()
 ```
@@ -91,6 +100,9 @@ sequenceDiagram
 
 ```text
 while (Platform::ProcessEvents())
+-> Application 驱动 CameraLayer::OnUpdate()
+-> CameraLayer 更新 Renderer::Camera 的 Pos / Dir / Right
+-> Application 读取 camera.ViewMat4() / ProjectionMat4()
 -> Application 清颜色/清深度
 -> Pipeline::Run(framebuffer, mesh)
 -> 顶点着色
@@ -105,11 +117,21 @@ while (Platform::ProcessEvents())
 ### 5.3 关键数据流
 
 ```text
-FlatColorVertex / Mesh
+Win32 keyboard messages
+-> Window::OnMessage()
+-> Window 内部按键状态
+-> Platform::IsKeyDown()
+-> CameraLayer::OnUpdate(deltaTime)
+-> render::Camera(Pos / Dir / Right / Up / Aspect)
+-> Camera::ViewMat4() / ProjectionMat4()
+
+OBJ(v + vn) file
+-> resource::LoadLitMesh()
+-> LitVertex / DebugFaceVertex / Mesh
 -> Pipeline::Run()
--> vertexShader 输出 clipPos
+-> vertexShader 输出 clipPos + worldPos + worldNormal
 -> 屏幕空间三角形遍历
--> fragmentShader 输出 Color
+-> fragmentShader 计算基础光照并叠加调试编号
 -> Framebuffer(pixels + depth)
 -> Window::Present()
 -> Win32 GDI
@@ -151,25 +173,27 @@ FlatColorVertex / Mesh
 
 - 作为运行时总调度器管理生命周期。
 - 创建平台窗口与帧缓冲。
-- 组织每帧清屏、渲染、显示和退出流程。
-- 组装当前示例场景的矩阵、uniforms、pipeline 与 mesh。
+- 组织每帧输入读取、驱动 `CameraLayer`、清屏、渲染、显示和退出流程。
+- 组装当前示例场景的模型矩阵、uniforms、pipeline 与 mesh，并在渲染前消费 `CameraLayer` 提供的相机结果。
+- 解析固定示例资源路径，并调用资源层加载模型。
 
 **输入**
 
 - 应用标题、窗口宽高。
 - `src/base` 的数学工具。
-- `src/render` 的帧缓冲、mesh、program、pipeline。
-- `src/platform` 的初始化、事件处理和 present 能力。
+- `src/render` 的相机、帧缓冲、mesh、program、pipeline。
+- `src/resource` 的模型加载能力。
+- `src/platform` 的初始化、事件处理、键盘查询和 present 能力。
 
 **输出**
 
 - 进程返回码。
-- 对平台层发出 present 请求。
+- 对平台层发出事件处理与 present 请求。
 - 对渲染层发出逐帧执行请求。
 
 **边界条件**
 
-- 可以依赖 `base`、`render`、`platform`，但不应下沉到 Win32 API。
+- 可以依赖 `base`、`resource`、`render`、`platform`，但不应下沉到 Win32 API。
 - 负责“调度”和“场景装配”，不负责具体像素写入算法。
 - 不应把平台状态、窗口句柄或 GDI 细节泄漏到应用接口。
 - 如果后续引入场景管理、相机层、资源系统，应优先继续放在调度层或更高层，而不是塞回入口层。
@@ -178,7 +202,7 @@ FlatColorVertex / Mesh
 
 **职责**
 
-- 封装当前 Windows 平台的窗口生命周期与消息泵。
+- 封装当前 Windows 平台的窗口生命周期、消息泵与最小键盘输入状态。
 - 把 `render::Framebuffer` 的像素数据显示到本地窗口。
 - 作为应用层唯一可见的平台门面。
 
@@ -186,16 +210,16 @@ FlatColorVertex / Mesh
 
 - 来自 `src/app` 的窗口初始化参数。
 - 来自 `src/render` 的 `Framebuffer` 只读像素数据。
-- 来自操作系统的 Win32 消息和 GDI 显示能力。
+- 来自操作系统的 Win32 消息、键盘事件和 GDI 显示能力。
 
 **输出**
 
-- `Initialize / Show / ProcessEvents / Present / Close / Name` 等平台级接口。
+- `Initialize / Show / ProcessEvents / Present / IsKeyDown / Close / Name` 等平台级接口。
 
 **边界条件**
 
 - `Platform` 是门面，`Window` 是具体平台窗口对象；应用层应优先依赖 `Platform`。
-- 可以读取 `Framebuffer`，但不能反向修改渲染算法或业务场景数据。
+- 可以维护并暴露输入状态、可以读取 `Framebuffer`，但不能反向修改渲染算法或业务场景数据。
 - 不负责三角形光栅化、矩阵运算、mesh 组织或 shader 逻辑。
 - 当前实现是 Windows-only；如果后续支持多平台，应在 `platform` 目录内扩展，而不是让 `app` 层出现平台分支。
 
@@ -204,8 +228,8 @@ FlatColorVertex / Mesh
 **职责**
 
 - 持有 CPU 侧渲染核心数据结构与算法。
-- 提供颜色、顶点协议、mesh 容器、program、pipeline 与 framebuffer。
-- 完成从顶点到像素的主要软光栅流程。
+- 提供相机、颜色、顶点协议、mesh 容器、program、pipeline 与 framebuffer。
+- 提供基础光照所需的顶点/统一参数/插值协议，并完成从顶点到像素的主要软光栅流程。
 
 **输入**
 
@@ -222,7 +246,7 @@ FlatColorVertex / Mesh
 - 可以依赖 `base`，不应依赖 `platform` 或 Win32。
 - `Framebuffer` 是渲染结果容器，不负责窗口展示。
 - `Pipeline` 负责主线执行，不负责应用生命周期和消息循环。
-- `Vertex / Uniforms / Varyings / Program` 共同构成渲染协议，新增 shader 能力时应尽量在该协议内扩展，而不是把材质逻辑写进应用层。
+- `Camera / Vertex / Uniforms / Varyings / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，新增 shader 能力时应尽量继续在这些协议内扩展，而不是把材质逻辑写进应用层。
 - 当前实现以三角形列表和模板化 `Pipeline` 为核心；如果未来引入更多图元或阶段，也应尽量保持“渲染层负责渲染，不越界到平台显示”的原则。
 
 ### 6.5 `src/base`
@@ -245,18 +269,41 @@ FlatColorVertex / Mesh
 - 可以被 `app` 和 `render` 复用，但不应反向依赖上层模块。
 - 新增基础数学工具时，应优先保持可复用、可验证，不混入渲染流程控制。
 
-### 6.6 `assets`
+### 6.6 `src/resource`
 
 **职责**
 
-- 预留资源目录，用于模型、纹理、测试数据等静态资产。
+- 负责从磁盘读取最小 OBJ 资源，并转换成渲染层可消费的 `render::Mesh<render::FlatColorVertex>` 与 `render::Mesh<render::LitVertex>`。
+- 封装基础文件读取、OBJ 中 `v / vn / f` 行解析和索引合法性校验。
+
+**输入**
+
+- 来自 `src/app` 的资源路径。
+- 来自磁盘的 OBJ 文本内容。
+
+**输出**
+
+- 面向应用层返回的加载结果，以及面向渲染层的数据结构 `render::Mesh<...>`。
 
 **边界条件**
 
-- 当前骨架版运行时尚未真正接入资源加载主线。
-- 如果后续实现模型/纹理系统，资源格式解析仍应属于渲染或资源模块，不应放入平台层。
+- 可以依赖 `render` 的顶点/mesh 协议，但不负责窗口显示、主循环或像素写入。
+- 当前只接入最小 OBJ loader，并已支持基础法线读取；更复杂的材质、纹理和场景解析仍未落地。
+- 如果后续资源种类继续增多，应优先在 `resource` 目录内扩展，而不是把解析逻辑散落到 `app` 或 `render`。
 
-### 6.7 `docs`
+### 6.7 `assets`
+
+**职责**
+
+- 存放模型、纹理、测试数据等静态资产。
+- 当前已提供 `assets/models/cube.obj` 作为最小模型加载链路的测试资源。
+
+**边界条件**
+
+- `assets` 本身只存数据，不承担解析逻辑。
+- 资源格式解析仍应属于 `src/resource` 或未来的专门资源模块，不应放入平台层。
+
+### 6.8 `docs`
 
 **职责**
 
@@ -274,7 +321,8 @@ FlatColorVertex / Mesh
 
 ```text
 apps/viewer -> src/app
-src/app -> src/platform, src/render, src/base
+src/app -> src/platform, src/resource, src/render, src/base
+src/resource -> src/render
 src/render -> src/base
 src/platform -> src/render(仅 Framebuffer 显示接口), Win32/GDI
 src/base -> 无上层依赖
@@ -283,6 +331,7 @@ src/base -> 无上层依赖
 不建议出现的依赖方向：
 
 - `src/render -> src/platform`
+- `src/resource -> src/platform`
 - `src/base -> src/render` 或 `src/base -> src/app`
 - `apps/viewer -> src/platform` 或 `apps/viewer -> src/render`
 - 在 `src/app` 中直接写 Win32 API 调用
@@ -293,7 +342,7 @@ src/base -> 无上层依赖
 - `Framebuffer` 是渲染结果的唯一主容器，窗口显示只消费它，不替代它。
 - 平台显示和软光栅算法分层明确，平台层不实现渲染主线，渲染层不处理消息泵。
 - 数学层保持纯工具属性，为应用装配和渲染执行同时服务。
-- 当前渲染链以 `Program + Pipeline + Mesh + Framebuffer` 为基础协议。
+- 当前渲染链以 `Camera + Program + Pipeline + Mesh + Framebuffer` 为基础协议。
 
 ## 9. 什么时候必须更新这份架构图
 
@@ -322,3 +371,12 @@ src/base -> 无上层依赖
 3. 本次功能已有的 `docs/features/<feature-name>.md`，如果它已经存在。
 
 如果发现“代码现状”和“本文档”不一致，应优先指出差异，并在实现或 review 迭代中补齐更新。
+
+
+
+
+
+
+
+
+

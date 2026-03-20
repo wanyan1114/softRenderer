@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <type_traits>
 #include <utility>
-#include <vector>
 
 namespace sr::render {
 
@@ -25,8 +24,8 @@ public:
             "uniforms_t must derive from UniformsBase");
         static_assert(std::is_base_of_v<VaryingsBase, varyings_t>,
             "varyings_t must derive from VaryingsBase");
-        static_assert(std::is_standard_layout_v<varyings_t>,
-            "varyings_t must be standard layout");
+        static_assert(std::is_trivially_copyable_v<varyings_t>,
+            "varyings_t must be trivially copyable");
         static_assert(sizeof(varyings_t) % sizeof(float) == 0,
             "varyings_t must contain only float-compatible fields");
     }
@@ -40,9 +39,7 @@ public:
             return;
         }
 
-        StagedFrame stagedFrame = InitializeFrame(framebuffer);
-        ProcessMesh(mesh, framebuffer, stagedFrame);
-        CommitFrame(framebuffer, stagedFrame);
+        ProcessMesh(mesh, framebuffer);
     }
 
 private:
@@ -50,7 +47,6 @@ private:
     using ClipStage = detail::ClipStage<varyings_t>;
     using RasterStage = detail::RasterStage<varyings_t>;
     using FragmentStage = detail::FragmentStage<vertex_t, uniforms_t, varyings_t>;
-    using StagedFrame = detail::StagedFrame;
 
     bool CanRun(const Mesh<vertex_t>& mesh) const
     {
@@ -59,44 +55,18 @@ private:
             && VertexStage::ProgramAvailable(m_Program);
     }
 
-    static std::size_t PixelIndex(int width, int x, int y)
-    {
-        return static_cast<std::size_t>(y * width + x);
-    }
-
-    StagedFrame InitializeFrame(const Framebuffer& framebuffer) const
-    {
-        const int width = framebuffer.Width();
-        const int height = framebuffer.Height();
-        StagedFrame stagedFrame{
-            std::vector<float>(static_cast<std::size_t>(width * height), 1.0f),
-            std::vector<Color>(static_cast<std::size_t>(width * height)),
-            std::vector<bool>(static_cast<std::size_t>(width * height), false),
-        };
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                stagedFrame.depth[PixelIndex(width, x, y)] = framebuffer.GetDepth(x, y);
-            }
-        }
-
-        return stagedFrame;
-    }
-
     void ProcessMesh(const Mesh<vertex_t>& mesh,
-        const Framebuffer& framebuffer,
-        StagedFrame& stagedFrame) const
+        Framebuffer& framebuffer) const
     {
         mesh.ProcessMesh([&](const vertex_t& v0, const vertex_t& v1, const vertex_t& v2) {
-            ProcessInputTriangle(framebuffer, v0, v1, v2, stagedFrame);
+            ProcessInputTriangle(framebuffer, v0, v1, v2);
         });
     }
 
-    void ProcessInputTriangle(const Framebuffer& framebuffer,
+    void ProcessInputTriangle(Framebuffer& framebuffer,
         const vertex_t& vertex0,
         const vertex_t& vertex1,
-        const vertex_t& vertex2,
-        StagedFrame& stagedFrame) const
+        const vertex_t& vertex2) const
     {
         const auto inputTriangle = VertexStage::Execute(
             m_Program,
@@ -107,34 +77,18 @@ private:
 
         const auto clippedTriangles = ClipStage::Execute(inputTriangle);
         for (const auto& clippedTriangle : clippedTriangles) {
-            const auto fragments = RasterStage::Execute(
+            RasterStage::Execute(
                 framebuffer,
                 clippedTriangle,
-                m_Program.faceCullMode);
-            FragmentStage::Execute(
-                fragments,
-                m_Program,
-                m_Uniforms,
-                framebuffer.Width(),
-                stagedFrame);
-        }
-    }
-
-    static void CommitFrame(Framebuffer& framebuffer, const StagedFrame& stagedFrame)
-    {
-        const int width = framebuffer.Width();
-        const int height = framebuffer.Height();
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                const std::size_t index = PixelIndex(width, x, y);
-                if (!stagedFrame.coverage[index]) {
-                    continue;
-                }
-
-                framebuffer.SetDepth(x, y, stagedFrame.depth[index]);
-                framebuffer.SetPixel(x, y, stagedFrame.color[index]);
-            }
+                m_Program.faceCullMode,
+                [&](std::size_t pixelIndex, const varyings_t& varyings) {
+                    FragmentStage::Execute(
+                        pixelIndex,
+                        varyings,
+                        m_Program,
+                        m_Uniforms,
+                        framebuffer);
+                });
         }
     }
 

@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles/sr_viewer.dir/includes_CXX.rsp
 
-CXX_FLAGS = -std=c++20
+CXX_FLAGS = -O3 -DNDEBUG -std=c++20
 

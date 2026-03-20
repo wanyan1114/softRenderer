@@ -32,18 +32,64 @@ std::wstring ToWide(const std::string& value)
 constexpr wchar_t kWindowClassName[] = L"SoftRendererSkeletonWindow";
 constexpr DWORD kWindowStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
+Window* GetWindowFromHandle(HWND handle)
+{
+    return reinterpret_cast<Window*>(GetWindowLongPtrW(handle, GWLP_USERDATA));
+}
+
+bool TryMapKey(WPARAM virtualKey, Key& key)
+{
+    switch (virtualKey) {
+    case 'W':
+        key = Key::W;
+        return true;
+    case 'A':
+        key = Key::A;
+        return true;
+    case 'S':
+        key = Key::S;
+        return true;
+    case 'D':
+        key = Key::D;
+        return true;
+    case 'Q':
+        key = Key::Q;
+        return true;
+    case 'E':
+        key = Key::E;
+        return true;
+    case VK_SPACE:
+        key = Key::Space;
+        return true;
+    case VK_LSHIFT:
+    case VK_SHIFT:
+        key = Key::LeftShift;
+        return true;
+    default:
+        return false;
+    }
+}
+
 LRESULT CALLBACK WindowProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) {
-    case WM_CLOSE:
-        DestroyWindow(handle);
-        return 0;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    default:
-        return DefWindowProcW(handle, message, wParam, lParam);
+    if (message == WM_NCCREATE) {
+        const CREATESTRUCTW* createStruct = reinterpret_cast<const CREATESTRUCTW*>(lParam);
+        Window* window = static_cast<Window*>(createStruct->lpCreateParams);
+        SetWindowLongPtrW(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
     }
+
+    Window* window = GetWindowFromHandle(handle);
+    if (window != nullptr) {
+        long long result = 0;
+        if (window->OnMessage(message,
+                static_cast<unsigned long long>(wParam),
+                static_cast<long long>(lParam),
+                result)) {
+            return static_cast<LRESULT>(result);
+        }
+    }
+
+    return DefWindowProcW(handle, message, wParam, lParam);
 }
 
 bool RegisterWindowClass(HINSTANCE instance)
@@ -72,8 +118,12 @@ bool RegisterWindowClass(HINSTANCE instance)
 } // namespace
 
 Window::Window(std::string title, int width, int height)
-    : m_Title(std::move(title)), m_Width(width), m_Height(height), m_Handle(nullptr),
-      m_Closed(false)
+    : m_Title(std::move(title)),
+      m_Width(width),
+      m_Height(height),
+      m_Handle(nullptr),
+      m_Closed(false),
+      m_KeyStates{}
 {
 }
 
@@ -114,7 +164,7 @@ bool Window::Create()
         nullptr,
         nullptr,
         instance,
-        nullptr);
+        this);
 
     if (handle == nullptr) {
         return false;
@@ -122,6 +172,7 @@ bool Window::Create()
 
     m_Handle = handle;
     m_Closed = false;
+    ResetInput();
     return true;
 }
 
@@ -209,6 +260,63 @@ bool Window::Present(const render::Framebuffer& framebuffer) const
     return result != GDI_ERROR;
 }
 
+bool Window::IsKeyDown(Key key) const
+{
+    return m_KeyStates[static_cast<std::size_t>(key)];
+}
+
+bool Window::OnMessage(unsigned int message, unsigned long long wParam, long long, long long& result)
+{
+    switch (message) {
+    case WM_CLOSE:
+        DestroyWindow(static_cast<HWND>(m_Handle));
+        result = 0;
+        return true;
+    case WM_DESTROY:
+        m_Closed = true;
+        ResetInput();
+        PostQuitMessage(0);
+        result = 0;
+        return true;
+    case WM_KILLFOCUS:
+        ResetInput();
+        result = 0;
+        return true;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN: {
+        Key key = Key::W;
+        if (TryMapKey(static_cast<WPARAM>(wParam), key)) {
+            SetKeyState(key, true);
+            result = 0;
+            return true;
+        }
+        break;
+    }
+    case WM_KEYUP:
+    case WM_SYSKEYUP: {
+        Key key = Key::W;
+        if (TryMapKey(static_cast<WPARAM>(wParam), key)) {
+            SetKeyState(key, false);
+            result = 0;
+            return true;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    return false;
+}
+
+void Window::SetKeyState(Key key, bool isDown)
+{
+    m_KeyStates[static_cast<std::size_t>(key)] = isDown;
+}
+
+void Window::ResetInput()
+{
+    m_KeyStates.fill(false);
+}
+
 } // namespace sr::platform
-
-

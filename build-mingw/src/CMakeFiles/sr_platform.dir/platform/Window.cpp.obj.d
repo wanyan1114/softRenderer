@@ -1,12 +1,43 @@
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: \
  D:\TimePlan\2026-2\softRanderer\src\platform\Window.cpp \
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
- C:/msys64/mingw64/include/c++/15.2.0/string \
- C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
+ D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
+ C:/msys64/mingw64/include/c++/15.2.0/array \
+ C:/msys64/mingw64/include/c++/15.2.0/compare \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/version.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/os_defines.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/cpu_defines.h \
  C:/msys64/mingw64/include/c++/15.2.0/pstl/pstl_config.h \
+ C:/msys64/mingw64/include/c++/15.2.0/concepts \
+ C:/msys64/mingw64/include/c++/15.2.0/type_traits \
+ C:/msys64/mingw64/include/c++/15.2.0/initializer_list \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/functexcept.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/exception_defines.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algobase.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/cpp_type_traits.h \
+ C:/msys64/mingw64/include/c++/15.2.0/ext/type_traits.h \
+ C:/msys64/mingw64/include/c++/15.2.0/ext/numeric_traits.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_pair.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/move.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/utility.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator_base_types.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/iterator_concepts.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/ptr_traits.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_cmp.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator_base_funcs.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/concept_check.h \
+ C:/msys64/mingw64/include/c++/15.2.0/debug/assertions.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator.h \
+ C:/msys64/mingw64/include/c++/15.2.0/new \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/exception.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_construct.h \
+ C:/msys64/mingw64/include/c++/15.2.0/debug/debug.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/predefined_ops.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bit \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/range_access.h \
+ C:/msys64/mingw64/include/c++/15.2.0/string \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stringfwd.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/memoryfwd.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/char_traits.h \
@@ -25,27 +56,9 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: \
  C:/msys64/mingw64/include/_mingw_stat64.h \
  C:/msys64/mingw64/include/swprintf.inl \
  C:/msys64/mingw64/include/sec_api/wchar_s.h \
- C:/msys64/mingw64/include/c++/15.2.0/type_traits \
- C:/msys64/mingw64/include/c++/15.2.0/bits/version.h \
- C:/msys64/mingw64/include/c++/15.2.0/compare \
- C:/msys64/mingw64/include/c++/15.2.0/concepts \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_construct.h \
- C:/msys64/mingw64/include/c++/15.2.0/new \
- C:/msys64/mingw64/include/c++/15.2.0/bits/exception.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/move.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator_base_types.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/iterator_concepts.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/ptr_traits.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_cmp.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator_base_funcs.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/concept_check.h \
- C:/msys64/mingw64/include/c++/15.2.0/debug/assertions.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/new_allocator.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/functexcept.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/exception_defines.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/cpp_type_traits.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/localefwd.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++locale.h \
  C:/msys64/mingw64/include/c++/15.2.0/clocale \
@@ -57,21 +70,10 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: \
  C:/msys64/mingw64/include/ctype.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ostream_insert.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/cxxabi_forced.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator.h \
- C:/msys64/mingw64/include/c++/15.2.0/ext/type_traits.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_function.h \
  C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h \
- C:/msys64/mingw64/include/c++/15.2.0/ext/numeric_traits.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algobase.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_pair.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/utility.h \
- C:/msys64/mingw64/include/c++/15.2.0/debug/debug.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/predefined_ops.h \
- C:/msys64/mingw64/include/c++/15.2.0/bit \
  C:/msys64/mingw64/include/c++/15.2.0/bits/refwrap.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/invoke.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/range_access.h \
- C:/msys64/mingw64/include/c++/15.2.0/initializer_list \
  C:/msys64/mingw64/include/c++/15.2.0/bits/basic_string.h \
  C:/msys64/mingw64/include/c++/15.2.0/ext/alloc_traits.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/alloc_traits.h \

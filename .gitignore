@@ -1,4 +1,4 @@
-# Prerequisites
+﻿# Prerequisites
 *.d
 
 # Compiled Object files
@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+!assets/models/*.obj
 
 # Precompiled Headers
 *.gch
@@ -39,3 +40,4 @@
 
 # debug information files
 *.dwo
+

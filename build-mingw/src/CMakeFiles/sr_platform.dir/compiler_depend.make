@@ -14,6 +14,7 @@ src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: D:/TimePlan/2026-2/sof
   C:/msys64/mingw64/include/apisetcconv.h \
   C:/msys64/mingw64/include/basetsd.h \
   C:/msys64/mingw64/include/bemapiset.h \
+  C:/msys64/mingw64/include/c++/15.2.0/array \
   C:/msys64/mingw64/include/c++/15.2.0/backward/auto_ptr.h \
   C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h \
   C:/msys64/mingw64/include/c++/15.2.0/bit \
@@ -377,6 +378,7 @@ src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: D:/TimePlan/2026-2/sof
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsaveoptintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsavesintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xtestintrin.h \
+  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Platform.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
 
@@ -393,6 +395,7 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: D:/TimePlan/2026-2/softR
   C:/msys64/mingw64/include/basetsd.h \
   C:/msys64/mingw64/include/bemapiset.h \
   C:/msys64/mingw64/include/c++/15.2.0/algorithm \
+  C:/msys64/mingw64/include/c++/15.2.0/array \
   C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h \
   C:/msys64/mingw64/include/c++/15.2.0/bit \
   C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h \
@@ -708,6 +711,7 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: D:/TimePlan/2026-2/softR
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsaveoptintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsavesintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xtestintrin.h \
+  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h
@@ -778,6 +782,10 @@ C:/msys64/mingw64/include/stralign.h:
 C:/msys64/mingw64/include/pthread_time.h:
 
 C:/msys64/mingw64/include/bemapiset.h:
+
+C:/msys64/mingw64/include/malloc.h:
+
+C:/msys64/mingw64/include/c++/15.2.0/array:
 
 C:/msys64/mingw64/include/c++/15.2.0/backward/auto_ptr.h:
 
@@ -901,10 +909,6 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/nested_exception.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/move.h:
 
-C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h:
-
-C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_util.h:
-
 C:/msys64/mingw64/include/timezoneapi.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/ostream_insert.h:
@@ -914,6 +918,10 @@ C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/cpu_defines.h:
 C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_algobase.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_cmp.h:
+
+C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h:
+
+C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_util.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/refwrap.h:
 
@@ -1187,9 +1195,9 @@ C:/msys64/mingw64/include/mcx.h:
 
 C:/msys64/mingw64/include/libloaderapi.h:
 
-C:/msys64/mingw64/include/locale.h:
+D:/TimePlan/2026-2/softRanderer/src/platform/Input.h:
 
-C:/msys64/mingw64/include/malloc.h:
+C:/msys64/mingw64/include/locale.h:
 
 C:/msys64/mingw64/include/pthread_signal.h:
 
