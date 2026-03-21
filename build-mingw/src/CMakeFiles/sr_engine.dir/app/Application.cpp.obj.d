@@ -132,6 +132,7 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
  C:/msys64/mingw64/include/c++/15.2.0/cmath \
  C:/msys64/mingw64/include/math.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/specfun.h \

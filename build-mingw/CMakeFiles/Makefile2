@@ -129,7 +129,7 @@ src/clean: src/CMakeFiles/sr_engine.dir/clean
 src/CMakeFiles/sr_platform.dir/all:
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/depend
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=8,9,10 "Built target sr_platform"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=9,10,11 "Built target sr_platform"
 .PHONY : src/CMakeFiles/sr_platform.dir/all
 
 # Build rule for subdir invocation for target.
@@ -146,7 +146,7 @@ sr_platform: src/CMakeFiles/sr_platform.dir/rule
 # codegen rule for target.
 src/CMakeFiles/sr_platform.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=8,9,10 "Finished codegen for target sr_platform"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=9,10,11 "Finished codegen for target sr_platform"
 .PHONY : src/CMakeFiles/sr_platform.dir/codegen
 
 # clean rule for target.
@@ -161,12 +161,12 @@ src/CMakeFiles/sr_platform.dir/clean:
 src/CMakeFiles/sr_engine.dir/all: src/CMakeFiles/sr_platform.dir/all
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/depend
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target sr_engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target sr_engine"
 .PHONY : src/CMakeFiles/sr_engine.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/sr_engine.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 src/CMakeFiles/sr_engine.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 0
 .PHONY : src/CMakeFiles/sr_engine.dir/rule
@@ -178,7 +178,7 @@ sr_engine: src/CMakeFiles/sr_engine.dir/rule
 # codegen rule for target.
 src/CMakeFiles/sr_engine.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7 "Finished codegen for target sr_engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Finished codegen for target sr_engine"
 .PHONY : src/CMakeFiles/sr_engine.dir/codegen
 
 # clean rule for target.
@@ -194,12 +194,12 @@ apps/viewer/CMakeFiles/sr_viewer.dir/all: src/CMakeFiles/sr_platform.dir/all
 apps/viewer/CMakeFiles/sr_viewer.dir/all: src/CMakeFiles/sr_engine.dir/all
 	$(MAKE) $(MAKESILENT) -f apps\viewer\CMakeFiles\sr_viewer.dir\build.make apps/viewer/CMakeFiles/sr_viewer.dir/depend
 	$(MAKE) $(MAKESILENT) -f apps\viewer\CMakeFiles\sr_viewer.dir\build.make apps/viewer/CMakeFiles/sr_viewer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=11,12 "Built target sr_viewer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=12,13 "Built target sr_viewer"
 .PHONY : apps/viewer/CMakeFiles/sr_viewer.dir/all
 
 # Build rule for subdir invocation for target.
 apps/viewer/CMakeFiles/sr_viewer.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 apps/viewer/CMakeFiles/sr_viewer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles 0
 .PHONY : apps/viewer/CMakeFiles/sr_viewer.dir/rule
@@ -211,7 +211,7 @@ sr_viewer: apps/viewer/CMakeFiles/sr_viewer.dir/rule
 # codegen rule for target.
 apps/viewer/CMakeFiles/sr_viewer.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f apps\viewer\CMakeFiles\sr_viewer.dir\build.make apps/viewer/CMakeFiles/sr_viewer.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=11,12 "Finished codegen for target sr_viewer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=12,13 "Finished codegen for target sr_viewer"
 .PHONY : apps/viewer/CMakeFiles/sr_viewer.dir/codegen
 
 # clean rule for target.

@@ -1,1 +1,1 @@
- ../../lib/libsr_engine.a ../../lib/libsr_platform.a -luser32 -lgdi32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
+ ../../lib/libsr_engine.a ../../lib/libsr_platform.a -luser32 -lgdi32 -lole32 -lwindowscodecs -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

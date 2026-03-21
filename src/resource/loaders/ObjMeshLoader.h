@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "render/Mesh.h"
+#include "render/Texture2D.h"
 #include "render/Vertex.h"
 
 #include <filesystem>
@@ -17,6 +18,9 @@ struct ObjLoadResult {
 
 struct ObjLitLoadResult {
     render::Mesh<render::LitVertex> mesh;
+    render::Texture2D baseColorTexture;
+    std::filesystem::path baseColorTexturePath;
+    std::string materialName;
     std::string error;
 
     bool Ok() const { return error.empty(); }

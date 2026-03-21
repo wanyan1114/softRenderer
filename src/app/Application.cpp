@@ -6,6 +6,7 @@
 #include "render/Framebuffer.h"
 #include "render/Mesh.h"
 #include "render/Pipeline.h"
+#include "render/Texture2D.h"
 #include "render/Vertex.h"
 #include "resource/loaders/ObjMeshLoader.h"
 
@@ -107,6 +108,7 @@ bool ShouldExportDemoImagesOnly()
     const char* env = std::getenv("SR_EXPORT_DEMO_IMAGES");
     return env != nullptr && env[0] != '\0' && env[0] != '0';
 }
+
 
 CubeFaceId DetermineCubeFace(const math::Vec3& p0,
     const math::Vec3& p1,
@@ -310,6 +312,41 @@ void RenderFaceDebugScene(render::Framebuffer& framebuffer,
     }
 }
 
+void RenderTexturedScene(render::Framebuffer& framebuffer,
+    const render::Mesh<render::LitVertex>& mesh,
+    const render::Texture2D& texture,
+    const render::Color& clearColor,
+    const math::Mat4& projection,
+    const math::Mat4& view,
+    const math::Mat4& model,
+    const math::Vec3& cameraPos,
+    const math::Vec3& lightPos)
+{
+    framebuffer.Clear(clearColor);
+    framebuffer.ClearDepth();
+
+    render::Program<render::LitVertex,
+        render::LitUniforms,
+        render::LitVaryings> program{};
+    program.vertexShader = &render::LitVertexShader;
+    program.fragmentShader = &render::LitFragmentShader;
+    program.faceCullMode = render::FaceCullMode::Back;
+
+    render::LitUniforms uniforms{};
+    uniforms.mvp = projection * view * model;
+    uniforms.model = model;
+    uniforms.color = render::Color{ 255, 255, 255 };
+    uniforms.lightPosWorld = lightPos;
+    uniforms.cameraPosWorld = cameraPos;
+    uniforms.baseColorTexture = &texture;
+    uniforms.textureEnabled = 1.0f;
+
+    render::Pipeline<render::LitVertex,
+        render::LitUniforms,
+        render::LitVaryings> pipeline(program, uniforms);
+    pipeline.Run(framebuffer, mesh);
+}
+
 bool WriteFramebufferToBmp(const std::filesystem::path& path,
     const render::Framebuffer& framebuffer,
     std::string& error)
@@ -414,21 +451,22 @@ int Application::Run()
         return 1;
     }
 
-    std::vector<FaceDebugDraw> faceDraws;
-    std::string faceBuildError;
-    if (!BuildFaceDebugDraws(loadResult.mesh, faceDraws, faceBuildError)) {
-        std::cerr << faceBuildError << '\n';
-        return 1;
-    }
-
     render::Framebuffer framebuffer(m_Width, m_Height);
     m_CameraLayer.OnAttach(framebuffer);
 
+    const render::Texture2D& baseColorTexture = loadResult.baseColorTexture;
     const math::Vec3 lightPos{ 1.6f, 2.0f, 2.8f };
     const math::Mat4 model = math::RotateY(math::kPi / 5.0f) * math::RotateX(-math::kPi / 7.0f);
     const render::Camera& camera = m_CameraLayer.Camera();
 
     if (ShouldExportDemoImagesOnly()) {
+        std::vector<FaceDebugDraw> faceDraws;
+        std::string faceBuildError;
+        if (!BuildFaceDebugDraws(loadResult.mesh, faceDraws, faceBuildError)) {
+            std::cerr << faceBuildError << '\n';
+            return 1;
+        }
+
         std::string exportError;
         if (!ExportDemoImages(faceDraws,
                 m_Width,
@@ -452,12 +490,14 @@ int Application::Run()
         return 1;
     }
 
-    std::cout << "SoftRenderer OBJ lit face-debug viewer started on "
+    std::cout << "SoftRenderer OBJ textured viewer started on "
               << platform::Platform::Name()
               << " with model \"" << modelPath.string() << "\" ("
               << loadResult.mesh.Vertices().size() << " expanded vertices, "
-              << loadResult.mesh.Indices().size() / 3 << " triangles, "
-              << faceDraws.size() << " faces)\n"
+              << loadResult.mesh.Indices().size() / 3 << " triangles, material \""
+              << loadResult.materialName << "\", texture \""
+              << loadResult.baseColorTexturePath.string() << "\" ("
+              << baseColorTexture.Width() << "x" << baseColorTexture.Height() << ")\n"
               << "Controls: WASD move, Space/Left Shift move vertically, Q/E turn\n";
 
     platform::Platform::Show();
@@ -478,16 +518,16 @@ int Application::Run()
 
         const render::Camera& activeCamera = m_CameraLayer.Camera();
         const auto renderStartTime = std::chrono::steady_clock::now();
-        RenderFaceDebugScene(
+        RenderTexturedScene(
             framebuffer,
-            faceDraws,
+            loadResult.mesh,
+            baseColorTexture,
             m_CameraLayer.BackgroundColor(),
             activeCamera.ProjectionMat4(),
             activeCamera.ViewMat4(),
             model,
             activeCamera.Pos,
-            lightPos,
-            true);
+            lightPos);
         const auto renderEndTime = std::chrono::steady_clock::now();
         renderAccumulatedMs += std::chrono::duration<float, std::milli>(renderEndTime - renderStartTime).count();
 
@@ -545,12 +585,4 @@ int Application::Run()
 }
 
 } // namespace sr
-
-
-
-
-
-
-
-
 

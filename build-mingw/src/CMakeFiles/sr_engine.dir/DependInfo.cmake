@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/render/Camera.cpp" "src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.cpp" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj.d"
+  "D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.cpp" "src/CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.cpp" "src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj.d"
   )
 

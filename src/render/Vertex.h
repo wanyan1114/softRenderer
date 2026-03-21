@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "base/Math.h"
 #include "render/Color.h"
+#include "render/Texture2D.h"
 
 #include <cmath>
 
@@ -216,19 +217,23 @@ inline Color FlatColorFragmentShader(const FlatColorVaryings&,
 
 struct LitVertex : public VertexBase {
     math::Vec3 normalModel{};
+    math::Vec2 uv{};
 
     constexpr LitVertex() = default;
 
-    constexpr LitVertex(const math::Vec3& position, const math::Vec3& normal)
+    constexpr LitVertex(const math::Vec3& position,
+        const math::Vec3& normal,
+        const math::Vec2& uvValue = {})
         : VertexBase(position),
-          normalModel(normal)
+          normalModel(normal),
+          uv(uvValue)
     {
     }
 };
 
 struct LitUniforms : public UniformsBase {
     math::Mat4 model = math::Mat4::Identity();
-    Color color{ 255, 184, 77 };
+    Color color{ 255, 255, 255 };
     math::Vec3 lightPosWorld{ 1.6f, 2.0f, 2.8f };
     math::Vec3 cameraPosWorld{ 0.0f, 0.0f, 2.6f };
     Color skyAmbientColor{ 196, 210, 232 };
@@ -236,11 +241,14 @@ struct LitUniforms : public UniformsBase {
     float ambientStrength = 0.42f;
     float specularStrength = 0.18f;
     float shininess = 28.0f;
+    const Texture2D* baseColorTexture = nullptr;
+    float textureEnabled = 0.0f;
 };
 
 struct LitVaryings : public VaryingsBase {
     math::Vec3 worldPos{};
     math::Vec3 worldNormal{};
+    math::Vec2 uv{};
 };
 
 inline void LitVertexShader(LitVaryings& varyings,
@@ -250,13 +258,19 @@ inline void LitVertexShader(LitVaryings& varyings,
     varyings.clipPos = uniforms.mvp * math::Vec4(vertex.positionModel, 1.0f);
     varyings.worldPos = detail::TransformPosition(uniforms.model, vertex.positionModel);
     varyings.worldNormal = detail::TransformDirection(uniforms.model, vertex.normalModel).Normalized();
+    varyings.uv = vertex.uv;
 }
 
 inline Color LitFragmentShader(const LitVaryings& varyings,
     const LitUniforms& uniforms)
 {
+    Color baseColor = uniforms.color;
+    if (uniforms.textureEnabled > 0.5f && uniforms.baseColorTexture != nullptr) {
+        baseColor = uniforms.baseColorTexture->Sample(varyings.uv);
+    }
+
     return detail::ApplyBlinnPhongLighting(
-        uniforms.color,
+        baseColor,
         varyings.worldPos,
         varyings.worldNormal,
         uniforms.lightPosWorld,
@@ -276,7 +290,7 @@ struct DebugFaceVertex : public LitVertex {
     constexpr DebugFaceVertex(const math::Vec3& position,
         const math::Vec3& normal,
         const math::Vec2& uv)
-        : LitVertex(position, normal),
+        : LitVertex(position, normal, uv),
           faceUv(uv)
     {
     }
@@ -299,6 +313,7 @@ inline void DebugFaceVertexShader(DebugFaceVaryings& varyings,
     varyings.clipPos = uniforms.mvp * math::Vec4(vertex.positionModel, 1.0f);
     varyings.worldPos = detail::TransformPosition(uniforms.model, vertex.positionModel);
     varyings.worldNormal = detail::TransformDirection(uniforms.model, vertex.normalModel).Normalized();
+    varyings.uv = vertex.uv;
     varyings.faceUv = vertex.faceUv;
 }
 
@@ -327,4 +342,3 @@ inline Color DebugFaceFragmentShader(const DebugFaceVaryings& varyings,
 }
 
 } // namespace sr::render
-

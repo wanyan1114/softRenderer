@@ -36,7 +36,7 @@ flowchart LR
     app["src/app/Application + CameraLayer"]
     resource["src/resource\nOBJ Loader"]
     base["src/base\nMath"]
-    render["src/render\nCamera / Color / Vertex / Mesh / Pipeline / Framebuffer"]
+    render["src/render\nCamera / Color / Vertex / Mesh / Texture2D / Pipeline / Framebuffer"]
     platform["src/platform/Platform"]
     window["src/platform/Window"]
     win32["Win32 + GDI"]
@@ -90,8 +90,8 @@ sequenceDiagram
     Main->>App: Run()
     App->>Platform: Initialize(title, width, height)
     Platform->>Window: Create()
-    App->>Loader: 读取 assets/models/cube.obj(v + vn)
-    Loader-->>App: render::Mesh<LitVertex>
+    App->>Loader: 读取 assets/models/cube.obj + cube.mtl + map_Kd 纹理
+    Loader-->>App: render::Mesh<LitVertex> + Texture2D
     App->>FB: 构造 Framebuffer(width, height)
     App->>Platform: Show()
 ```
@@ -125,13 +125,15 @@ Win32 keyboard messages
 -> render::Camera(Pos / Dir / Right / Up / Aspect)
 -> Camera::ViewMat4() / ProjectionMat4()
 
-OBJ(v + vn) file
+OBJ(v + vt + vn) + mtllib/usemtl
 -> resource::LoadLitMesh()
+-> 解析 MTL(newmtl + map_Kd)
+-> 解码 PNG/JPG/JPEG 为 Texture2D
 -> LitVertex / DebugFaceVertex / Mesh
 -> Pipeline::Run()
--> vertexShader 输出 clipPos + worldPos + worldNormal
+-> vertexShader 输出 clipPos + worldPos + worldNormal + uv
 -> 屏幕空间三角形遍历
--> fragmentShader 计算基础光照并叠加调试编号
+-> fragmentShader 采样 Texture2D 并计算基础光照
 -> Framebuffer(pixels + depth)
 -> Window::Present()
 -> Win32 GDI
@@ -174,14 +176,14 @@ OBJ(v + vn) file
 - 作为运行时总调度器管理生命周期。
 - 创建平台窗口与帧缓冲。
 - 组织每帧输入读取、驱动 `CameraLayer`、清屏、渲染、显示和退出流程。
-- 组装当前示例场景的模型矩阵、uniforms、pipeline 与 mesh，并在渲染前消费 `CameraLayer` 提供的相机结果。
-- 解析固定示例资源路径，并调用资源层加载模型。
+- 组装当前示例场景的模型矩阵、uniforms、pipeline、mesh 与 base color 纹理，并在渲染前消费 `CameraLayer` 提供的相机结果。
+- 解析固定示例资源路径，调用资源层加载 OBJ/MTL/外部图片，并把返回的纹理对象装配到示例场景。
 
 **输入**
 
 - 应用标题、窗口宽高。
 - `src/base` 的数学工具。
-- `src/render` 的相机、帧缓冲、mesh、program、pipeline。
+- `src/render` 的相机、帧缓冲、mesh、Texture2D、program、pipeline。
 - `src/resource` 的模型加载能力。
 - `src/platform` 的初始化、事件处理、键盘查询和 present 能力。
 
@@ -228,8 +230,8 @@ OBJ(v + vn) file
 **职责**
 
 - 持有 CPU 侧渲染核心数据结构与算法。
-- 提供相机、颜色、顶点协议、mesh 容器、program、pipeline 与 framebuffer。
-- 提供基础光照所需的顶点/统一参数/插值协议，并完成从顶点到像素的主要软光栅流程。
+- 提供相机、颜色、顶点协议、mesh 容器、Texture2D、program、pipeline 与 framebuffer。
+- 提供基础光照与最小 2D 纹理采样所需的顶点/统一参数/插值协议，并完成从顶点到像素的主要软光栅流程。
 
 **输入**
 
@@ -246,7 +248,7 @@ OBJ(v + vn) file
 - 可以依赖 `base`，不应依赖 `platform` 或 Win32。
 - `Framebuffer` 是渲染结果容器，不负责窗口展示。
 - `Pipeline` 负责主线执行，不负责应用生命周期和消息循环。
-- `Camera / Vertex / Uniforms / Varyings / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，新增 shader 能力时应尽量继续在这些协议内扩展，而不是把材质逻辑写进应用层。
+- `Camera / Vertex / Uniforms / Varyings / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，新增 shader 能力时应尽量继续在这些协议内扩展，而不是把材质逻辑写进应用层。
 - 当前实现以三角形列表和模板化 `Pipeline` 为核心；如果未来引入更多图元或阶段，也应尽量保持“渲染层负责渲染，不越界到平台显示”的原则。
 
 ### 6.5 `src/base`
@@ -273,22 +275,22 @@ OBJ(v + vn) file
 
 **职责**
 
-- 负责从磁盘读取最小 OBJ 资源，并转换成渲染层可消费的 `render::Mesh<render::FlatColorVertex>` 与 `render::Mesh<render::LitVertex>`。
-- 封装基础文件读取、OBJ 中 `v / vn / f` 行解析和索引合法性校验。
+- 负责从磁盘读取最小 OBJ / MTL / base color 图片资源，并转换成渲染层可消费的 `render::Mesh<render::FlatColorVertex>`、`render::Mesh<render::LitVertex>` 与 `render::Texture2D`。
+- 封装基础文件读取、OBJ 中 `mtllib / usemtl / v / vt / vn / f` 行解析、MTL 中 `newmtl / map_Kd` 解析和最小图片解码。
 
 **输入**
 
 - 来自 `src/app` 的资源路径。
-- 来自磁盘的 OBJ 文本内容。
+- 来自磁盘的 OBJ / MTL 文本内容和 PNG/JPG/JPEG 图片内容。
 
 **输出**
 
-- 面向应用层返回的加载结果，以及面向渲染层的数据结构 `render::Mesh<...>`。
+- 面向应用层返回的加载结果，以及面向渲染层的数据结构 `render::Mesh<...>` 与 `render::Texture2D`。
 
 **边界条件**
 
 - 可以依赖 `render` 的顶点/mesh 协议，但不负责窗口显示、主循环或像素写入。
-- 当前只接入最小 OBJ loader，并已支持基础法线读取；更复杂的材质、纹理和场景解析仍未落地。
+- 当前已接入最小 OBJ loader、最小 MTL(base color) 解析和 PNG/JPG/JPEG 外部纹理解码，但仍未扩展到多材质子网格、更多材质通道和通用场景解析。
 - 如果后续资源种类继续增多，应优先在 `resource` 目录内扩展，而不是把解析逻辑散落到 `app` 或 `render`。
 
 ### 6.7 `assets`
@@ -296,7 +298,7 @@ OBJ(v + vn) file
 **职责**
 
 - 存放模型、纹理、测试数据等静态资产。
-- 当前已提供 `assets/models/cube.obj` 作为最小模型加载链路的测试资源。
+- 当前已提供 `assets/models/cube.obj`、`assets/models/cube.mtl` 和 `assets/textures/cube-basecolor.png` 作为最小外部纹理加载链路的测试资源。
 
 **边界条件**
 
@@ -342,7 +344,7 @@ src/base -> 无上层依赖
 - `Framebuffer` 是渲染结果的唯一主容器，窗口显示只消费它，不替代它。
 - 平台显示和软光栅算法分层明确，平台层不实现渲染主线，渲染层不处理消息泵。
 - 数学层保持纯工具属性，为应用装配和渲染执行同时服务。
-- 当前渲染链以 `Camera + Program + Pipeline + Mesh + Framebuffer` 为基础协议。
+- 当前渲染链以 `Camera + Program + Pipeline + Mesh + Texture2D + Framebuffer` 为基础协议。
 
 ## 9. 什么时候必须更新这份架构图
 
@@ -371,6 +373,8 @@ src/base -> 无上层依赖
 3. 本次功能已有的 `docs/features/<feature-name>.md`，如果它已经存在。
 
 如果发现“代码现状”和“本文档”不一致，应优先指出差异，并在实现或 review 迭代中补齐更新。
+
+
 
 
 

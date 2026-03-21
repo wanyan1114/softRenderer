@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/sr_engine.dir/render/Camera.cpp.obj.d"
   "CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj"
   "CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj.d"
+  "CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.obj"
+  "CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.obj.d"
   "CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj"
   "CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj.d"
 )

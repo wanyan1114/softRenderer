@@ -30,6 +30,7 @@ target_sources(sr_engine
         base/Math.cpp
         render/Camera.cpp
         render/Framebuffer.cpp
+        resource/loaders/ImageTextureLoader.cpp
         resource/loaders/ObjMeshLoader.cpp)
 
 target_include_directories(sr_engine
@@ -40,8 +41,13 @@ target_compile_features(sr_engine PUBLIC cxx_std_20)
 
 target_compile_definitions(sr_engine
     PRIVATE
-        SR_PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
+        SR_PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX)
 
 target_link_libraries(sr_engine
     PUBLIC
-        sr_platform)
+        sr_platform
+    PRIVATE
+        ole32
+        windowscodecs)

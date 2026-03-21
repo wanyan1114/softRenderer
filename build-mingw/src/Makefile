@@ -311,6 +311,30 @@ render/Framebuffer.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.s
 .PHONY : render/Framebuffer.cpp.s
 
+resource/loaders/ImageTextureLoader.obj: resource/loaders/ImageTextureLoader.cpp.obj
+.PHONY : resource/loaders/ImageTextureLoader.obj
+
+# target to build an object file
+resource/loaders/ImageTextureLoader.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.obj
+.PHONY : resource/loaders/ImageTextureLoader.cpp.obj
+
+resource/loaders/ImageTextureLoader.i: resource/loaders/ImageTextureLoader.cpp.i
+.PHONY : resource/loaders/ImageTextureLoader.i
+
+# target to preprocess a source file
+resource/loaders/ImageTextureLoader.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.i
+.PHONY : resource/loaders/ImageTextureLoader.cpp.i
+
+resource/loaders/ImageTextureLoader.s: resource/loaders/ImageTextureLoader.cpp.s
+.PHONY : resource/loaders/ImageTextureLoader.s
+
+# target to generate assembly for a file
+resource/loaders/ImageTextureLoader.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/resource/loaders/ImageTextureLoader.cpp.s
+.PHONY : resource/loaders/ImageTextureLoader.cpp.s
+
 resource/loaders/ObjMeshLoader.obj: resource/loaders/ObjMeshLoader.cpp.obj
 .PHONY : resource/loaders/ObjMeshLoader.obj
 
@@ -366,6 +390,9 @@ help:
 	@echo ... render/Framebuffer.obj
 	@echo ... render/Framebuffer.i
 	@echo ... render/Framebuffer.s
+	@echo ... resource/loaders/ImageTextureLoader.obj
+	@echo ... resource/loaders/ImageTextureLoader.i
+	@echo ... resource/loaders/ImageTextureLoader.s
 	@echo ... resource/loaders/ObjMeshLoader.obj
 	@echo ... resource/loaders/ObjMeshLoader.i
 	@echo ... resource/loaders/ObjMeshLoader.s
