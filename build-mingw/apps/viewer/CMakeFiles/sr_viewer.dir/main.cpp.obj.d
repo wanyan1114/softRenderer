@@ -1,8 +1,6 @@
 apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  D:\TimePlan\2026-2\softRanderer\apps\viewer\main.cpp \
  D:/TimePlan/2026-2/softRanderer/src/app/Application.h \
- D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h \
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
  C:/msys64/mingw64/include/c++/15.2.0/cstddef \
@@ -18,20 +16,21 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/vadefs.h \
  C:/msys64/mingw64/include/sdks/_mingw_ddk.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/version.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
- C:/msys64/mingw64/include/c++/15.2.0/algorithm \
- C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algobase.h \
+ D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
+ C:/msys64/mingw64/include/c++/15.2.0/array \
+ C:/msys64/mingw64/include/c++/15.2.0/compare \
+ C:/msys64/mingw64/include/c++/15.2.0/concepts \
+ C:/msys64/mingw64/include/c++/15.2.0/type_traits \
+ C:/msys64/mingw64/include/c++/15.2.0/initializer_list \
  C:/msys64/mingw64/include/c++/15.2.0/bits/functexcept.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/exception_defines.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algobase.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/cpp_type_traits.h \
- C:/msys64/mingw64/include/c++/15.2.0/type_traits \
  C:/msys64/mingw64/include/c++/15.2.0/ext/type_traits.h \
  C:/msys64/mingw64/include/c++/15.2.0/ext/numeric_traits.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_pair.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/move.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/utility.h \
- C:/msys64/mingw64/include/c++/15.2.0/compare \
- C:/msys64/mingw64/include/c++/15.2.0/concepts \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_iterator_base_types.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/iterator_concepts.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ptr_traits.h \
@@ -46,9 +45,11 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/debug/debug.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/predefined_ops.h \
  C:/msys64/mingw64/include/c++/15.2.0/bit \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/range_access.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
+ C:/msys64/mingw64/include/c++/15.2.0/algorithm \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algo.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/algorithmfwd.h \
- C:/msys64/mingw64/include/c++/15.2.0/initializer_list \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_heap.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uniform_int_dist.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_tempbuf.h \
@@ -113,7 +114,6 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/refwrap.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_function.h \
  C:/msys64/mingw64/include/c++/15.2.0/backward/binders.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/range_access.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/vector.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/bits/memory_resource.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator.h \
@@ -149,6 +149,8 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/cerrno \
  C:/msys64/mingw64/include/c++/15.2.0/bits/charconv.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/basic_string.tcc \
+ D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h \
+ D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
  C:/msys64/mingw64/include/c++/15.2.0/memory \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_raw_storage_iter.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/align.h \
@@ -207,30 +209,4 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/backward/auto_ptr.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/ranges_uninitialized.h \
  C:/msys64/mingw64/include/c++/15.2.0/pstl/glue_memory_defs.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
- D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h \
- C:/msys64/mingw64/include/c++/15.2.0/filesystem \
- C:/msys64/mingw64/include/c++/15.2.0/bits/fs_fwd.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/chrono.h \
- C:/msys64/mingw64/include/c++/15.2.0/ratio \
- C:/msys64/mingw64/include/c++/15.2.0/ctime \
- C:/msys64/mingw64/include/c++/15.2.0/bits/parse_numbers.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/fs_path.h \
- C:/msys64/mingw64/include/c++/15.2.0/locale \
- C:/msys64/mingw64/include/c++/15.2.0/bits/locale_facets_nonio.h \
- C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/time_members.h \
- C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/messages_members.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/codecvt.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/locale_facets_nonio.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/bits/locale_conv.h \
- C:/msys64/mingw64/include/c++/15.2.0/iomanip \
- C:/msys64/mingw64/include/c++/15.2.0/bits/quoted_string.h \
- C:/msys64/mingw64/include/c++/15.2.0/sstream \
- C:/msys64/mingw64/include/c++/15.2.0/istream \
- C:/msys64/mingw64/include/c++/15.2.0/ostream \
- C:/msys64/mingw64/include/c++/15.2.0/bits/ostream.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/bits/istream.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/bits/sstream.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/codecvt \
- C:/msys64/mingw64/include/c++/15.2.0/bits/fs_dir.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/fs_ops.h
+ D:/TimePlan/2026-2/softRanderer/src/platform/Window.h

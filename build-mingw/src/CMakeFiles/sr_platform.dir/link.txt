@@ -1,2 +1,2 @@
-C:\msys64\mingw64\bin\ar.exe qc ..\lib\libsr_platform.a CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj CMakeFiles/sr_platform.dir/platform/Window.cpp.obj
+C:\msys64\mingw64\bin\ar.exe qc ..\lib\libsr_platform.a CMakeFiles/sr_platform.dir/platform/Window.cpp.obj
 C:\msys64\mingw64\bin\ranlib.exe ..\lib\libsr_platform.a

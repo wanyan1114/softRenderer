@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "../lib/libsr_platform.a"
   "../lib/libsr_platform.pdb"
-  "CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj"
-  "CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj.d"
   "CMakeFiles/sr_platform.dir/platform/Window.cpp.obj"
   "CMakeFiles/sr_platform.dir/platform/Window.cpp.obj.d"
 )

@@ -2,7 +2,6 @@
 
 target_sources(sr_platform
     PRIVATE
-        platform/Platform.cpp
         platform/Window.cpp)
 
 target_include_directories(sr_platform
@@ -28,6 +27,7 @@ target_sources(sr_engine
         app/Application.cpp
         app/CameraLayer.cpp
         app/RenderLayer.cpp
+        app/SceneLayer.cpp
         base/Math.cpp
         render/Camera.cpp
         render/Framebuffer.cpp

@@ -1,7 +1,6 @@
 ﻿#include "app/CameraLayer.h"
 
 #include "platform/Input.h"
-#include "platform/Platform.h"
 
 namespace sr {
 namespace {
@@ -9,6 +8,11 @@ namespace {
 math::Vec3 WorldUp()
 {
     return { 0.0f, 1.0f, 0.0f };
+}
+
+bool IsKeyDown(const LayerContext& context, platform::Key key)
+{
+    return context.input != nullptr && context.input->IsKeyDown(key);
 }
 
 } // namespace
@@ -36,8 +40,8 @@ void CameraLayer::OnAttach(LayerContext& context)
 void CameraLayer::OnUpdate(float deltaTime, LayerContext& context)
 {
     const float clampedDeltaTime = math::Clamp(deltaTime, 0.0f, 0.1f);
-    const float yawDelta = ((platform::Platform::IsKeyDown(platform::Key::Q) ? 1.0f : 0.0f)
-                               - (platform::Platform::IsKeyDown(platform::Key::E) ? 1.0f : 0.0f))
+    const float yawDelta = ((IsKeyDown(context, platform::Key::Q) ? 1.0f : 0.0f)
+                               - (IsKeyDown(context, platform::Key::E) ? 1.0f : 0.0f))
         * m_RotateSpeed * clampedDeltaTime;
 
     if (yawDelta != 0.0f) {
@@ -48,22 +52,22 @@ void CameraLayer::OnUpdate(float deltaTime, LayerContext& context)
     }
 
     math::Vec3 movement{};
-    if (platform::Platform::IsKeyDown(platform::Key::W)) {
+    if (IsKeyDown(context, platform::Key::W)) {
         movement = movement + m_Camera.Dir;
     }
-    if (platform::Platform::IsKeyDown(platform::Key::S)) {
+    if (IsKeyDown(context, platform::Key::S)) {
         movement = movement - m_Camera.Dir;
     }
-    if (platform::Platform::IsKeyDown(platform::Key::D)) {
+    if (IsKeyDown(context, platform::Key::D)) {
         movement = movement + m_Camera.Right;
     }
-    if (platform::Platform::IsKeyDown(platform::Key::A)) {
+    if (IsKeyDown(context, platform::Key::A)) {
         movement = movement - m_Camera.Right;
     }
-    if (platform::Platform::IsKeyDown(platform::Key::Space)) {
+    if (IsKeyDown(context, platform::Key::Space)) {
         movement = movement + m_Camera.Up;
     }
-    if (platform::Platform::IsKeyDown(platform::Key::LeftShift)) {
+    if (IsKeyDown(context, platform::Key::LeftShift)) {
         movement = movement - m_Camera.Up;
     }
 

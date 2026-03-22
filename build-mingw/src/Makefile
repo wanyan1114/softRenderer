@@ -215,6 +215,30 @@ app/RenderLayer.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.s
 .PHONY : app/RenderLayer.cpp.s
 
+app/SceneLayer.obj: app/SceneLayer.cpp.obj
+.PHONY : app/SceneLayer.obj
+
+# target to build an object file
+app/SceneLayer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj
+.PHONY : app/SceneLayer.cpp.obj
+
+app/SceneLayer.i: app/SceneLayer.cpp.i
+.PHONY : app/SceneLayer.i
+
+# target to preprocess a source file
+app/SceneLayer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.i
+.PHONY : app/SceneLayer.cpp.i
+
+app/SceneLayer.s: app/SceneLayer.cpp.s
+.PHONY : app/SceneLayer.s
+
+# target to generate assembly for a file
+app/SceneLayer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.s
+.PHONY : app/SceneLayer.cpp.s
+
 base/Math.obj: base/Math.cpp.obj
 .PHONY : base/Math.obj
 
@@ -238,30 +262,6 @@ base/Math.s: base/Math.cpp.s
 base/Math.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/base/Math.cpp.s
 .PHONY : base/Math.cpp.s
-
-platform/Platform.obj: platform/Platform.cpp.obj
-.PHONY : platform/Platform.obj
-
-# target to build an object file
-platform/Platform.cpp.obj:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj
-.PHONY : platform/Platform.cpp.obj
-
-platform/Platform.i: platform/Platform.cpp.i
-.PHONY : platform/Platform.i
-
-# target to preprocess a source file
-platform/Platform.cpp.i:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.i
-.PHONY : platform/Platform.cpp.i
-
-platform/Platform.s: platform/Platform.cpp.s
-.PHONY : platform/Platform.s
-
-# target to generate assembly for a file
-platform/Platform.cpp.s:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_platform.dir\build.make src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.s
-.PHONY : platform/Platform.cpp.s
 
 platform/Window.obj: platform/Window.cpp.obj
 .PHONY : platform/Window.obj
@@ -402,12 +402,12 @@ help:
 	@echo ... app/RenderLayer.obj
 	@echo ... app/RenderLayer.i
 	@echo ... app/RenderLayer.s
+	@echo ... app/SceneLayer.obj
+	@echo ... app/SceneLayer.i
+	@echo ... app/SceneLayer.s
 	@echo ... base/Math.obj
 	@echo ... base/Math.i
 	@echo ... base/Math.s
-	@echo ... platform/Platform.obj
-	@echo ... platform/Platform.i
-	@echo ... platform/Platform.s
 	@echo ... platform/Window.obj
 	@echo ... platform/Window.i
 	@echo ... platform/Window.s

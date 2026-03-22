@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "D:/TimePlan/2026-2/softRanderer/src/platform/Platform.cpp" "src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj" "gcc" "src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/platform/Window.cpp" "src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj" "gcc" "src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj.d"
   )
 

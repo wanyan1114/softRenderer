@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/TimePlan/2026-2/softRanderer/src/app/Application.cpp" "src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.cpp" "src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.cpp" "src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj.d"
+  "D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.cpp" "src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/render/Camera.cpp" "src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj.d"
   "D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.cpp" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj" "gcc" "src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj.d"

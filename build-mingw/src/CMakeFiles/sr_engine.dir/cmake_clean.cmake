@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj.d"
   "CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj"
   "CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj.d"
+  "CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj"
+  "CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj.d"
   "CMakeFiles/sr_engine.dir/base/Math.cpp.obj"
   "CMakeFiles/sr_engine.dir/base/Math.cpp.obj.d"
   "CMakeFiles/sr_engine.dir/render/Camera.cpp.obj"

@@ -1,12 +1,14 @@
 ﻿#pragma once
 
 #include "base/Math.h"
+#include "platform/Input.h"
 #include "render/Color.h"
 #include "render/Mesh.h"
 #include "render/Texture2D.h"
 #include "render/Vertex.h"
 
 #include <cstddef>
+#include <string>
 
 namespace sr::render {
 class Camera;
@@ -33,10 +35,20 @@ struct RenderSceneView {
     }
 };
 
+struct StartupState {
+    bool shouldExit = false;
+    int exitCode = 0;
+    std::string exitMessage;
+    std::string startupMessage;
+};
+
 struct LayerContext {
     const render::Camera* activeCamera = nullptr;
     const RenderSceneView* sceneView = nullptr;
     render::Framebuffer* framebuffer = nullptr;
+    const platform::InputState* input = nullptr;
+    StartupState* startupState = nullptr;
+    const char* platformName = "Unknown";
 };
 
 } // namespace sr

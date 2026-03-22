@@ -71,26 +71,11 @@ include src/CMakeFiles/sr_platform.dir/flags.make
 src/CMakeFiles/sr_platform.dir/codegen:
 .PHONY : src/CMakeFiles/sr_platform.dir/codegen
 
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: src/CMakeFiles/sr_platform.dir/flags.make
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: src/CMakeFiles/sr_platform.dir/includes_CXX.rsp
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/platform/Platform.cpp
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj: src/CMakeFiles/sr_platform.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj -MF CMakeFiles\sr_platform.dir\platform\Platform.cpp.obj.d -o CMakeFiles\sr_platform.dir\platform\Platform.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\platform\Platform.cpp
-
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_platform.dir/platform/Platform.cpp.i"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\platform\Platform.cpp > CMakeFiles\sr_platform.dir\platform\Platform.cpp.i
-
-src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_platform.dir/platform/Platform.cpp.s"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\platform\Platform.cpp -o CMakeFiles\sr_platform.dir\platform\Platform.cpp.s
-
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: src/CMakeFiles/sr_platform.dir/flags.make
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: src/CMakeFiles/sr_platform.dir/includes_CXX.rsp
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/platform/Window.cpp
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: src/CMakeFiles/sr_platform.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj"
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj -MF CMakeFiles\sr_platform.dir\platform\Window.cpp.obj.d -o CMakeFiles\sr_platform.dir\platform\Window.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\platform\Window.cpp
 
 src/CMakeFiles/sr_platform.dir/platform/Window.cpp.i: cmake_force
@@ -103,17 +88,15 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.s: cmake_force
 
 # Object files for target sr_platform
 sr_platform_OBJECTS = \
-"CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj" \
 "CMakeFiles/sr_platform.dir/platform/Window.cpp.obj"
 
 # External object files for target sr_platform
 sr_platform_EXTERNAL_OBJECTS =
 
-lib/libsr_platform.a: src/CMakeFiles/sr_platform.dir/platform/Platform.cpp.obj
 lib/libsr_platform.a: src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj
 lib/libsr_platform.a: src/CMakeFiles/sr_platform.dir/build.make
 lib/libsr_platform.a: src/CMakeFiles/sr_platform.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ..\lib\libsr_platform.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library ..\lib\libsr_platform.a"
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && $(CMAKE_COMMAND) -P CMakeFiles\sr_platform.dir\cmake_clean_target.cmake
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\sr_platform.dir\link.txt --verbose=$(VERBOSE)
 

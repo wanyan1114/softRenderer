@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "app/LayerContext.h"
 #include "app/Layer.h"
 
 namespace sr {

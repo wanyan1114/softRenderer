@@ -1,10 +1,11 @@
 ﻿#pragma once
 
-#include "app/LayerContext.h"
-
 #include <string>
+#include <utility>
 
 namespace sr {
+
+struct LayerContext;
 
 class Layer {
 public:

@@ -2,7 +2,6 @@
 
 #include "platform/Input.h"
 
-#include <array>
 #include <string>
 
 namespace sr::render {
@@ -23,14 +22,14 @@ public:
     void Show();
     bool ProcessEvents();
     bool Present(const render::Framebuffer& framebuffer) const;
-    bool IsKeyDown(Key key) const;
     bool OnMessage(unsigned int message, unsigned long long wParam, long long lParam, long long& result);
 
     bool IsClosed() const { return m_Closed; }
-
     const std::string& Title() const { return m_Title; }
     int Width() const { return m_Width; }
     int Height() const { return m_Height; }
+    const InputState& Input() const { return m_InputState; }
+    const char* PlatformName() const { return "Windows"; }
 
 private:
     void SetKeyState(Key key, bool isDown);
@@ -41,7 +40,7 @@ private:
     int m_Height;
     void* m_Handle;
     bool m_Closed;
-    std::array<bool, static_cast<std::size_t>(Key::Count)> m_KeyStates;
+    InputState m_InputState;
 };
 
 } // namespace sr::platform

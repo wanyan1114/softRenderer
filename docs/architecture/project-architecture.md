@@ -22,7 +22,7 @@
 ## 3. 这些笔记对当前架构文档的约束与启发
 
 - `lesson01` 约束我们先从 `main -> Application -> 主循环` 画起，架构图应优先反映总调度关系。
-- `lesson02` 约束平台层必须封装窗口与系统显示细节，应用层不应直接依赖 Win32 API。
+- `lesson02` 约束窗口、输入和消息泵应聚合为平台实现的一部分，而不是继续拆成过宽的应用门面。
 - `lesson03` 启发我们把数学模块视为“基础支撑层”，它为变换和相机提供统一语言。
 - `lesson04` 约束 `Framebuffer` 作为 CPU 渲染结果与窗口显示之间的桥接数据结构。
 - `lesson05` 启发渲染模块内部要明确区分顶点输入、统一参数、插值数据和流水线执行器。
@@ -33,28 +33,26 @@
 ```mermaid
 flowchart LR
     viewer["apps/viewer/main.cpp"]
-    app["src/app<br/>Application / Layer / LayerContext / LayerStack / CameraLayer / RenderLayer"]
+    app["src/app<br/>Application / Layer / LayerContext / LayerStack / SceneLayer / CameraLayer / RenderLayer"]
+    platform["src/platform\nWindow / Input"]
     resource["src/resource\nOBJ Loader"]
     base["src/base\nMath"]
     render["src/render\nCamera / Color / Vertex / Mesh / Texture2D / Pipeline / Framebuffer"]
-    platform["src/platform/Platform"]
-    window["src/platform/Window"]
     win32["Win32 + GDI"]
     docs["docs/architecture/project-architecture.md"]
 
     viewer --> app
+    app --> platform
     app --> base
     app --> resource
     app --> render
-    app --> platform
     resource --> render
-    platform --> window
-    window --> win32
+    platform --> win32
     render --> base
-    window -.读取像素并显示.-> render
+    platform -.读取像素并显示.-> render
     docs -.开发前阅读/开发后必要时更新.-> app
-    docs -.约束模块边界.-> resource
     docs -.约束模块边界.-> platform
+    docs -.约束模块边界.-> resource
     docs -.约束模块边界.-> render
 ```
 
@@ -63,11 +61,11 @@ flowchart LR
 1. `apps/viewer`
    程序入口层，只负责构造应用并交出控制权。
 2. `src/app`
-   应用调度层，负责生命周期、主循环、场景装配和渲染调用编排。
-3. `src/resource`
+   应用调度层，负责生命周期、主循环和 layer 编排。
+3. `src/platform`
+   平台实现层，负责窗口创建、消息泵、输入状态维护和最终显示。
+4. `src/resource`
    资源接入层，负责把磁盘资源解析成运行时可消费的数据结构。
-4. `src/platform`
-   平台适配层，负责窗口创建、消息泵、输入状态维护和最终显示。
 5. `src/render`
    软光栅核心层，负责 CPU 侧三角形处理与帧缓冲写入。
 6. `src/base`
@@ -81,32 +79,37 @@ flowchart LR
 sequenceDiagram
     participant Main as main.cpp
     participant App as Application
+    participant FB as render::Framebuffer(local)
+    participant Startup as StartupState(local)
+    participant Ctx as LayerContext(local)
     participant Layers as LayerStack
-    participant Ctx as LayerContext
+    participant SceneLayer as app::SceneLayer
     participant CameraLayer as app::CameraLayer
     participant RenderLayer as app::RenderLayer
-    participant Loader as resource::ObjMeshLoader
-    participant Platform as platform::Platform
     participant Window as platform::Window
 
     Main->>App: 构造 Application(title, width, height)
     Main->>App: Run()
-    App->>Loader: 读取 OBJ / MTL / 纹理资源
-    Loader-->>App: Mesh / Texture2D
-    App->>Ctx: 填充 sceneView / framebuffer
+    App->>FB: 创建局部 framebuffer
+    App->>Startup: 创建局部 startupState
+    App->>Ctx: 创建局部 context
     App->>Layers: OnAttach(context)
+    Layers->>SceneLayer: OnAttach(context)
+    SceneLayer->>App: 通过 context 回填 sceneView / startupState
     Layers->>CameraLayer: OnAttach(context)
     Layers->>RenderLayer: OnAttach(context)
-    App->>Platform: Initialize(title, width, height)
-    Platform->>Window: Create()
-    App->>Platform: Show()
+    App->>Window: Create()
+    App->>Window: Show()
 ```
 
 ### 5.2 逐帧链路
 
 ```text
-while (Platform::ProcessEvents())
+while (Window::ProcessEvents())
+-> Application 从 Window 读取输入状态
+-> Application 写 context.input
 -> Application 驱动 LayerStack::OnUpdate(deltaTime, context)
+-> CameraLayer 读取 context.input
 -> CameraLayer 更新 render::Camera 的 Pos / Dir / Right
 -> CameraLayer 写 context.activeCamera
 -> Application 驱动 LayerStack::OnRender(context)
@@ -117,7 +120,6 @@ while (Platform::ProcessEvents())
 -> NDC/屏幕映射
 -> 三角形光栅化
 -> 深度测试与颜色写入
--> Platform::Present(framebuffer)
 -> Window::Present(framebuffer)
 -> StretchDIBits 显示到 Win32 窗口
 ```
@@ -127,8 +129,8 @@ while (Platform::ProcessEvents())
 ```text
 Win32 keyboard messages
 -> Window::OnMessage()
--> Window 内部按键状态
--> Platform::IsKeyDown()
+-> Window 内部 InputState
+-> Application 写 context.input
 -> LayerStack::OnUpdate(deltaTime, context)
 -> CameraLayer::OnUpdate(deltaTime, context)
 -> render::Camera(Pos / Dir / Right / Up / Aspect)
@@ -140,8 +142,8 @@ OBJ(v + vt + vn) + mtllib/usemtl
 -> resource::LoadLitMesh()
 -> 解析 MTL(newmtl + map_Kd)
 -> 解码 PNG/JPG/JPEG 为 Texture2D
--> Application 组装 RenderSceneView
--> context.sceneView / context.framebuffer
+-> SceneLayer 持有 OBJ 资源和 model matrix
+-> context.sceneView
 -> RenderLayer::OnRender(context)
 -> Pipeline::Run()
 -> vertexShader 输出 clipPos + worldPos + worldNormal + uv
@@ -179,7 +181,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **边界条件**
 
 - 只做入口装配，不承载渲染、平台或数学逻辑。
-- 不直接操作 `platform::Platform`、`platform::Window`、`render::*`。
+- 不直接操作 `platform::Window`、`render::*`。
 - 入口如果需要新增模式切换、命令行解析，也应以“配置应用”而不是“替代应用主循环”为原则。
 
 ### 6.2 `src/app`
@@ -188,56 +190,55 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 - 作为运行时总调度器管理生命周期。
 - 持有 `LayerStack`，组织 `OnAttach / OnUpdate / OnRender / OnDetach` 的调用顺序。
-- 创建并维护 `LayerContext`，作为 layer 系统内部共享数据通道。
-- 创建平台窗口并维护主循环、present 与退出流程。
-- 负责 OBJ 场景资源加载、场景装配、启动信息构造、启动异常处理，以及把共享数据写入 `LayerContext`。
+- 在 `Run()` 内创建局部 `LayerContext / Framebuffer / StartupState`。
+- 直接持有 `Window` 并维护主循环、present 与退出流程。
+- 负责调度各 layer，但不拥有 scene/model/render 运行状态本体。
 
 **输入**
 
 - 应用标题、窗口宽高。
-- `src/platform` 的初始化、事件处理和 present 能力。
-- `src/resource` 的 OBJ 资源加载能力。
+- `src/platform` 的窗口、输入和显示能力。
 - `src/app` 内部 layer 提供的逐帧更新与渲染能力。
-- `src/render` 的渲染结果容器与相机数据。
+- `src/render` 的 `Framebuffer` 和相机数据。
 
 **输出**
 
 - 进程返回码。
-- 对平台层发出事件处理与 present 请求。
+- 对 `Window` 发出创建、事件处理与 present 请求。
 - 对 `LayerStack` 发出逐帧更新与渲染分发请求。
-- 向 `LayerContext` 提供场景视图与 `Framebuffer`。
+- 向局部 `LayerContext` 提供输入、`Framebuffer` 和启动期共享状态。
 
 **边界条件**
 
-- 可以依赖 `base`、`resource`、`render`、`platform`，但不应下沉到 Win32 API。
-- `Application` 负责“调度 + 场景装配”，不直接持有具体 `CameraLayer`。
-- 相机控制应放在 `CameraLayer::OnUpdate()`，渲染提交应放在 `RenderLayer::OnRender()`。
-- 不应把平台状态、窗口句柄或 GDI 细节泄漏到应用接口。
+- 可以依赖 `platform`、`base`、`resource`、`render`，但不应下沉到 Win32 API。
+- `Application` 负责“调度”，不直接持有具体 `SceneLayer`、`CameraLayer` 或 `RenderLayer`。
+- 相机控制应放在 `CameraLayer::OnUpdate()`，场景装配应放在 `SceneLayer::OnAttach()`，渲染提交应放在 `RenderLayer::OnRender()`。
+- 不应把 GDI、窗口句柄或资源所有权泄漏到应用接口。
 
 ### 6.3 `src/platform`
 
 **职责**
 
-- 封装当前 Windows 平台的窗口生命周期、消息泵与最小键盘输入状态。
+- 提供窗口创建、消息泵、输入状态维护和最终显示的具体平台实现。
+- 通过 `Window` 封装当前 Windows 平台细节。
 - 把 `render::Framebuffer` 的像素数据显示到本地窗口。
-- 作为应用层唯一可见的平台门面。
 
 **输入**
 
-- 来自 `src/app` 的窗口初始化参数。
+- 来自 `src/app` 的窗口参数。
 - 来自 `src/render` 的 `Framebuffer` 只读像素数据。
 - 来自操作系统的 Win32 消息、键盘事件和 GDI 显示能力。
 
 **输出**
 
-- `Initialize / Show / ProcessEvents / Present / IsKeyDown / Close / Name` 等平台级接口。
+- `Window::Create / Show / ProcessEvents / Present / Input` 等实例级能力。
 
 **边界条件**
 
-- `Platform` 是门面，`Window` 是具体平台窗口对象；应用层应优先依赖 `Platform`。
-- 可以维护并暴露输入状态、可以读取 `Framebuffer`，但不能反向修改渲染算法或业务场景数据。
+- 平台层当前不再保留额外 `Platform` 门面，`Window` 直接作为应用层可见的窗口抽象。
+- 可以维护并暴露输入状态、可以读取 `Framebuffer`，但不能反向修改渲染算法或场景数据。
 - 不负责三角形光栅化、矩阵运算、mesh 组织或 shader 逻辑。
-- 当前实现是 Windows-only；如果后续支持多平台，应在 `platform` 目录内扩展，而不是让 `app` 层出现平台分支。
+- 当前实现是 Windows-only；如果后续支持多平台，应在 `platform` 目录内扩展新的窗口实现，而不是把平台分支散到 `app` 层。
 
 ### 6.4 `src/render`
 
@@ -294,7 +295,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 **输入**
 
-- 来自 `src/app` 的资源路径。
+- 来自 `src/app` 或 `SceneLayer` 的资源路径。
 - 来自磁盘的 OBJ / MTL 文本内容和 PNG/JPG/JPEG 图片内容。
 
 **输出**

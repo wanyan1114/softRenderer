@@ -123,7 +123,7 @@ Window::Window(std::string title, int width, int height)
       m_Height(height),
       m_Handle(nullptr),
       m_Closed(false),
-      m_KeyStates{}
+      m_InputState{}
 {
 }
 
@@ -143,6 +143,8 @@ Window::~Window()
 
 bool Window::Create()
 {
+    SetProcessDPIAware();
+
     const HINSTANCE instance = GetModuleHandleW(nullptr);
     if (!RegisterWindowClass(instance)) {
         return false;
@@ -260,11 +262,6 @@ bool Window::Present(const render::Framebuffer& framebuffer) const
     return result != GDI_ERROR;
 }
 
-bool Window::IsKeyDown(Key key) const
-{
-    return m_KeyStates[static_cast<std::size_t>(key)];
-}
-
 bool Window::OnMessage(unsigned int message, unsigned long long wParam, long long, long long& result)
 {
     switch (message) {
@@ -311,12 +308,12 @@ bool Window::OnMessage(unsigned int message, unsigned long long wParam, long lon
 
 void Window::SetKeyState(Key key, bool isDown)
 {
-    m_KeyStates[static_cast<std::size_t>(key)] = isDown;
+    m_InputState.keyStates[static_cast<std::size_t>(key)] = isDown;
 }
 
 void Window::ResetInput()
 {
-    m_KeyStates.fill(false);
+    m_InputState.keyStates.fill(false);
 }
 
 } // namespace sr::platform
