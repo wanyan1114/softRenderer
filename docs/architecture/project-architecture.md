@@ -33,7 +33,7 @@
 ```mermaid
 flowchart LR
     viewer["apps/viewer/main.cpp"]
-    app["src/app/Application + CameraLayer"]
+    app["src/app<br/>Application / Layer / LayerContext / LayerStack / CameraLayer / RenderLayer"]
     resource["src/resource\nOBJ Loader"]
     base["src/base\nMath"]
     render["src/render\nCamera / Color / Vertex / Mesh / Texture2D / Pipeline / Framebuffer"]
@@ -63,7 +63,7 @@ flowchart LR
 1. `apps/viewer`
    程序入口层，只负责构造应用并交出控制权。
 2. `src/app`
-   应用调度层，负责生命周期、主循环、资源装配与渲染调用编排。
+   应用调度层，负责生命周期、主循环、场景装配和渲染调用编排。
 3. `src/resource`
    资源接入层，负责把磁盘资源解析成运行时可消费的数据结构。
 4. `src/platform`
@@ -81,18 +81,24 @@ flowchart LR
 sequenceDiagram
     participant Main as main.cpp
     participant App as Application
+    participant Layers as LayerStack
+    participant Ctx as LayerContext
+    participant CameraLayer as app::CameraLayer
+    participant RenderLayer as app::RenderLayer
+    participant Loader as resource::ObjMeshLoader
     participant Platform as platform::Platform
     participant Window as platform::Window
-    participant Loader as resource::LoadLitMesh
-    participant FB as render::Framebuffer
 
     Main->>App: 构造 Application(title, width, height)
     Main->>App: Run()
+    App->>Loader: 读取 OBJ / MTL / 纹理资源
+    Loader-->>App: Mesh / Texture2D
+    App->>Ctx: 填充 sceneView / framebuffer
+    App->>Layers: OnAttach(context)
+    Layers->>CameraLayer: OnAttach(context)
+    Layers->>RenderLayer: OnAttach(context)
     App->>Platform: Initialize(title, width, height)
     Platform->>Window: Create()
-    App->>Loader: 读取 assets/models/cube.obj + cube.mtl + map_Kd 纹理
-    Loader-->>App: render::Mesh<LitVertex> + Texture2D
-    App->>FB: 构造 Framebuffer(width, height)
     App->>Platform: Show()
 ```
 
@@ -100,10 +106,12 @@ sequenceDiagram
 
 ```text
 while (Platform::ProcessEvents())
--> Application 驱动 CameraLayer::OnUpdate()
--> CameraLayer 更新 Renderer::Camera 的 Pos / Dir / Right
--> Application 读取 camera.ViewMat4() / ProjectionMat4()
--> Application 清颜色/清深度
+-> Application 驱动 LayerStack::OnUpdate(deltaTime, context)
+-> CameraLayer 更新 render::Camera 的 Pos / Dir / Right
+-> CameraLayer 写 context.activeCamera
+-> Application 驱动 LayerStack::OnRender(context)
+-> RenderLayer 读取 context.activeCamera / context.sceneView / context.framebuffer
+-> RenderLayer 清颜色/清深度
 -> Pipeline::Run(framebuffer, mesh)
 -> 顶点着色
 -> NDC/屏幕映射
@@ -121,15 +129,20 @@ Win32 keyboard messages
 -> Window::OnMessage()
 -> Window 内部按键状态
 -> Platform::IsKeyDown()
--> CameraLayer::OnUpdate(deltaTime)
+-> LayerStack::OnUpdate(deltaTime, context)
+-> CameraLayer::OnUpdate(deltaTime, context)
 -> render::Camera(Pos / Dir / Right / Up / Aspect)
--> Camera::ViewMat4() / ProjectionMat4()
+-> context.activeCamera
+-> LayerStack::OnRender(context)
+-> RenderLayer 读取 Camera::ViewMat4() / ProjectionMat4()
 
 OBJ(v + vt + vn) + mtllib/usemtl
 -> resource::LoadLitMesh()
 -> 解析 MTL(newmtl + map_Kd)
 -> 解码 PNG/JPG/JPEG 为 Texture2D
--> LitVertex / DebugFaceVertex / Mesh
+-> Application 组装 RenderSceneView
+-> context.sceneView / context.framebuffer
+-> RenderLayer::OnRender(context)
 -> Pipeline::Run()
 -> vertexShader 输出 clipPos + worldPos + worldNormal + uv
 -> 屏幕空间三角形遍历
@@ -174,31 +187,32 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **职责**
 
 - 作为运行时总调度器管理生命周期。
-- 创建平台窗口与帧缓冲。
-- 组织每帧输入读取、驱动 `CameraLayer`、清屏、渲染、显示和退出流程。
-- 组装当前示例场景的模型矩阵、uniforms、pipeline、mesh 与 base color 纹理，并在渲染前消费 `CameraLayer` 提供的相机结果。
-- 解析固定示例资源路径，调用资源层加载 OBJ/MTL/外部图片，并把返回的纹理对象装配到示例场景。
+- 持有 `LayerStack`，组织 `OnAttach / OnUpdate / OnRender / OnDetach` 的调用顺序。
+- 创建并维护 `LayerContext`，作为 layer 系统内部共享数据通道。
+- 创建平台窗口并维护主循环、present 与退出流程。
+- 负责 OBJ 场景资源加载、场景装配、启动信息构造、启动异常处理，以及把共享数据写入 `LayerContext`。
 
 **输入**
 
 - 应用标题、窗口宽高。
-- `src/base` 的数学工具。
-- `src/render` 的相机、帧缓冲、mesh、Texture2D、program、pipeline。
-- `src/resource` 的模型加载能力。
-- `src/platform` 的初始化、事件处理、键盘查询和 present 能力。
+- `src/platform` 的初始化、事件处理和 present 能力。
+- `src/resource` 的 OBJ 资源加载能力。
+- `src/app` 内部 layer 提供的逐帧更新与渲染能力。
+- `src/render` 的渲染结果容器与相机数据。
 
 **输出**
 
 - 进程返回码。
 - 对平台层发出事件处理与 present 请求。
-- 对渲染层发出逐帧执行请求。
+- 对 `LayerStack` 发出逐帧更新与渲染分发请求。
+- 向 `LayerContext` 提供场景视图与 `Framebuffer`。
 
 **边界条件**
 
 - 可以依赖 `base`、`resource`、`render`、`platform`，但不应下沉到 Win32 API。
-- 负责“调度”和“场景装配”，不负责具体像素写入算法。
+- `Application` 负责“调度 + 场景装配”，不直接持有具体 `CameraLayer`。
+- 相机控制应放在 `CameraLayer::OnUpdate()`，渲染提交应放在 `RenderLayer::OnRender()`。
 - 不应把平台状态、窗口句柄或 GDI 细节泄漏到应用接口。
-- 如果后续引入场景管理、相机层、资源系统，应优先继续放在调度层或更高层，而不是塞回入口层。
 
 ### 6.3 `src/platform`
 
@@ -290,7 +304,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **边界条件**
 
 - 可以依赖 `render` 的顶点/mesh 协议，但不负责窗口显示、主循环或像素写入。
-- 当前已接入最小 OBJ loader、最小 MTL(base color) 解析和 PNG/JPG/JPEG 外部纹理解码，但仍未扩展到多材质子网格、更多材质通道和通用场景解析。
+- 当前只接入最小 OBJ loader、最小 MTL(base color) 解析和 PNG/JPG/JPEG 外部纹理解码。
 - 如果后续资源种类继续增多，应优先在 `resource` 目录内扩展，而不是把解析逻辑散落到 `app` 或 `render`。
 
 ### 6.7 `assets`
@@ -345,6 +359,7 @@ src/base -> 无上层依赖
 - 平台显示和软光栅算法分层明确，平台层不实现渲染主线，渲染层不处理消息泵。
 - 数学层保持纯工具属性，为应用装配和渲染执行同时服务。
 - 当前渲染链以 `Camera + Program + Pipeline + Mesh + Texture2D + Framebuffer` 为基础协议。
+- 当前 viewer 运行时只保留 OBJ 模型加载与渲染路径。
 
 ## 9. 什么时候必须更新这份架构图
 
@@ -373,14 +388,3 @@ src/base -> 无上层依赖
 3. 本次功能已有的 `docs/features/<feature-name>.md`，如果它已经存在。
 
 如果发现“代码现状”和“本文档”不一致，应优先指出差异，并在实现或 review 迭代中补齐更新。
-
-
-
-
-
-
-
-
-
-
-

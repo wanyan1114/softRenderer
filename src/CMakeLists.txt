@@ -27,6 +27,7 @@ target_sources(sr_engine
     PRIVATE
         app/Application.cpp
         app/CameraLayer.cpp
+        app/RenderLayer.cpp
         base/Math.cpp
         render/Camera.cpp
         render/Framebuffer.cpp

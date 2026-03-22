@@ -42,6 +42,18 @@ public:
         ProcessMesh(mesh, framebuffer);
     }
 
+    void RunTriangle(Framebuffer& framebuffer,
+        const vertex_t& vertex0,
+        const vertex_t& vertex1,
+        const vertex_t& vertex2) const
+    {
+        if (!VertexStage::ProgramAvailable(m_Program)) {
+            return;
+        }
+
+        ProcessInputTriangle(framebuffer, vertex0, vertex1, vertex2);
+    }
+
 private:
     using VertexStage = detail::VertexStage<vertex_t, uniforms_t, varyings_t>;
     using ClipStage = detail::ClipStage<varyings_t>;

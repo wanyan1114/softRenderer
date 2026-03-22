@@ -1,2 +1,2 @@
-﻿newmtl CubeMaterial
+newmtl CubeMaterial
 map_Kd ../textures/cube-basecolor.png

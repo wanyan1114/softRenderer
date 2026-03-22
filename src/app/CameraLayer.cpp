@@ -2,12 +2,8 @@
 
 #include "platform/Input.h"
 #include "platform/Platform.h"
-#include "render/Framebuffer.h"
 
 namespace sr {
-
-CameraLayer* CameraLayer::s_Instance = nullptr;
-
 namespace {
 
 math::Vec3 WorldUp()
@@ -17,35 +13,27 @@ math::Vec3 WorldUp()
 
 } // namespace
 
-CameraLayer::CameraLayer()
+CameraLayer::CameraLayer(int viewportWidth, int viewportHeight)
+    : Layer("CameraLayer"),
+      m_ViewportWidth(viewportWidth),
+      m_ViewportHeight(viewportHeight)
 {
-    s_Instance = this;
 }
 
-CameraLayer::~CameraLayer()
+void CameraLayer::OnAttach(LayerContext& context)
 {
-    if (s_Instance == this) {
-        s_Instance = nullptr;
-    }
-}
+    const int safeWidth = m_ViewportWidth > 0 ? m_ViewportWidth : 1;
+    const int safeHeight = m_ViewportHeight > 0 ? m_ViewportHeight : 1;
 
-CameraLayer& CameraLayer::Get()
-{
-    return *s_Instance;
-}
-
-void CameraLayer::OnAttach(const render::Framebuffer& framebuffer)
-{
-    const int width = framebuffer.Width();
-    const int height = framebuffer.Height();
-    m_Camera.Aspect = height > 0 ? static_cast<float>(width) / static_cast<float>(height) : 1.0f;
+    m_Camera.Aspect = static_cast<float>(safeWidth) / static_cast<float>(safeHeight);
     m_Camera.Pos = { 0.0f, 0.0f, 2.6f };
     m_Camera.Right = { 1.0f, 0.0f, 0.0f };
     m_Camera.Up = WorldUp();
     m_Camera.Dir = { 0.0f, 0.0f, -1.0f };
+    context.activeCamera = &m_Camera;
 }
 
-void CameraLayer::OnUpdate(float deltaTime)
+void CameraLayer::OnUpdate(float deltaTime, LayerContext& context)
 {
     const float clampedDeltaTime = math::Clamp(deltaTime, 0.0f, 0.1f);
     const float yawDelta = ((platform::Platform::IsKeyDown(platform::Key::Q) ? 1.0f : 0.0f)
@@ -82,6 +70,8 @@ void CameraLayer::OnUpdate(float deltaTime)
     if (movement.Length() > 0.0f) {
         m_Camera.Pos = m_Camera.Pos + movement.Normalized() * (m_MoveSpeed * clampedDeltaTime);
     }
+
+    context.activeCamera = &m_Camera;
 }
 
 } // namespace sr

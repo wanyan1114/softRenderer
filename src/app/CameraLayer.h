@@ -1,35 +1,21 @@
 ﻿#pragma once
 
-#include "render/Camera.h"
-#include "render/Color.h"
+#include "app/Layer.h"
 
-namespace sr::render {
-class Framebuffer;
-}
+#include "render/Camera.h"
 
 namespace sr {
 
-class CameraLayer {
+class CameraLayer : public Layer {
 public:
-    CameraLayer();
-    ~CameraLayer();
+    CameraLayer(int viewportWidth, int viewportHeight);
 
-    CameraLayer(const CameraLayer&) = delete;
-    CameraLayer& operator=(const CameraLayer&) = delete;
-
-    static CameraLayer& Get();
-
-    void OnAttach(const render::Framebuffer& framebuffer);
-    void OnUpdate(float deltaTime);
-
-    const render::Camera& Camera() const { return m_Camera; }
-    render::Camera& Camera() { return m_Camera; }
-    const render::Color& BackgroundColor() const { return m_BackgroundColor; }
+    void OnAttach(LayerContext& context) override;
+    void OnUpdate(float deltaTime, LayerContext& context) override;
 
 private:
-    static CameraLayer* s_Instance;
-
-    render::Color m_BackgroundColor{ 18, 24, 38 };
+    int m_ViewportWidth = 1;
+    int m_ViewportHeight = 1;
     render::Camera m_Camera{};
     float m_MoveSpeed = 2.0f;
     float m_RotateSpeed = math::kPi * 0.9f;
