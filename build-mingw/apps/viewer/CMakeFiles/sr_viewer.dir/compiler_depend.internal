@@ -207,14 +207,14 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h
  D:/TimePlan/2026-2/softRanderer/src/app/Application.h
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
 

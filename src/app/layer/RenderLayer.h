@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "app/LayerContext.h"
-#include "app/Layer.h"
+#include "app/layer/LayerContext.h"
+#include "app/layer/Layer.h"
 
 namespace sr {
 
@@ -13,3 +13,4 @@ public:
 };
 
 } // namespace sr
+

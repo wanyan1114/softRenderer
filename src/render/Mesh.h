@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "render/Vertex.h"
-
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>

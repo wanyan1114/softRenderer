@@ -14,13 +14,12 @@
 namespace sr::resource {
 namespace {
 
-using FlatMeshIndex = render::Mesh<render::FlatColorVertex>::index_t;
-using LitMeshIndex = render::Mesh<render::LitVertex>::index_t;
+using MeshIndex = render::Mesh<render::LitVertex>::index_t;
 
 struct ParsedFaceVertex {
-    FlatMeshIndex positionIndex = 0;
-    FlatMeshIndex texCoordIndex = 0;
-    FlatMeshIndex normalIndex = 0;
+    MeshIndex positionIndex = 0;
+    MeshIndex texCoordIndex = 0;
+    MeshIndex normalIndex = 0;
     bool hasTexCoord = false;
     bool hasNormal = false;
 };
@@ -59,7 +58,7 @@ std::string Trim(const std::string& text)
     return text.substr(start, end - start);
 }
 
-bool ParseIndexToken(const std::string& token, FlatMeshIndex& index)
+bool ParseIndexToken(const std::string& token, MeshIndex& index)
 {
     if (token.empty()) {
         return false;
@@ -71,7 +70,7 @@ bool ParseIndexToken(const std::string& token, FlatMeshIndex& index)
         return false;
     }
 
-    index = static_cast<FlatMeshIndex>(parsedIndex - 1);
+    index = static_cast<MeshIndex>(parsedIndex - 1);
     return true;
 }
 
@@ -156,17 +155,17 @@ bool ParseFaceLine(const std::string& line, std::array<ParsedFaceVertex, 3>& fac
         && ParseFaceVertexToken(tokens[2], faceVertices[2]);
 }
 
-bool PositionIndexInRange(FlatMeshIndex index, const std::vector<math::Vec3>& positions)
+bool PositionIndexInRange(MeshIndex index, const std::vector<math::Vec3>& positions)
 {
     return static_cast<std::size_t>(index) < positions.size();
 }
 
-bool TexCoordIndexInRange(FlatMeshIndex index, const std::vector<math::Vec2>& texCoords)
+bool TexCoordIndexInRange(MeshIndex index, const std::vector<math::Vec2>& texCoords)
 {
     return static_cast<std::size_t>(index) < texCoords.size();
 }
 
-bool NormalIndexInRange(FlatMeshIndex index, const std::vector<math::Vec3>& normals)
+bool NormalIndexInRange(MeshIndex index, const std::vector<math::Vec3>& normals)
 {
     return static_cast<std::size_t>(index) < normals.size();
 }
@@ -252,64 +251,6 @@ MaterialLibraryParseResult ResolveBaseColorTexturePath(
 
 } // namespace
 
-ObjLoadResult LoadFlatColorMesh(const std::filesystem::path& path)
-{
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        return { {}, "Failed to open OBJ file: " + path.string() };
-    }
-
-    std::vector<math::Vec3> positions;
-    std::vector<render::FlatColorVertex> vertices;
-    std::vector<FlatMeshIndex> indices;
-    std::string line;
-    int lineNumber = 0;
-
-    while (std::getline(file, line)) {
-        ++lineNumber;
-        const std::string trimmed = TrimLeadingWhitespace(line);
-        if (trimmed.empty() || trimmed[0] == '#' || IsWhitespaceOnly(trimmed)) {
-            continue;
-        }
-
-        if (trimmed.rfind("v ", 0) == 0) {
-            math::Vec3 position{};
-            if (!ParseVertexLine(trimmed, position)) {
-                return { {}, "Invalid vertex line at " + std::to_string(lineNumber) + " in " + path.string() };
-            }
-
-            positions.push_back(position);
-            vertices.emplace_back(position);
-            continue;
-        }
-
-        if (trimmed.rfind("f ", 0) == 0) {
-            std::array<ParsedFaceVertex, 3> faceVertices{};
-            if (!ParseFaceLine(trimmed, faceVertices)) {
-                return { {}, "Only triangular faces are supported. Invalid face line at "
-                        + std::to_string(lineNumber) + " in " + path.string() };
-            }
-
-            for (const ParsedFaceVertex& faceVertex : faceVertices) {
-                if (!PositionIndexInRange(faceVertex.positionIndex, positions)) {
-                    return { {}, "OBJ face references an out-of-range vertex index in: " + path.string() };
-                }
-                indices.push_back(faceVertex.positionIndex);
-            }
-        }
-    }
-
-    if (vertices.empty()) {
-        return { {}, "OBJ file contains no vertices: " + path.string() };
-    }
-
-    if (indices.empty()) {
-        return { {}, "OBJ file contains no faces: " + path.string() };
-    }
-
-    return { render::Mesh<render::FlatColorVertex>(std::move(vertices), std::move(indices)), {} };
-}
-
 ObjLitLoadResult LoadLitMesh(const std::filesystem::path& path)
 {
     std::ifstream file(path);
@@ -321,10 +262,10 @@ ObjLitLoadResult LoadLitMesh(const std::filesystem::path& path)
     std::vector<math::Vec2> texCoords;
     std::vector<math::Vec3> normals;
     std::vector<render::LitVertex> vertices;
-    std::vector<LitMeshIndex> indices;
+    std::vector<MeshIndex> indices;
     std::string line;
     int lineNumber = 0;
-    LitMeshIndex nextIndex = 0;
+    MeshIndex nextIndex = 0;
     std::filesystem::path materialLibraryPath;
     std::string activeMaterialName;
     std::string resolvedMaterialName;
@@ -430,16 +371,8 @@ ObjLitLoadResult LoadLitMesh(const std::filesystem::path& path)
         }
     }
 
-    if (positions.empty()) {
+    if (vertices.empty()) {
         return { {}, {}, {}, {}, "OBJ file contains no vertices: " + path.string() };
-    }
-
-    if (texCoords.empty()) {
-        return { {}, {}, {}, {}, "OBJ file contains no texcoords: " + path.string() };
-    }
-
-    if (normals.empty()) {
-        return { {}, {}, {}, {}, "OBJ file contains no normals: " + path.string() };
     }
 
     if (indices.empty()) {
@@ -447,32 +380,32 @@ ObjLitLoadResult LoadLitMesh(const std::filesystem::path& path)
     }
 
     if (materialLibraryPath.empty()) {
-        return { {}, {}, {}, {}, "OBJ file is missing mtllib: " + path.string() };
+        return { {}, {}, {}, {}, "OBJ file does not declare mtllib: " + path.string() };
     }
 
     if (resolvedMaterialName.empty()) {
         return { {}, {}, {}, {}, "OBJ file does not use any material: " + path.string() };
     }
 
-    const MaterialLibraryParseResult materialResult = ResolveBaseColorTexturePath(materialLibraryPath, resolvedMaterialName);
+    const MaterialLibraryParseResult materialResult = ResolveBaseColorTexturePath(
+        materialLibraryPath,
+        resolvedMaterialName);
     if (!materialResult.Ok()) {
         return { {}, {}, {}, {}, materialResult.error };
     }
 
-    const ImageTextureLoadResult textureResult = LoadImageTexture2D(materialResult.baseColorTexturePath);
-    if (!textureResult.Ok()) {
-        return { {}, {}, {}, {}, textureResult.error };
+    ImageTextureLoadResult imageResult = LoadImageTexture2D(materialResult.baseColorTexturePath);
+    if (!imageResult.Ok()) {
+        return { {}, {}, {}, {}, imageResult.error };
     }
 
     return {
         render::Mesh<render::LitVertex>(std::move(vertices), std::move(indices)),
-        textureResult.texture,
+        std::move(imageResult.texture),
         materialResult.baseColorTexturePath,
         resolvedMaterialName,
-        {}
+        {},
     };
 }
 
 } // namespace sr::resource
-
-

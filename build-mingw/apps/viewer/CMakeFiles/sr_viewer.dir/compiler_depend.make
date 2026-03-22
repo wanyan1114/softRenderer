@@ -206,16 +206,16 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: D:/TimePlan/2026-2/softRander
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h \
   D:/TimePlan/2026-2/softRanderer/src/app/Application.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
 
 
 C:/msys64/mingw64/include/_mingw_secapi.h:
@@ -398,8 +398,6 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algo.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/stl_algobase.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h:
-
 C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/stl_construct.h:
@@ -540,6 +538,8 @@ C:/msys64/mingw64/include/c++/15.2.0/string_view:
 
 C:/msys64/mingw64/include/c++/15.2.0/tr1/bessel_function.tcc:
 
+D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h:
+
 C:/msys64/mingw64/include/c++/15.2.0/tr1/beta_function.tcc:
 
 C:/msys64/mingw64/include/c++/15.2.0/tr1/ell_integral.tcc:
@@ -640,10 +640,10 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/Layer.h:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h:
 
-D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h:
+D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h:

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "app/LayerContext.h"
-#include "app/Layer.h"
+#include "app/layer/LayerContext.h"
+#include "app/layer/Layer.h"
 
 #include "base/Math.h"
 #include "resource/loaders/ObjMeshLoader.h"
@@ -30,3 +30,4 @@ private:
 };
 
 } // namespace sr
+

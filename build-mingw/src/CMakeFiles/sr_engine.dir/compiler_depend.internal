@@ -244,12 +244,12 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h
  D:/TimePlan/2026-2/softRanderer/src/app/Application.h
- D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.h
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h
- D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.h
- D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Window.h
@@ -258,11 +258,11 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj
  D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
  D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj
- D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.cpp
  C:/msys64/mingw64/include/_mingw.h
  C:/msys64/mingw64/include/_mingw_mac.h
  C:/msys64/mingw64/include/_mingw_off_t.h
@@ -407,19 +407,19 @@ src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h
- D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.h
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/render/Camera.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
 
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj
- D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.cpp
  C:/msys64/mingw64/include/_mingw.h
  C:/msys64/mingw64/include/_mingw_mac.h
  C:/msys64/mingw64/include/_mingw_off_t.h
@@ -564,10 +564,11 @@ src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h
- D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
+ D:/TimePlan/2026-2/softRanderer/src/base/StateMachine.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/render/Camera.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
@@ -576,11 +577,15 @@ src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj
  D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h
  D:/TimePlan/2026-2/softRanderer/src/render/PipelineMathHelper.h
  D:/TimePlan/2026-2/softRanderer/src/render/PipelineStages.h
+ D:/TimePlan/2026-2/softRanderer/src/render/Program.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
+ D:/TimePlan/2026-2/softRanderer/src/render/shader/Lighting.h
+ D:/TimePlan/2026-2/softRanderer/src/render/shader/LitShader.h
+ D:/TimePlan/2026-2/softRanderer/src/render/shader/ShaderTypes.h
 
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj
- D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.cpp
  C:/msys64/mingw64/include/_mingw.h
  C:/msys64/mingw64/include/_mingw_mac.h
  C:/msys64/mingw64/include/_mingw_off_t.h
@@ -799,15 +804,15 @@ src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h
- D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h
  D:/TimePlan/2026-2/softRanderer/src/platform/Input.h
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
  D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 
 src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj
@@ -1751,7 +1756,7 @@ src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj
  D:/TimePlan/2026-2/softRanderer/src/render/Color.h
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h
  D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
  D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.h
  D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 

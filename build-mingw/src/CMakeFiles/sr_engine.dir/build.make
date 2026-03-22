@@ -86,50 +86,50 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/Application.cpp.s"
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\Application.cpp -o CMakeFiles\sr_engine.dir\app\Application.cpp.s
 
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.cpp
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\CameraLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\CameraLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\CameraLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\layer\CameraLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\layer\CameraLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\layer\CameraLayer.cpp
 
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.i"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\CameraLayer.cpp > CMakeFiles\sr_engine.dir\app\CameraLayer.cpp.i
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\layer\CameraLayer.cpp > CMakeFiles\sr_engine.dir\app\layer\CameraLayer.cpp.i
 
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.s"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\CameraLayer.cpp -o CMakeFiles\sr_engine.dir\app\CameraLayer.cpp.s
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\layer\CameraLayer.cpp -o CMakeFiles\sr_engine.dir\app\layer\CameraLayer.cpp.s
 
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.cpp
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\RenderLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\RenderLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\RenderLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\layer\RenderLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\layer\RenderLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\layer\RenderLayer.cpp
 
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.i"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\RenderLayer.cpp > CMakeFiles\sr_engine.dir\app\RenderLayer.cpp.i
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\layer\RenderLayer.cpp > CMakeFiles\sr_engine.dir\app\layer\RenderLayer.cpp.i
 
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.s"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\RenderLayer.cpp -o CMakeFiles\sr_engine.dir\app\RenderLayer.cpp.s
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\layer\RenderLayer.cpp -o CMakeFiles\sr_engine.dir\app\layer\RenderLayer.cpp.s
 
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.cpp
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\SceneLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\SceneLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\SceneLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.cpp
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj: src/CMakeFiles/sr_engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\TimePlan\2026-2\softRanderer\build-mingw\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj -MF CMakeFiles\sr_engine.dir\app\layer\SceneLayer.cpp.obj.d -o CMakeFiles\sr_engine.dir\app\layer\SceneLayer.cpp.obj -c D:\TimePlan\2026-2\softRanderer\src\app\layer\SceneLayer.cpp
 
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.i"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\SceneLayer.cpp > CMakeFiles\sr_engine.dir\app\SceneLayer.cpp.i
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.i"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\TimePlan\2026-2\softRanderer\src\app\layer\SceneLayer.cpp > CMakeFiles\sr_engine.dir\app\layer\SceneLayer.cpp.i
 
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.s"
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\SceneLayer.cpp -o CMakeFiles\sr_engine.dir\app\SceneLayer.cpp.s
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.s"
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw\src && C:\msys64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\TimePlan\2026-2\softRanderer\src\app\layer\SceneLayer.cpp -o CMakeFiles\sr_engine.dir\app\layer\SceneLayer.cpp.s
 
 src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: src/CMakeFiles/sr_engine.dir/flags.make
 src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: src/CMakeFiles/sr_engine.dir/includes_CXX.rsp
@@ -209,9 +209,9 @@ src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.s: cmake_force
 # Object files for target sr_engine
 sr_engine_OBJECTS = \
 "CMakeFiles/sr_engine.dir/app/Application.cpp.obj" \
-"CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj" \
-"CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj" \
-"CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj" \
+"CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj" \
+"CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj" \
+"CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj" \
 "CMakeFiles/sr_engine.dir/base/Math.cpp.obj" \
 "CMakeFiles/sr_engine.dir/render/Camera.cpp.obj" \
 "CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj" \
@@ -222,9 +222,9 @@ sr_engine_OBJECTS = \
 sr_engine_EXTERNAL_OBJECTS =
 
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj
-lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj
-lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj
-lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj
+lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/render/Camera.cpp.obj
 lib/libsr_engine.a: src/CMakeFiles/sr_engine.dir/render/Framebuffer.cpp.obj

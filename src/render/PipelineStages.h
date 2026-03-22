@@ -1,18 +1,45 @@
-#pragma once
+﻿#pragma once
 
 #include "base/Math.h"
+#include "base/StateMachine.h"
 #include "render/Framebuffer.h"
 #include "render/PipelineMathHelper.h"
-#include "render/Vertex.h"
+#include "render/Program.h"
+#include "render/shader/ShaderTypes.h"
 
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <utility>
 #include <vector>
 
 namespace sr::render::detail {
+
+enum class PipelineStageId {
+    Vertex,
+    Clip,
+    Raster,
+    Fragment,
+    Completed,
+    Invalid,
+};
+
+template<typename varyings_t>
+struct VertexStageData {
+    using Triangle = std::array<varyings_t, 3>;
+
+    Triangle triangle{};
+};
+
+template<typename varyings_t>
+struct ClipStageData {
+    using Triangle = std::array<varyings_t, 3>;
+
+    std::vector<Triangle> clippedTriangles;
+    std::size_t currentTriangleIndex = 0;
+};
 
 struct ScreenPoint {
     math::Vec2 position;
@@ -35,33 +62,76 @@ struct RasterBounds {
     bool positiveArea = true;
 };
 
-template<typename vertex_t, typename uniforms_t, typename varyings_t>
-struct VertexStage {
-    using Triangle = std::array<varyings_t, 3>;
+template<typename varyings_t>
+struct RasterStageData {
+    using ScreenTriangle = std::array<ScreenVertex<varyings_t>, 3>;
 
-    static bool ProgramAvailable(const Program<vertex_t, uniforms_t, varyings_t>& program)
+    ScreenTriangle screenTriangle{};
+    RasterBounds bounds{};
+    bool hasTriangle = false;
+};
+
+template<typename vertex_t, typename uniforms_t, typename varyings_t>
+bool ProgramAvailable(const Program<vertex_t, uniforms_t, varyings_t>& program)
+{
+    return program.vertexShader != nullptr && program.fragmentShader != nullptr;
+}
+
+template<typename vertex_t, typename uniforms_t, typename varyings_t>
+class PipelineStageMachine;
+
+template<typename machine_t>
+class VertexStage final : public base::State<machine_t, PipelineStageId> {
+public:
+    PipelineStageId GetID() const override
     {
-        return program.vertexShader != nullptr && program.fragmentShader != nullptr;
+        return PipelineStageId::Vertex;
     }
 
-    static Triangle Execute(const Program<vertex_t, uniforms_t, varyings_t>& program,
-        const uniforms_t& uniforms,
-        const vertex_t& vertex0,
-        const vertex_t& vertex1,
-        const vertex_t& vertex2)
+    void OnExcute(machine_t& machine) override
     {
-        Triangle triangle{};
-        program.vertexShader(triangle[0], vertex0, uniforms);
-        program.vertexShader(triangle[1], vertex1, uniforms);
-        program.vertexShader(triangle[2], vertex2, uniforms);
-        return triangle;
+        using triangle_t = typename machine_t::vertex_triangle_t;
+
+        triangle_t triangle{};
+        const auto& input = machine.InputTriangle();
+        const auto& program = machine.ProgramRef();
+        const auto& uniforms = machine.UniformsRef();
+
+        program.vertexShader(triangle[0], input[0], uniforms);
+        program.vertexShader(triangle[1], input[1], uniforms);
+        program.vertexShader(triangle[2], input[2], uniforms);
+
+        machine.VertexData().triangle = std::move(triangle);
+        machine.ChangeToClip();
     }
 };
 
-template<typename varyings_t>
-struct ClipStage {
-    using Math = PipelineMathHelper;
+template<typename machine_t>
+class ClipStage final : public base::State<machine_t, PipelineStageId> {
+public:
+    PipelineStageId GetID() const override
+    {
+        return PipelineStageId::Clip;
+    }
+
+    void OnExcute(machine_t& machine) override
+    {
+        auto& clipData = machine.ClipData();
+        clipData.clippedTriangles = Execute(machine.VertexData().triangle);
+        clipData.currentTriangleIndex = 0;
+
+        if (clipData.clippedTriangles.empty()) {
+            machine.Complete();
+            return;
+        }
+
+        machine.ChangeToRaster();
+    }
+
+private:
+    using varyings_t = typename machine_t::varyings_type;
     using Triangle = std::array<varyings_t, 3>;
+    using Math = PipelineMathHelper;
 
     enum class ClipPlane {
         Left,
@@ -81,7 +151,6 @@ struct ClipStage {
         return TriangulatePolygon(clippedPolygon);
     }
 
-private:
     static float ClipDistance(const math::Vec4& clipPosition, ClipPlane plane)
     {
         switch (plane) {
@@ -226,41 +295,68 @@ private:
     }
 };
 
-template<typename varyings_t>
-struct RasterStage {
-    using Math = PipelineMathHelper;
+template<typename machine_t>
+class RasterStage final : public base::State<machine_t, PipelineStageId> {
+public:
+    PipelineStageId GetID() const override
+    {
+        return PipelineStageId::Raster;
+    }
+
+    void OnExcute(machine_t& machine) override
+    {
+        auto& clipData = machine.ClipData();
+        auto& rasterData = machine.RasterData();
+        rasterData.hasTriangle = false;
+
+        while (clipData.currentTriangleIndex < clipData.clippedTriangles.size()) {
+            if (PrepareTriangle(
+                    machine.FramebufferRef(),
+                    clipData.clippedTriangles[clipData.currentTriangleIndex],
+                    machine.ProgramRef().faceCullMode,
+                    rasterData)) {
+                machine.ChangeToFragment();
+                return;
+            }
+
+            ++clipData.currentTriangleIndex;
+        }
+
+        machine.Complete();
+    }
+
+private:
+    using varyings_t = typename machine_t::varyings_type;
     using Triangle = std::array<varyings_t, 3>;
-    using ScreenVertex = detail::ScreenVertex<varyings_t>;
+    using ScreenTriangle = typename RasterStageData<varyings_t>::ScreenTriangle;
+    using Math = PipelineMathHelper;
 
-    static constexpr std::size_t kBaseFloatCount = sizeof(VaryingsBase) / sizeof(float);
-    static constexpr std::size_t kTotalFloatCount = sizeof(varyings_t) / sizeof(float);
-
-    template<typename fragment_consumer_t>
-    static void Execute(const Framebuffer& framebuffer,
+    static bool PrepareTriangle(const Framebuffer& framebuffer,
         const Triangle& triangle,
         FaceCullMode faceCullMode,
-        fragment_consumer_t&& consumeFragment)
+        RasterStageData<varyings_t>& rasterData)
     {
-        ScreenVertex v0{ triangle[0], {} };
-        ScreenVertex v1{ triangle[1], {} };
-        ScreenVertex v2{ triangle[2], {} };
+        ScreenVertex<varyings_t> v0{ triangle[0], {} };
+        ScreenVertex<varyings_t> v1{ triangle[1], {} };
+        ScreenVertex<varyings_t> v2{ triangle[2], {} };
 
         if (!FinalizeVertex(framebuffer, v0)
             || !FinalizeVertex(framebuffer, v1)
             || !FinalizeVertex(framebuffer, v2)) {
-            return;
+            return false;
         }
 
-        RasterizeTriangle(
-            framebuffer,
-            v0,
-            v1,
-            v2,
-            faceCullMode,
-            std::forward<fragment_consumer_t>(consumeFragment));
+        const float area = Math::CalculateTriangleArea(v0.screen.position, v1.screen.position, v2.screen.position);
+        if (Math::IsDegenerateTriangle(area) || ShouldCullTriangle(area, faceCullMode)) {
+            return false;
+        }
+
+        rasterData.screenTriangle = ScreenTriangle{ v0, v1, v2 };
+        rasterData.bounds = CalculateRasterBounds(framebuffer, v0, v1, v2, area);
+        rasterData.hasTriangle = true;
+        return true;
     }
 
-private:
     static math::Vec4 CalculateNdcPosition(const math::Vec4& clipPosition)
     {
         const float reciprocalW = 1.0f / clipPosition.w;
@@ -299,7 +395,7 @@ private:
         };
     }
 
-    static bool FinalizeVertex(const Framebuffer& framebuffer, ScreenVertex& vertex)
+    static bool FinalizeVertex(const Framebuffer& framebuffer, ScreenVertex<varyings_t>& vertex)
     {
         const math::Vec4& clipPosition = vertex.varyings.clipPos;
         if (!std::isfinite(clipPosition.x)
@@ -322,10 +418,80 @@ private:
         return true;
     }
 
+    static bool ShouldCullTriangle(float area, FaceCullMode faceCullMode)
+    {
+        if (faceCullMode == FaceCullMode::None) {
+            return false;
+        }
+
+        return area <= Math::kAreaEpsilon;
+    }
+
+    static RasterBounds CalculateRasterBounds(const Framebuffer& framebuffer,
+        const ScreenVertex<varyings_t>& v0,
+        const ScreenVertex<varyings_t>& v1,
+        const ScreenVertex<varyings_t>& v2,
+        float area)
+    {
+        const float minX = std::min({ v0.screen.position.x, v1.screen.position.x, v2.screen.position.x });
+        const float maxX = std::max({ v0.screen.position.x, v1.screen.position.x, v2.screen.position.x });
+        const float minY = std::min({ v0.screen.position.y, v1.screen.position.y, v2.screen.position.y });
+        const float maxY = std::max({ v0.screen.position.y, v1.screen.position.y, v2.screen.position.y });
+
+        return RasterBounds{
+            std::max(0, static_cast<int>(std::floor(minX))),
+            std::min(framebuffer.Width() - 1, static_cast<int>(std::ceil(maxX))),
+            std::max(0, static_cast<int>(std::floor(minY))),
+            std::min(framebuffer.Height() - 1, static_cast<int>(std::ceil(maxY))),
+            area,
+            area > 0.0f,
+        };
+    }
+};
+
+template<typename machine_t>
+class FragmentStage final : public base::State<machine_t, PipelineStageId> {
+public:
+    PipelineStageId GetID() const override
+    {
+        return PipelineStageId::Fragment;
+    }
+
+    void OnExcute(machine_t& machine) override
+    {
+        auto& rasterData = machine.RasterData();
+        if (rasterData.hasTriangle) {
+            RasterizeTriangle(
+                machine.ProgramRef(),
+                machine.UniformsRef(),
+                machine.FramebufferRef(),
+                rasterData);
+        }
+
+        rasterData.hasTriangle = false;
+        ++machine.ClipData().currentTriangleIndex;
+
+        if (machine.ClipData().currentTriangleIndex >= machine.ClipData().clippedTriangles.size()) {
+            machine.Complete();
+            return;
+        }
+
+        machine.ChangeToRaster();
+    }
+
+private:
+    using vertex_t = typename machine_t::vertex_type;
+    using uniforms_t = typename machine_t::uniforms_type;
+    using varyings_t = typename machine_t::varyings_type;
+    using Math = PipelineMathHelper;
+
+    static constexpr std::size_t kBaseFloatCount = sizeof(VaryingsBase) / sizeof(float);
+    static constexpr std::size_t kTotalFloatCount = sizeof(varyings_t) / sizeof(float);
+
     static varyings_t InterpolateVaryings(const Framebuffer& framebuffer,
-        const ScreenVertex& v0,
-        const ScreenVertex& v1,
-        const ScreenVertex& v2,
+        const ScreenVertex<varyings_t>& v0,
+        const ScreenVertex<varyings_t>& v1,
+        const ScreenVertex<varyings_t>& v2,
         float w0,
         float w1,
         float w2)
@@ -346,8 +512,18 @@ private:
 
         const float clipW = out.clipPos.w;
         if (std::abs(clipW) > Math::kClipEpsilon && std::isfinite(clipW)) {
-            out.ndcPos = CalculateNdcPosition(out.clipPos);
-            out.fragPos = CalculateFragPosition(framebuffer, out.ndcPos);
+            const float reciprocalW = 1.0f / clipW;
+            out.ndcPos = out.clipPos * reciprocalW;
+            out.ndcPos.w = reciprocalW;
+
+            const float width = static_cast<float>(framebuffer.Width() - 1);
+            const float height = static_cast<float>(framebuffer.Height() - 1);
+            out.fragPos = math::Vec4{
+                (out.ndcPos.x * 0.5f + 0.5f) * width,
+                (0.5f - out.ndcPos.y * 0.5f) * height,
+                math::Clamp(out.ndcPos.z * 0.5f + 0.5f, 0.0f, 1.0f),
+                out.ndcPos.w,
+            };
         }
 
         if constexpr (kTotalFloatCount > kBaseFloatCount) {
@@ -366,50 +542,34 @@ private:
         return out;
     }
 
-    static bool ShouldCullTriangle(float area, FaceCullMode faceCullMode)
+    static void ExecuteFragment(std::size_t pixelIndex,
+        const varyings_t& varyings,
+        const Program<vertex_t, uniforms_t, varyings_t>& program,
+        const uniforms_t& uniforms,
+        float* depthBuffer,
+        std::uint32_t* pixelBuffer)
     {
-        if (faceCullMode == FaceCullMode::None) {
-            return false;
-        }
-
-        return area <= Math::kAreaEpsilon;
-    }
-
-    static RasterBounds CalculateRasterBounds(const Framebuffer& framebuffer,
-        const ScreenVertex& v0,
-        const ScreenVertex& v1,
-        const ScreenVertex& v2,
-        float area)
-    {
-        const float minX = std::min({ v0.screen.position.x, v1.screen.position.x, v2.screen.position.x });
-        const float maxX = std::max({ v0.screen.position.x, v1.screen.position.x, v2.screen.position.x });
-        const float minY = std::min({ v0.screen.position.y, v1.screen.position.y, v2.screen.position.y });
-        const float maxY = std::max({ v0.screen.position.y, v1.screen.position.y, v2.screen.position.y });
-
-        return RasterBounds{
-            std::max(0, static_cast<int>(std::floor(minX))),
-            std::min(framebuffer.Width() - 1, static_cast<int>(std::ceil(maxX))),
-            std::max(0, static_cast<int>(std::floor(minY))),
-            std::min(framebuffer.Height() - 1, static_cast<int>(std::ceil(maxY))),
-            area,
-            area > 0.0f,
-        };
-    }
-
-    template<typename fragment_consumer_t>
-    static void RasterizeTriangle(const Framebuffer& framebuffer,
-        const ScreenVertex& v0,
-        const ScreenVertex& v1,
-        const ScreenVertex& v2,
-        FaceCullMode faceCullMode,
-        fragment_consumer_t&& consumeFragment)
-    {
-        const float area = Math::CalculateTriangleArea(v0.screen.position, v1.screen.position, v2.screen.position);
-        if (Math::IsDegenerateTriangle(area) || ShouldCullTriangle(area, faceCullMode)) {
+        const float depth = varyings.fragPos.z;
+        if (depth >= depthBuffer[pixelIndex]) {
             return;
         }
 
-        const RasterBounds bounds = CalculateRasterBounds(framebuffer, v0, v1, v2, area);
+        depthBuffer[pixelIndex] = depth;
+        pixelBuffer[pixelIndex] = program.fragmentShader(varyings, uniforms).ToBgra8();
+    }
+
+    static void RasterizeTriangle(const Program<vertex_t, uniforms_t, varyings_t>& program,
+        const uniforms_t& uniforms,
+        Framebuffer& framebuffer,
+        const RasterStageData<varyings_t>& rasterData)
+    {
+        const auto& v0 = rasterData.screenTriangle[0];
+        const auto& v1 = rasterData.screenTriangle[1];
+        const auto& v2 = rasterData.screenTriangle[2];
+        const RasterBounds& bounds = rasterData.bounds;
+        float* const depthBuffer = framebuffer.MutableDepthData();
+        std::uint32_t* const pixelBuffer = framebuffer.MutablePixelData();
+
         for (int y = bounds.startY; y <= bounds.endY; ++y) {
             const std::size_t rowStartIndex = framebuffer.PixelIndexUnchecked(bounds.startX, y);
             for (int x = bounds.startX; x <= bounds.endX; ++x) {
@@ -424,34 +584,135 @@ private:
                 const float w0 = e0 / bounds.area;
                 const float w1 = e1 / bounds.area;
                 const float w2 = e2 / bounds.area;
-                consumeFragment(
+                const varyings_t varyings = InterpolateVaryings(framebuffer, v0, v1, v2, w0, w1, w2);
+                ExecuteFragment(
                     rowStartIndex + static_cast<std::size_t>(x - bounds.startX),
-                    InterpolateVaryings(framebuffer, v0, v1, v2, w0, w1, w2));
+                    varyings,
+                    program,
+                    uniforms,
+                    depthBuffer,
+                    pixelBuffer);
             }
         }
     }
 };
 
 template<typename vertex_t, typename uniforms_t, typename varyings_t>
-struct FragmentStage {
-    static void Execute(std::size_t pixelIndex,
-        const varyings_t& varyings,
+class PipelineStageMachine
+    : public base::StateMachine<PipelineStageMachine<vertex_t, uniforms_t, varyings_t>, PipelineStageId> {
+public:
+    using vertex_type = vertex_t;
+    using uniforms_type = uniforms_t;
+    using varyings_type = varyings_t;
+    using vertex_triangle_t = std::array<varyings_t, 3>;
+    using input_triangle_t = std::array<vertex_t, 3>;
+    using Base = base::StateMachine<PipelineStageMachine<vertex_t, uniforms_t, varyings_t>, PipelineStageId>;
+
+    PipelineStageMachine(Framebuffer& framebuffer,
         const Program<vertex_t, uniforms_t, varyings_t>& program,
         const uniforms_t& uniforms,
-        Framebuffer& framebuffer)
+        input_triangle_t inputTriangle)
+        : m_Framebuffer(framebuffer),
+          m_Program(program),
+          m_Uniforms(uniforms),
+          m_InputTriangle(std::move(inputTriangle))
     {
-        float* const depthBuffer = framebuffer.MutableDepthData();
-        std::uint32_t* const pixelBuffer = framebuffer.MutablePixelData();
-
-        const float depth = varyings.fragPos.z;
-        if (depth >= depthBuffer[pixelIndex]) {
-            return;
-        }
-
-        depthBuffer[pixelIndex] = depth;
-        pixelBuffer[pixelIndex] = program.fragmentShader(varyings, uniforms).ToBgra8();
     }
+
+    void Run()
+    {
+        m_Result = PipelineStageId::Invalid;
+        Base::SetInitialState(*this, m_VertexState);
+        while (Base::HasState()) {
+            Base::UpdateCurrentState(*this);
+        }
+    }
+
+    PipelineStageId Result() const
+    {
+        return m_Result;
+    }
+
+    const input_triangle_t& InputTriangle() const
+    {
+        return m_InputTriangle;
+    }
+
+    const Program<vertex_t, uniforms_t, varyings_t>& ProgramRef() const
+    {
+        return m_Program;
+    }
+
+    const uniforms_t& UniformsRef() const
+    {
+        return m_Uniforms;
+    }
+
+    Framebuffer& FramebufferRef() const
+    {
+        return m_Framebuffer;
+    }
+
+    VertexStageData<varyings_t>& VertexData()
+    {
+        return m_VertexData;
+    }
+
+    ClipStageData<varyings_t>& ClipData()
+    {
+        return m_ClipData;
+    }
+
+    RasterStageData<varyings_t>& RasterData()
+    {
+        return m_RasterData;
+    }
+
+    void ChangeToClip()
+    {
+        Base::ChangeState(*this, m_ClipState);
+    }
+
+    void ChangeToRaster()
+    {
+        Base::ChangeState(*this, m_RasterState);
+    }
+
+    void ChangeToFragment()
+    {
+        Base::ChangeState(*this, m_FragmentState);
+    }
+
+    void Complete()
+    {
+        m_Result = PipelineStageId::Completed;
+        Base::ClearState(*this);
+    }
+
+    void Invalidate()
+    {
+        m_Result = PipelineStageId::Invalid;
+        Base::ClearState(*this);
+    }
+
+private:
+    Framebuffer& m_Framebuffer;
+    const Program<vertex_t, uniforms_t, varyings_t>& m_Program;
+    const uniforms_t& m_Uniforms;
+    input_triangle_t m_InputTriangle;
+
+    VertexStageData<varyings_t> m_VertexData{};
+    ClipStageData<varyings_t> m_ClipData{};
+    RasterStageData<varyings_t> m_RasterData{};
+    PipelineStageId m_Result = PipelineStageId::Invalid;
+
+    VertexStage<PipelineStageMachine> m_VertexState{};
+    ClipStage<PipelineStageMachine> m_ClipState{};
+    RasterStage<PipelineStageMachine> m_RasterState{};
+    FragmentStage<PipelineStageMachine> m_FragmentState{};
 };
 
 } // namespace sr::render::detail
+
+
 

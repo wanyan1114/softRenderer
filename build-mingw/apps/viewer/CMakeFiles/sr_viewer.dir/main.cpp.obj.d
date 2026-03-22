@@ -1,7 +1,7 @@
 apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  D:\TimePlan\2026-2\softRanderer\apps\viewer\main.cpp \
  D:/TimePlan/2026-2/softRanderer/src/app/Application.h \
- D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
  D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
  C:/msys64/mingw64/include/c++/15.2.0/cstddef \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -78,28 +78,10 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
  C:/msys64/mingw64/include/stdint.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
- C:/msys64/mingw64/include/c++/15.2.0/cmath \
- C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
- C:/msys64/mingw64/include/math.h \
- C:/msys64/mingw64/include/c++/15.2.0/bits/specfun.h \
- C:/msys64/mingw64/include/c++/15.2.0/limits \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/gamma.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/special_function_util.h \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/bessel_function.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/beta_function.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/ell_integral.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/exp_integral.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/hypergeometric.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/legendre_function.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/modified_bessel_func.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
- C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
  C:/msys64/mingw64/include/c++/15.2.0/utility \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_relops.h \
  C:/msys64/mingw64/include/c++/15.2.0/vector \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/new_allocator.h \
@@ -119,6 +101,24 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator_args.h \
  C:/msys64/mingw64/include/c++/15.2.0/tuple \
+ D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
+ C:/msys64/mingw64/include/c++/15.2.0/cmath \
+ C:/msys64/mingw64/include/math.h \
+ C:/msys64/mingw64/include/c++/15.2.0/bits/specfun.h \
+ C:/msys64/mingw64/include/c++/15.2.0/limits \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/gamma.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/special_function_util.h \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/bessel_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/beta_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/ell_integral.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/exp_integral.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/hypergeometric.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/legendre_function.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/modified_bessel_func.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_hermite.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/poly_laguerre.tcc \
+ C:/msys64/mingw64/include/c++/15.2.0/tr1/riemann_zeta.tcc \
+ D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h \
  C:/msys64/mingw64/include/c++/15.2.0/string \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stringfwd.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/char_traits.h \
@@ -149,8 +149,8 @@ apps/viewer/CMakeFiles/sr_viewer.dir/main.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/cerrno \
  C:/msys64/mingw64/include/c++/15.2.0/bits/charconv.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/basic_string.tcc \
- D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h \
- D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h \
+ D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
  C:/msys64/mingw64/include/c++/15.2.0/memory \
  C:/msys64/mingw64/include/c++/15.2.0/bits/stl_raw_storage_iter.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/align.h \

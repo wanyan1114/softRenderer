@@ -5,7 +5,7 @@
 #include "render/Color.h"
 #include "render/Mesh.h"
 #include "render/Texture2D.h"
-#include "render/Vertex.h"
+#include "render/VertexTypes.h"
 
 #include <cstddef>
 #include <string>

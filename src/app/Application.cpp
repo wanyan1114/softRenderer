@@ -1,8 +1,8 @@
 ﻿#include "app/Application.h"
 
-#include "app/CameraLayer.h"
-#include "app/RenderLayer.h"
-#include "app/SceneLayer.h"
+#include "app/layer/CameraLayer.h"
+#include "app/layer/RenderLayer.h"
+#include "app/layer/SceneLayer.h"
 #include "render/Camera.h"
 #include "render/Framebuffer.h"
 
@@ -82,39 +82,71 @@ bool Application::CreateWindow()
 
 int Application::RunMainLoop(LayerContext& context)
 {
-    auto previousFrameTime = std::chrono::steady_clock::now();
+    using clock = std::chrono::steady_clock;
+    constexpr float kMillisecondsPerSecond = 1000.0f;
+
+    auto previousFrameTime = clock::now();
     int fpsFrameCount = 0;
     float fpsAccumulatedSeconds = 0.0f;
+    float frameAccumulatedSeconds = 0.0f;
+    float renderAccumulatedSeconds = 0.0f;
+    float presentAccumulatedSeconds = 0.0f;
     bool wroteStatusLine = false;
 
     while (m_Window.ProcessEvents()) {
-        const auto currentFrameTime = std::chrono::steady_clock::now();
-        const float deltaTime = std::chrono::duration<float>(currentFrameTime - previousFrameTime).count();
-        previousFrameTime = currentFrameTime;
+        const auto frameStartTime = clock::now();
+        const float deltaTime = std::chrono::duration<float>(frameStartTime - previousFrameTime).count();
+        previousFrameTime = frameStartTime;
 
+        const auto renderStartTime = clock::now();
         context.activeCamera = &kFallbackCamera;
         context.input = &m_Window.Input();
         m_LayerStack.OnUpdate(deltaTime, context);
         m_LayerStack.OnRender(context);
+        const auto renderEndTime = clock::now();
 
+        const auto presentStartTime = renderEndTime;
         if (context.framebuffer == nullptr || !m_Window.Present(*context.framebuffer)) {
             std::cerr << "Failed to present framebuffer to window.\n";
             return 1;
         }
+        const auto presentEndTime = clock::now();
 
-        fpsAccumulatedSeconds += deltaTime;
+        const float frameSeconds = std::chrono::duration<float>(presentEndTime - frameStartTime).count();
+        const float renderSeconds = std::chrono::duration<float>(renderEndTime - renderStartTime).count();
+        const float presentSeconds = std::chrono::duration<float>(presentEndTime - presentStartTime).count();
+
+        fpsAccumulatedSeconds += frameSeconds;
+        frameAccumulatedSeconds += frameSeconds;
+        renderAccumulatedSeconds += renderSeconds;
+        presentAccumulatedSeconds += presentSeconds;
         ++fpsFrameCount;
         if (fpsAccumulatedSeconds >= kFpsReportIntervalSeconds) {
             const float averageFps = fpsFrameCount > 0 && fpsAccumulatedSeconds > 0.0f
                 ? static_cast<float>(fpsFrameCount) / fpsAccumulatedSeconds
                 : 0.0f;
+            const float averageFrameMilliseconds = fpsFrameCount > 0
+                ? frameAccumulatedSeconds * kMillisecondsPerSecond / static_cast<float>(fpsFrameCount)
+                : 0.0f;
+            const float averageRenderMilliseconds = fpsFrameCount > 0
+                ? renderAccumulatedSeconds * kMillisecondsPerSecond / static_cast<float>(fpsFrameCount)
+                : 0.0f;
+            const float averagePresentMilliseconds = fpsFrameCount > 0
+                ? presentAccumulatedSeconds * kMillisecondsPerSecond / static_cast<float>(fpsFrameCount)
+                : 0.0f;
 
             std::cout << "\rFPS: "
                       << std::fixed << std::setprecision(1)
                       << averageFps
+                      << " | Frame: " << averageFrameMilliseconds << " ms"
+                      << " | Render: " << averageRenderMilliseconds << " ms"
+                      << " | Present: " << averagePresentMilliseconds << " ms"
                       << std::flush;
 
             fpsAccumulatedSeconds = 0.0f;
+            frameAccumulatedSeconds = 0.0f;
+            renderAccumulatedSeconds = 0.0f;
+            presentAccumulatedSeconds = 0.0f;
             fpsFrameCount = 0;
             wroteStatusLine = true;
         }
@@ -138,4 +170,6 @@ void Application::Shutdown(LayerContext& context)
 }
 
 } // namespace sr
+
+
 

@@ -167,77 +167,77 @@ app/Application.cpp.s:
 	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/Application.cpp.s
 .PHONY : app/Application.cpp.s
 
-app/CameraLayer.obj: app/CameraLayer.cpp.obj
-.PHONY : app/CameraLayer.obj
+app/layer/CameraLayer.obj: app/layer/CameraLayer.cpp.obj
+.PHONY : app/layer/CameraLayer.obj
 
 # target to build an object file
-app/CameraLayer.cpp.obj:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj
-.PHONY : app/CameraLayer.cpp.obj
+app/layer/CameraLayer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj
+.PHONY : app/layer/CameraLayer.cpp.obj
 
-app/CameraLayer.i: app/CameraLayer.cpp.i
-.PHONY : app/CameraLayer.i
+app/layer/CameraLayer.i: app/layer/CameraLayer.cpp.i
+.PHONY : app/layer/CameraLayer.i
 
 # target to preprocess a source file
-app/CameraLayer.cpp.i:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.i
-.PHONY : app/CameraLayer.cpp.i
+app/layer/CameraLayer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.i
+.PHONY : app/layer/CameraLayer.cpp.i
 
-app/CameraLayer.s: app/CameraLayer.cpp.s
-.PHONY : app/CameraLayer.s
+app/layer/CameraLayer.s: app/layer/CameraLayer.cpp.s
+.PHONY : app/layer/CameraLayer.s
 
 # target to generate assembly for a file
-app/CameraLayer.cpp.s:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.s
-.PHONY : app/CameraLayer.cpp.s
+app/layer/CameraLayer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.s
+.PHONY : app/layer/CameraLayer.cpp.s
 
-app/RenderLayer.obj: app/RenderLayer.cpp.obj
-.PHONY : app/RenderLayer.obj
+app/layer/RenderLayer.obj: app/layer/RenderLayer.cpp.obj
+.PHONY : app/layer/RenderLayer.obj
 
 # target to build an object file
-app/RenderLayer.cpp.obj:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj
-.PHONY : app/RenderLayer.cpp.obj
+app/layer/RenderLayer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj
+.PHONY : app/layer/RenderLayer.cpp.obj
 
-app/RenderLayer.i: app/RenderLayer.cpp.i
-.PHONY : app/RenderLayer.i
+app/layer/RenderLayer.i: app/layer/RenderLayer.cpp.i
+.PHONY : app/layer/RenderLayer.i
 
 # target to preprocess a source file
-app/RenderLayer.cpp.i:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.i
-.PHONY : app/RenderLayer.cpp.i
+app/layer/RenderLayer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.i
+.PHONY : app/layer/RenderLayer.cpp.i
 
-app/RenderLayer.s: app/RenderLayer.cpp.s
-.PHONY : app/RenderLayer.s
+app/layer/RenderLayer.s: app/layer/RenderLayer.cpp.s
+.PHONY : app/layer/RenderLayer.s
 
 # target to generate assembly for a file
-app/RenderLayer.cpp.s:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.s
-.PHONY : app/RenderLayer.cpp.s
+app/layer/RenderLayer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.s
+.PHONY : app/layer/RenderLayer.cpp.s
 
-app/SceneLayer.obj: app/SceneLayer.cpp.obj
-.PHONY : app/SceneLayer.obj
+app/layer/SceneLayer.obj: app/layer/SceneLayer.cpp.obj
+.PHONY : app/layer/SceneLayer.obj
 
 # target to build an object file
-app/SceneLayer.cpp.obj:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj
-.PHONY : app/SceneLayer.cpp.obj
+app/layer/SceneLayer.cpp.obj:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj
+.PHONY : app/layer/SceneLayer.cpp.obj
 
-app/SceneLayer.i: app/SceneLayer.cpp.i
-.PHONY : app/SceneLayer.i
+app/layer/SceneLayer.i: app/layer/SceneLayer.cpp.i
+.PHONY : app/layer/SceneLayer.i
 
 # target to preprocess a source file
-app/SceneLayer.cpp.i:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.i
-.PHONY : app/SceneLayer.cpp.i
+app/layer/SceneLayer.cpp.i:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.i
+.PHONY : app/layer/SceneLayer.cpp.i
 
-app/SceneLayer.s: app/SceneLayer.cpp.s
-.PHONY : app/SceneLayer.s
+app/layer/SceneLayer.s: app/layer/SceneLayer.cpp.s
+.PHONY : app/layer/SceneLayer.s
 
 # target to generate assembly for a file
-app/SceneLayer.cpp.s:
-	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.s
-.PHONY : app/SceneLayer.cpp.s
+app/layer/SceneLayer.cpp.s:
+	cd /d D:\TimePlan\2026-2\softRanderer\build-mingw && $(MAKE) $(MAKESILENT) -f src\CMakeFiles\sr_engine.dir\build.make src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.s
+.PHONY : app/layer/SceneLayer.cpp.s
 
 base/Math.obj: base/Math.cpp.obj
 .PHONY : base/Math.obj
@@ -396,15 +396,15 @@ help:
 	@echo ... app/Application.obj
 	@echo ... app/Application.i
 	@echo ... app/Application.s
-	@echo ... app/CameraLayer.obj
-	@echo ... app/CameraLayer.i
-	@echo ... app/CameraLayer.s
-	@echo ... app/RenderLayer.obj
-	@echo ... app/RenderLayer.i
-	@echo ... app/RenderLayer.s
-	@echo ... app/SceneLayer.obj
-	@echo ... app/SceneLayer.i
-	@echo ... app/SceneLayer.s
+	@echo ... app/layer/CameraLayer.obj
+	@echo ... app/layer/CameraLayer.i
+	@echo ... app/layer/CameraLayer.s
+	@echo ... app/layer/RenderLayer.obj
+	@echo ... app/layer/RenderLayer.i
+	@echo ... app/layer/RenderLayer.s
+	@echo ... app/layer/SceneLayer.obj
+	@echo ... app/layer/SceneLayer.i
+	@echo ... app/layer/SceneLayer.s
 	@echo ... base/Math.obj
 	@echo ... base/Math.i
 	@echo ... base/Math.s

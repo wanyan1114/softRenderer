@@ -243,12 +243,12 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: D:/TimePlan/2026-2/softRan
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h \
   D:/TimePlan/2026-2/softRanderer/src/app/Application.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
@@ -257,10 +257,10 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: D:/TimePlan/2026-2/softRan
   D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h \
   D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 
-src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.cpp \
+src/CMakeFiles/sr_engine.dir/app/layer/CameraLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.cpp \
   C:/msys64/mingw64/include/_mingw.h \
   C:/msys64/mingw64/include/_mingw_mac.h \
   C:/msys64/mingw64/include/_mingw_off_t.h \
@@ -405,18 +405,18 @@ src/CMakeFiles/sr_engine.dir/app/CameraLayer.cpp.obj: D:/TimePlan/2026-2/softRan
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Camera.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h
 
-src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.cpp \
+src/CMakeFiles/sr_engine.dir/app/layer/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.cpp \
   C:/msys64/mingw64/include/_mingw.h \
   C:/msys64/mingw64/include/_mingw_mac.h \
   C:/msys64/mingw64/include/_mingw_off_t.h \
@@ -561,10 +561,11 @@ src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRan
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
+  D:/TimePlan/2026-2/softRanderer/src/base/StateMachine.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Camera.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
@@ -573,10 +574,14 @@ src/CMakeFiles/sr_engine.dir/app/RenderLayer.cpp.obj: D:/TimePlan/2026-2/softRan
   D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h \
   D:/TimePlan/2026-2/softRanderer/src/render/PipelineMathHelper.h \
   D:/TimePlan/2026-2/softRanderer/src/render/PipelineStages.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/Program.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/shader/Lighting.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/shader/LitShader.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/shader/ShaderTypes.h
 
-src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.cpp \
+src/CMakeFiles/sr_engine.dir/app/layer/SceneLayer.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.cpp \
   C:/msys64/mingw64/include/_mingw.h \
   C:/msys64/mingw64/include/_mingw_mac.h \
   C:/msys64/mingw64/include/_mingw_off_t.h \
@@ -795,15 +800,15 @@ src/CMakeFiles/sr_engine.dir/app/SceneLayer.cpp.obj: D:/TimePlan/2026-2/softRand
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/Layer.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h \
-  D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h \
+  D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h \
   D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h \
   D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 
 src/CMakeFiles/sr_engine.dir/base/Math.cpp.obj: D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp \
@@ -1742,16 +1747,16 @@ src/CMakeFiles/sr_engine.dir/resource/loaders/ObjMeshLoader.cpp.obj: D:/TimePlan
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Mesh.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h \
-  D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h \
+  D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h \
   D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.h \
   D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h
 
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/max_size_type.h:
 
-C:/msys64/mingw64/include/_mingw_mac.h:
-
 C:/msys64/mingw64/include/c++/15.2.0/bits/node_handle.h:
+
+C:/msys64/mingw64/include/_mingw_mac.h:
 
 D:/TimePlan/2026-2/softRanderer/src/app/Application.cpp:
 
@@ -1867,6 +1872,8 @@ C:/msys64/mingw64/include/time.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/locale_facets.h:
 
+D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h:
+
 C:/msys64/mingw64/include/c++/15.2.0/bits/atomic_wait.h:
 
 C:/msys64/mingw64/include/hstring.h:
@@ -1965,11 +1972,9 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/fxsrintrin.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/PipelineStages.h:
 
-C:/msys64/mingw64/include/c++/15.2.0/bits/nested_exception.h:
-
-D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.h:
-
 C:/msys64/mingw64/include/c++/15.2.0/tuple:
+
+C:/msys64/mingw64/include/c++/15.2.0/bits/nested_exception.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/move.h:
 
@@ -2021,11 +2026,11 @@ C:/msys64/mingw64/include/c++/15.2.0/bits/shared_ptr.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/shared_ptr_atomic.h:
 
+C:/msys64/mingw64/include/c++/15.2.0/bits/fstream.tcc:
+
 C:/msys64/mingw64/include/c++/15.2.0/bits/shared_ptr_base.h:
 
 C:/msys64/mingw64/include/driverspecs.h:
-
-C:/msys64/mingw64/include/c++/15.2.0/bits/fstream.tcc:
 
 C:/msys64/mingw64/include/handleapi.h:
 
@@ -2056,10 +2061,6 @@ C:/msys64/mingw64/include/_mingw_stdarg.h:
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/tmmintrin.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/stl_bvector.h:
-
-D:/TimePlan/2026-2/softRanderer/src/app/LayerStack.h:
-
-C:/msys64/mingw64/include/c++/15.2.0/bits/hashtable_policy.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/stl_construct.h:
 
@@ -2099,6 +2100,8 @@ C:/msys64/mingw64/include/ctype.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/ios:
 
+D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h:
+
 C:/msys64/mingw64/include/c++/15.2.0/bits/unique_ptr.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator_args.h:
@@ -2132,8 +2135,6 @@ C:/msys64/mingw64/include/c++/15.2.0/codecvt:
 C:/msys64/mingw64/include/c++/15.2.0/compare:
 
 C:/msys64/mingw64/include/c++/15.2.0/initializer_list:
-
-D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.cpp:
 
 C:/msys64/mingw64/include/wincon.h:
 
@@ -2175,6 +2176,8 @@ D:/TimePlan/2026-2/softRanderer/src/platform/Window.h:
 
 C:/msys64/mingw64/include/poppack.h:
 
+D:/TimePlan/2026-2/softRanderer/src/base/StateMachine.h:
+
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vbmivlintrin.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/ext/alloc_traits.h:
@@ -2205,13 +2208,13 @@ C:/msys64/mingw64/include/c++/15.2.0/iomanip:
 
 C:/msys64/mingw64/include/c++/15.2.0/iosfwd:
 
+C:/msys64/mingw64/include/c++/15.2.0/bits/unordered_map.h:
+
 C:/msys64/mingw64/include/c++/15.2.0/iostream:
 
 C:/msys64/mingw64/include/sys/types.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vldqintrin.h:
-
-C:/msys64/mingw64/include/c++/15.2.0/bits/unordered_map.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/istream:
 
@@ -2282,6 +2285,8 @@ C:/msys64/mingw64/include/c++/15.2.0/tr1/bessel_function.tcc:
 C:/msys64/mingw64/include/winsvc.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/tr1/beta_function.tcc:
+
+D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerContext.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/tr1/ell_integral.tcc:
 
@@ -2437,13 +2442,19 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.h:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/Layer.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/Layer.h:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/LayerStack.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/LayerContext.h:
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxcomplexintrin.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/RenderLayer.h:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h:
+
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vp2intersectvlintrin.h:
+
+D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.h:
+
+C:/msys64/mingw64/include/fibersapi.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Camera.h:
 
@@ -2451,15 +2462,19 @@ D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Texture2D.h:
 
-C:/msys64/mingw64/include/ocidl.h:
+C:/msys64/mingw64/include/c++/15.2.0/bits/hashtable.h:
 
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/clflushoptintrin.h:
-
-D:/TimePlan/2026-2/softRanderer/src/render/Vertex.h:
+D:/TimePlan/2026-2/softRanderer/src/render/VertexTypes.h:
 
 D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/CameraLayer.cpp:
+D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.cpp:
+
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/pmmintrin.h:
+
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/fma4intrin.h:
+
+D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.cpp:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Pipeline.h:
 
@@ -2467,15 +2482,25 @@ C:/msys64/mingw64/include/stringapiset.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/PipelineMathHelper.h:
 
-D:/TimePlan/2026-2/softRanderer/src/app/SceneLayer.cpp:
+D:/TimePlan/2026-2/softRanderer/src/render/Program.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/shader/Lighting.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/shader/LitShader.h:
+
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/clwbintrin.h:
+
+D:/TimePlan/2026-2/softRanderer/src/render/shader/ShaderTypes.h:
+
+D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.cpp:
+
+D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.cpp:
 
 D:/TimePlan/2026-2/softRanderer/src/base/Math.cpp:
 
 C:/msys64/mingw64/include/datetimeapi.h:
 
 D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.cpp:
-
-D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.cpp:
 
 C:/msys64/mingw64/include/activation.h:
 
@@ -2505,12 +2530,6 @@ C:/msys64/mingw64/include/errhandlingapi.h:
 
 C:/msys64/mingw64/include/excpt.h:
 
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/avx512vp2intersectvlintrin.h:
-
-D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ImageTextureLoader.h:
-
-C:/msys64/mingw64/include/fibersapi.h:
-
 C:/msys64/mingw64/include/pshpack8.h:
 
 C:/msys64/mingw64/include/fileapi.h:
@@ -2532,6 +2551,10 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/prfchiintrin.h:
 C:/msys64/mingw64/include/oaidl.h:
 
 C:/msys64/mingw64/include/objbase.h:
+
+C:/msys64/mingw64/include/ocidl.h:
+
+C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/clflushoptintrin.h:
 
 C:/msys64/mingw64/include/oleidl.h:
 
@@ -2633,8 +2656,6 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxavx512intrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/cldemoteintrin.h:
 
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxcomplexintrin.h:
-
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxfp16intrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/amxfp8intrin.h:
@@ -2695,17 +2716,11 @@ C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/bmi2intrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/cetintrin.h:
 
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/clwbintrin.h:
-
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/clzerointrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/emmintrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/enqcmdintrin.h:
-
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/pmmintrin.h:
-
-C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/fma4intrin.h:
 
 C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/fmaintrin.h:
 
@@ -2771,7 +2786,7 @@ D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.cpp:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/erase_if.h:
 
-C:/msys64/mingw64/include/c++/15.2.0/bits/hashtable.h:
+C:/msys64/mingw64/include/c++/15.2.0/bits/hashtable_policy.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/fstream:
 

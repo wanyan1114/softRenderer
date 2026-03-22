@@ -33,11 +33,11 @@
 ```mermaid
 flowchart LR
     viewer["apps/viewer/main.cpp"]
-    app["src/app<br/>Application / Layer / LayerContext / LayerStack / SceneLayer / CameraLayer / RenderLayer"]
+    app["src/app<br/>Application / layer/Layer / layer/LayerContext / layer/LayerStack / layer/SceneLayer / layer/CameraLayer / layer/RenderLayer"]
     platform["src/platform\nWindow / Input"]
     resource["src/resource\nOBJ Loader"]
-    base["src/base\nMath"]
-    render["src/render\nCamera / Color / Vertex / Mesh / Texture2D / Pipeline / Framebuffer"]
+    base["src/base\nMath / StateMachine"]
+    render["src/render\nCamera / Color / VertexTypes / Program / shader/* / Mesh / Texture2D / Pipeline / PipelineStages / Framebuffer"]
     win32["Win32 + GDI"]
     docs["docs/architecture/project-architecture.md"]
 
@@ -67,9 +67,9 @@ flowchart LR
 4. `src/resource`
    资源接入层，负责把磁盘资源解析成运行时可消费的数据结构。
 5. `src/render`
-   软光栅核心层，负责 CPU 侧三角形处理与帧缓冲写入。
+   软光栅核心层，负责 CPU 侧三角形处理、阶段状态机推进与帧缓冲写入。
 6. `src/base`
-   基础数学层，负责向量、矩阵与变换工具。
+   基础支撑层，负责向量、矩阵、变换工具和通用状态机基础设施。
 
 ## 5. 当前运行时主链路
 
@@ -115,15 +115,15 @@ while (Window::ProcessEvents())
 -> Application 驱动 LayerStack::OnRender(context)
 -> RenderLayer 读取 context.activeCamera / context.sceneView / context.framebuffer
 -> RenderLayer 清颜色/清深度
--> Pipeline::Run(framebuffer, mesh)
--> 顶点着色
--> NDC/屏幕映射
--> 三角形光栅化
+-> Pipeline::Run(framebuffer, mesh, program, uniforms)
+-> PipelineStageMachine
+-> VertexStage
+-> ClipStage
+-> RasterStage
+-> FragmentStage
 -> 深度测试与颜色写入
 -> Window::Present(framebuffer)
 -> StretchDIBits 显示到 Win32 窗口
-```
-
 ### 5.3 关键数据流
 
 ```text
@@ -144,11 +144,13 @@ OBJ(v + vt + vn) + mtllib/usemtl
 -> 解码 PNG/JPG/JPEG 为 Texture2D
 -> SceneLayer 持有 OBJ 资源和 model matrix
 -> context.sceneView
--> RenderLayer::OnRender(context)
+-> PipelineStageMachine 驱动固定阶段切换
 -> Pipeline::Run()
+-> PipelineStageMachine 内部 FsmBase + handleEvent(PipelineStepEvent{}) 驱动固定阶段切换
 -> vertexShader 输出 clipPos + worldPos + worldNormal + uv
--> 屏幕空间三角形遍历
--> fragmentShader 采样 Texture2D 并计算基础光照
+-> ClipStage 生成 clippedTriangles
+-> RasterStage 生成当前片元批次
+-> FragmentStage 采样 Texture2D 并计算基础光照
 -> Framebuffer(pixels + depth)
 -> Window::Present()
 -> Win32 GDI
@@ -188,7 +190,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 **职责**
 
-- 作为运行时总调度器管理生命周期。
+- 作为运行时总调度器管理生命周期。`r`n- `src/app/layer/` 负责承载 layer 抽象、layer 容器与具体 layer 实现。
 - 持有 `LayerStack`，组织 `OnAttach / OnUpdate / OnRender / OnDetach` 的调用顺序。
 - 在 `Run()` 内创建局部 `LayerContext / Framebuffer / StartupState`。
 - 直接持有 `Window` 并维护主循环、present 与退出流程。
@@ -245,8 +247,8 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **职责**
 
 - 持有 CPU 侧渲染核心数据结构与算法。
-- 提供相机、颜色、顶点协议、mesh 容器、Texture2D、program、pipeline 与 framebuffer。
-- 提供基础光照与最小 2D 纹理采样所需的顶点/统一参数/插值协议，并完成从顶点到像素的主要软光栅流程。
+- 提供相机、颜色、顶点类型、shader 协议、Program、mesh 容器、Texture2D、无状态 Pipeline 执行器、阶段状态机与 framebuffer。
+- 当前 shader 相关实现集中在 `src/render/shader/`，并以 Lit 渲染链为当前版本唯一保留的材质路径。
 
 **输入**
 
@@ -262,35 +264,39 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 - 可以依赖 `base`，不应依赖 `platform` 或 Win32。
 - `Framebuffer` 是渲染结果容器，不负责窗口展示。
-- `Pipeline` 负责主线执行，不负责应用生命周期和消息循环。
-- `Camera / Vertex / Uniforms / Varyings / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，新增 shader 能力时应尽量继续在这些协议内扩展，而不是把材质逻辑写进应用层。
+- `Pipeline` 当前是无状态执行器，不负责应用生命周期和消息循环。
+- `Camera / VertexTypes / ShaderTypes / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，shader 相关实现应优先继续收敛在 `src/render/shader/` 内，而不是把材质逻辑写进应用层。
+- `Pipeline` 当前是无状态执行器，不负责应用生命周期和消息循环。
+- `Camera / VertexTypes / ShaderTypes / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，shader 相关实现应优先继续收敛在 `src/render/shader/` 内，而不是把材质逻辑写进应用层。
+- `PipelineStages` 以固定阶段状态机组织 `Vertex -> Clip -> Raster -> Fragment`，阶段切换参数在 render 内部按固定数据结构传递。
 - 当前实现以三角形列表和模板化 `Pipeline` 为核心；如果未来引入更多图元或阶段，也应尽量保持“渲染层负责渲染，不越界到平台显示”的原则。
 
 ### 6.5 `src/base`
 
 **职责**
 
-- 提供向量、矩阵、插值、裁剪辅助等基础数学能力。
+- 提供向量、矩阵、插值、裁剪辅助等基础数学能力，以及可供多模块复用的通用状态机基础设施。
 
 **输入**
 
-- 纯数学参数。
+- 纯数学参数或通用状态机所有者/状态对象。
 
 **输出**
 
-- 无平台语义的数学结果。
+- 无平台语义的数学结果或通用状态切换结果。
 
 **边界条件**
 
 - 应保持无平台、无窗口、无业务场景依赖。
 - 可以被 `app` 和 `render` 复用，但不应反向依赖上层模块。
+- `StateMachine` 这类基础设施如果继续扩展，也应保持通用性，不绑定具体 render 语义。
 - 新增基础数学工具时，应优先保持可复用、可验证，不混入渲染流程控制。
 
 ### 6.6 `src/resource`
 
 **职责**
 
-- 负责从磁盘读取最小 OBJ / MTL / base color 图片资源，并转换成渲染层可消费的 `render::Mesh<render::FlatColorVertex>`、`render::Mesh<render::LitVertex>` 与 `render::Texture2D`。
+- 负责从磁盘读取最小 OBJ / MTL / base color 图片资源，并转换成渲染层可消费的 `render::Mesh<render::LitVertex>` 与 `render::Texture2D`。
 - 封装基础文件读取、OBJ 中 `mtllib / usemtl / v / vt / vn / f` 行解析、MTL 中 `newmtl / map_Kd` 解析和最小图片解码。
 
 **输入**
@@ -359,7 +365,7 @@ src/base -> 无上层依赖
 - `Framebuffer` 是渲染结果的唯一主容器，窗口显示只消费它，不替代它。
 - 平台显示和软光栅算法分层明确，平台层不实现渲染主线，渲染层不处理消息泵。
 - 数学层保持纯工具属性，为应用装配和渲染执行同时服务。
-- 当前渲染链以 `Camera + Program + Pipeline + Mesh + Texture2D + Framebuffer` 为基础协议。
+- 当前渲染链以 `Camera + VertexTypes + ShaderTypes + Program + Pipeline + PipelineStages + Mesh + Texture2D + Framebuffer` 为基础协议。
 - 当前 viewer 运行时只保留 OBJ 模型加载与渲染路径。
 
 ## 9. 什么时候必须更新这份架构图
@@ -389,3 +395,8 @@ src/base -> 无上层依赖
 3. 本次功能已有的 `docs/features/<feature-name>.md`，如果它已经存在。
 
 如果发现“代码现状”和“本文档”不一致，应优先指出差异，并在实现或 review 迭代中补齐更新。
+
+
+
+
+

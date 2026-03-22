@@ -25,9 +25,9 @@ add_library(sr_engine)
 target_sources(sr_engine
     PRIVATE
         app/Application.cpp
-        app/CameraLayer.cpp
-        app/RenderLayer.cpp
-        app/SceneLayer.cpp
+        app/layer/CameraLayer.cpp
+        app/layer/RenderLayer.cpp
+        app/layer/SceneLayer.cpp
         base/Math.cpp
         render/Camera.cpp
         render/Framebuffer.cpp
@@ -52,3 +52,4 @@ target_link_libraries(sr_engine
     PRIVATE
         ole32
         windowscodecs)
+

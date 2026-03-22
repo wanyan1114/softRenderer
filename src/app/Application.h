@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "app/LayerContext.h"
-#include "app/LayerStack.h"
+#include "app/layer/LayerContext.h"
+#include "app/layer/LayerStack.h"
 
 #include "platform/Window.h"
 
@@ -30,3 +30,4 @@ private:
 };
 
 } // namespace sr
+

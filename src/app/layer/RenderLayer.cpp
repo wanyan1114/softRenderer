@@ -1,7 +1,10 @@
-﻿#include "app/RenderLayer.h"
+﻿#include "app/layer/RenderLayer.h"
 
 #include "render/Camera.h"
 #include "render/Pipeline.h"
+#include "render/Program.h"
+#include "render/VertexTypes.h"
+#include "render/shader/LitShader.h"
 
 namespace sr {
 namespace {
@@ -30,8 +33,8 @@ void RenderLitMeshPart(render::Framebuffer& framebuffer,
     uniforms.baseColorTexture = texture;
     uniforms.textureEnabled = texture != nullptr ? 1.0f : 0.0f;
 
-    render::Pipeline<render::LitVertex, render::LitUniforms, render::LitVaryings> pipeline(program, uniforms);
-    pipeline.Run(framebuffer, mesh);
+    render::Pipeline<render::LitVertex, render::LitUniforms, render::LitVaryings> pipeline;
+    pipeline.Run(framebuffer, mesh, program, uniforms);
 }
 
 bool ReadyForRendering(const LayerContext& context)
@@ -82,3 +85,4 @@ void RenderLayer::OnRender(LayerContext& context)
 }
 
 } // namespace sr
+
