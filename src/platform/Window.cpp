@@ -58,6 +58,18 @@ bool TryMapKey(WPARAM virtualKey, Key& key)
     case 'E':
         key = Key::E;
         return true;
+    case 'F':
+        key = Key::F;
+        return true;
+    case 'G':
+        key = Key::G;
+        return true;
+    case 'R':
+        key = Key::R;
+        return true;
+    case 'T':
+        key = Key::T;
+        return true;
     case VK_SPACE:
         key = Key::Space;
         return true;

@@ -213,6 +213,9 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  D:/TimePlan/2026-2/softRanderer/src/app/layer/CameraLayer.h \
  D:/TimePlan/2026-2/softRanderer/src/render/Camera.h \
  D:/TimePlan/2026-2/softRanderer/src/app/layer/RenderLayer.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/SkyboxRenderer.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/EnvironmentMap.h \
+ D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
  D:/TimePlan/2026-2/softRanderer/src/app/layer/SceneLayer.h \
  D:/TimePlan/2026-2/softRanderer/src/resource/loaders/ObjMeshLoader.h \
  C:/msys64/mingw64/include/c++/15.2.0/filesystem \
@@ -240,7 +243,6 @@ src/CMakeFiles/sr_engine.dir/app/Application.cpp.obj: \
  C:/msys64/mingw64/include/c++/15.2.0/codecvt \
  C:/msys64/mingw64/include/c++/15.2.0/bits/fs_dir.h \
  C:/msys64/mingw64/include/c++/15.2.0/bits/fs_ops.h \
- D:/TimePlan/2026-2/softRanderer/src/render/Framebuffer.h \
  C:/msys64/mingw64/include/c++/15.2.0/chrono \
  C:/msys64/mingw64/include/c++/15.2.0/bits/chrono_io.h \
  C:/msys64/mingw64/include/c++/15.2.0/format \

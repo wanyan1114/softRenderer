@@ -330,6 +330,7 @@ src/CMakeFiles/sr_platform.dir/platform/Window.cpp.obj: D:/TimePlan/2026-2/softR
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsaveoptintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xsavesintrin.h \
   C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/xtestintrin.h \
+  D:/TimePlan/2026-2/softRanderer/src/base/Math.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Input.h \
   D:/TimePlan/2026-2/softRanderer/src/platform/Window.h \
   D:/TimePlan/2026-2/softRanderer/src/render/Color.h \
@@ -537,6 +538,8 @@ C:/msys64/mingw64/include/ctype.h:
 C:/msys64/mingw64/include/c++/15.2.0/bits/uniform_int_dist.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/uses_allocator_args.h:
+
+D:/TimePlan/2026-2/softRanderer/src/base/Math.h:
 
 C:/msys64/mingw64/include/c++/15.2.0/bits/utility.h:
 

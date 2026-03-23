@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "base/Math.h"
 #include "base/StateMachine.h"
@@ -542,20 +542,44 @@ private:
         return out;
     }
 
-    static void ExecuteFragment(std::size_t pixelIndex,
+    static void ExecuteFragmentSamples(int x,
+        int y,
         const varyings_t& varyings,
         const Program<vertex_t, uniforms_t, varyings_t>& program,
         const uniforms_t& uniforms,
-        float* depthBuffer,
-        std::uint32_t* pixelBuffer)
+        Framebuffer& framebuffer,
+        const std::array<bool, Framebuffer::kSampleCount>& sampleCoverage)
     {
         const float depth = varyings.fragPos.z;
-        if (depth >= depthBuffer[pixelIndex]) {
+        bool hasVisibleSample = false;
+        for (std::size_t sampleIndex = 0; sampleIndex < Framebuffer::kSampleCount; ++sampleIndex) {
+            if (!sampleCoverage[sampleIndex]) {
+                continue;
+            }
+
+            if (depth < framebuffer.GetSampleDepth(x, y, sampleIndex)) {
+                hasVisibleSample = true;
+                break;
+            }
+        }
+
+        if (!hasVisibleSample) {
             return;
         }
 
-        depthBuffer[pixelIndex] = depth;
-        pixelBuffer[pixelIndex] = program.fragmentShader(varyings, uniforms).ToBgra8();
+        const Color fragmentColor = program.fragmentShader(varyings, uniforms);
+        for (std::size_t sampleIndex = 0; sampleIndex < Framebuffer::kSampleCount; ++sampleIndex) {
+            if (!sampleCoverage[sampleIndex]) {
+                continue;
+            }
+
+            if (depth >= framebuffer.GetSampleDepth(x, y, sampleIndex)) {
+                continue;
+            }
+
+            framebuffer.SetSampleDepth(x, y, sampleIndex, depth);
+            framebuffer.SetSamplePixel(x, y, sampleIndex, fragmentColor);
+        }
     }
 
     static void RasterizeTriangle(const Program<vertex_t, uniforms_t, varyings_t>& program,
@@ -567,31 +591,45 @@ private:
         const auto& v1 = rasterData.screenTriangle[1];
         const auto& v2 = rasterData.screenTriangle[2];
         const RasterBounds& bounds = rasterData.bounds;
-        float* const depthBuffer = framebuffer.MutableDepthData();
-        std::uint32_t* const pixelBuffer = framebuffer.MutablePixelData();
 
         for (int y = bounds.startY; y <= bounds.endY; ++y) {
-            const std::size_t rowStartIndex = framebuffer.PixelIndexUnchecked(bounds.startX, y);
             for (int x = bounds.startX; x <= bounds.endX; ++x) {
-                const math::Vec2 samplePoint = Math::CalculateSamplePoint(x, y);
-                const float e0 = Math::EdgeFunction(v1.screen.position, v2.screen.position, samplePoint);
-                const float e1 = Math::EdgeFunction(v2.screen.position, v0.screen.position, samplePoint);
-                const float e2 = Math::EdgeFunction(v0.screen.position, v1.screen.position, samplePoint);
-                if (!Math::IsSampleCovered(e0, e1, e2, bounds.positiveArea)) {
+                std::array<bool, Framebuffer::kSampleCount> sampleCoverage{};
+                bool anyCovered = false;
+
+                for (std::size_t sampleIndex = 0; sampleIndex < Framebuffer::kSampleCount; ++sampleIndex) {
+                    const math::Vec2 samplePoint = math::Vec2{
+                        static_cast<float>(x),
+                        static_cast<float>(y)
+                    } + Framebuffer::SampleOffset(sampleIndex);
+                    const float e0 = Math::EdgeFunction(v1.screen.position, v2.screen.position, samplePoint);
+                    const float e1 = Math::EdgeFunction(v2.screen.position, v0.screen.position, samplePoint);
+                    const float e2 = Math::EdgeFunction(v0.screen.position, v1.screen.position, samplePoint);
+                    const bool covered = Math::IsSampleCovered(e0, e1, e2, bounds.positiveArea);
+                    sampleCoverage[sampleIndex] = covered;
+                    anyCovered = anyCovered || covered;
+                }
+
+                if (!anyCovered) {
                     continue;
                 }
 
+                const math::Vec2 pixelCenter = Math::CalculateSamplePoint(x, y);
+                const float e0 = Math::EdgeFunction(v1.screen.position, v2.screen.position, pixelCenter);
+                const float e1 = Math::EdgeFunction(v2.screen.position, v0.screen.position, pixelCenter);
+                const float e2 = Math::EdgeFunction(v0.screen.position, v1.screen.position, pixelCenter);
                 const float w0 = e0 / bounds.area;
                 const float w1 = e1 / bounds.area;
                 const float w2 = e2 / bounds.area;
                 const varyings_t varyings = InterpolateVaryings(framebuffer, v0, v1, v2, w0, w1, w2);
-                ExecuteFragment(
-                    rowStartIndex + static_cast<std::size_t>(x - bounds.startX),
+                ExecuteFragmentSamples(
+                    x,
+                    y,
                     varyings,
                     program,
                     uniforms,
-                    depthBuffer,
-                    pixelBuffer);
+                    framebuffer,
+                    sampleCoverage);
             }
         }
     }
@@ -713,6 +751,3 @@ private:
 };
 
 } // namespace sr::render::detail
-
-
-

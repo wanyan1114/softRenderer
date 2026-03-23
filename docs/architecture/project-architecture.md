@@ -18,6 +18,8 @@
 - `computer-graphics-notes/lesson04-framebuffer-depth-and-msaa.md`
 - `computer-graphics-notes/lesson05-vertex-uniform-varyings-and-programmable-shader-interface.md`
 - `computer-graphics-notes/lesson06-software-rasterization-mainline.md`
+- `computer-graphics-notes/lesson08-from-blinn-phong-to-pbr.md`
+- `computer-graphics-notes/lesson09-ibl-precomputation-and-toolchain.md`
 
 ## 3. 这些笔记对当前架构文档的约束与启发
 
@@ -27,6 +29,8 @@
 - `lesson04` 约束 `Framebuffer` 作为 CPU 渲染结果与窗口显示之间的桥接数据结构。
 - `lesson05` 启发渲染模块内部要明确区分顶点输入、统一参数、插值数据和流水线执行器。
 - `lesson06` 约束运行时主线要能表达“顶点 -> 三角形 -> 像素 -> 帧缓冲 -> 窗口”的数据流。
+- `lesson08` 约束材质扩展仍应沿着 `ShaderTypes / Program / shader/*` 协议演进，而不是把光照逻辑写进应用层。
+- `lesson09` 约束 IBL 不是单个片元公式升级，而是“环境源 -> irradiance / prefilter / BRDF LUT -> 运行时消费”的完整资源闭环。
 
 ## 4. 当前项目架构总览
 
@@ -35,9 +39,9 @@ flowchart LR
     viewer["apps/viewer/main.cpp"]
     app["src/app<br/>Application / layer/Layer / layer/LayerContext / layer/LayerStack / layer/SceneLayer / layer/CameraLayer / layer/RenderLayer"]
     platform["src/platform\nWindow / Input"]
-    resource["src/resource\nOBJ Loader"]
+    resource["src/resource\nOBJ Loader / Image Loader"]
     base["src/base\nMath / StateMachine"]
-    render["src/render\nCamera / Color / VertexTypes / Program / shader/* / Mesh / Texture2D / Pipeline / PipelineStages / Framebuffer"]
+    render["src/render\nCamera / Color / VertexTypes / Texture2D / EnvironmentMap / Program / shader/* / Mesh / Pipeline / PipelineStages / Framebuffer / SkyboxRenderer / IblPrecompute"]
     win32["Win32 + GDI"]
     docs["docs/architecture/project-architecture.md"]
 
@@ -67,7 +71,7 @@ flowchart LR
 4. `src/resource`
    资源接入层，负责把磁盘资源解析成运行时可消费的数据结构。
 5. `src/render`
-   软光栅核心层，负责 CPU 侧三角形处理、阶段状态机推进与帧缓冲写入。
+   软光栅核心层，负责 CPU 侧三角形处理、阶段状态机推进、skybox/IBL 预计算与帧缓冲写入。
 6. `src/base`
    基础支撑层，负责向量、矩阵、变换工具和通用状态机基础设施。
 
@@ -95,6 +99,8 @@ sequenceDiagram
     App->>Ctx: 创建局部 context
     App->>Layers: OnAttach(context)
     Layers->>SceneLayer: OnAttach(context)
+    SceneLayer->>resource: LoadLitMesh(OBJ/MTL/base color)
+    SceneLayer->>render::ibl: 生成环境预设 / irradiance / prefilter / BRDF LUT
     SceneLayer->>App: 通过 context 回填 sceneView / startupState
     Layers->>CameraLayer: OnAttach(context)
     Layers->>RenderLayer: OnAttach(context)
@@ -109,21 +115,30 @@ while (Window::ProcessEvents())
 -> Application 从 Window 读取输入状态
 -> Application 写 context.input
 -> Application 驱动 LayerStack::OnUpdate(deltaTime, context)
+-> SceneLayer 读取 context.input
+-> SceneLayer 根据 R 键切换环境预设并更新 sceneView.ibl
 -> CameraLayer 读取 context.input
 -> CameraLayer 更新 render::Camera 的 Pos / Dir / Right
 -> CameraLayer 写 context.activeCamera
+-> RenderLayer 读取 context.input
+-> RenderLayer 根据 F/G/T 切换材质模式、skybox 模式和 prefilter 预览 lod
 -> Application 驱动 LayerStack::OnRender(context)
 -> RenderLayer 读取 context.activeCamera / context.sceneView / context.framebuffer
--> RenderLayer 清颜色/清深度
+-> RenderLayer 清颜色
+-> SkyboxRenderer 按当前 skybox 模式绘制背景
+-> RenderLayer 清深度
 -> Pipeline::Run(framebuffer, mesh, program, uniforms)
 -> PipelineStageMachine
 -> VertexStage
 -> ClipStage
 -> RasterStage
 -> FragmentStage
--> 深度测试与颜色写入
+-> sample 级覆盖判断、深度测试与颜色写入
+-> Framebuffer::ResolveColor() 聚合 4x sample 颜色
 -> Window::Present(framebuffer)
 -> StretchDIBits 显示到 Win32 窗口
+```
+
 ### 5.3 关键数据流
 
 ```text
@@ -132,9 +147,17 @@ Win32 keyboard messages
 -> Window 内部 InputState
 -> Application 写 context.input
 -> LayerStack::OnUpdate(deltaTime, context)
+-> SceneLayer::OnUpdate(deltaTime, context)
+-> R 键切换 active IBL preset
+-> RenderSceneIblResources(skybox / irradiance / prefilter / brdfLut / presetName)
+-> context.sceneView
 -> CameraLayer::OnUpdate(deltaTime, context)
 -> render::Camera(Pos / Dir / Right / Up / Aspect)
 -> context.activeCamera
+-> RenderLayer::OnUpdate(deltaTime, context)
+-> F 键切换 Blinn / 直接光 PBR / IBL-PBR
+-> G 键切换 Skybox / Irradiance / Prefilter 背景视图
+-> T 键切换 Prefilter 预览 lod
 -> LayerStack::OnRender(context)
 -> RenderLayer 读取 Camera::ViewMat4() / ProjectionMat4()
 
@@ -142,16 +165,28 @@ OBJ(v + vt + vn) + mtllib/usemtl
 -> resource::LoadLitMesh()
 -> 解析 MTL(newmtl + map_Kd)
 -> 解码 PNG/JPG/JPEG 为 Texture2D
--> SceneLayer 持有 OBJ 资源和 model matrix
+-> SceneLayer 持有 OBJ 资源、程序生成的 albedo / metallic / roughness / ao 贴图、model matrix 和场景级 IBL 资源
 -> context.sceneView
+
+程序环境预设
+-> render::ibl::GenerateEnvironmentPreset()
+-> render::ibl::ConvoluteDiffuseIrradiance()
+-> render::ibl::PrefilterEnvironment()
+-> render::ibl::IntegrateBrdfLut()
+-> SceneLayer 持有多套 IBL 预设
+-> RenderLayer / IblPbrShader / SkyboxRenderer 运行时消费
+
+RenderLayer::OnRender()
+-> SkyboxRenderer 按方向采样 EnvironmentMap / PrefilterEnvironmentMap
 -> PipelineStageMachine 驱动固定阶段切换
 -> Pipeline::Run()
--> PipelineStageMachine 内部 FsmBase + handleEvent(PipelineStepEvent{}) 驱动固定阶段切换
 -> vertexShader 输出 clipPos + worldPos + worldNormal + uv
 -> ClipStage 生成 clippedTriangles
 -> RasterStage 生成当前片元批次
--> FragmentStage 采样 Texture2D 并计算基础光照
--> Framebuffer(pixels + depth)
+-> FragmentStage 采样 Texture2D / EnvironmentMap / BRDF LUT
+-> 计算 Blinn-Phong 或直接光 PBR 或 IBL-PBR 光照
+-> Framebuffer(samplePixels + sampleDepth + pixels + depth)
+-> ResolveColor() 将 sample 颜色聚合为最终像素颜色
 -> Window::Present()
 -> Win32 GDI
 ```
@@ -190,8 +225,8 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 **职责**
 
-- 作为运行时总调度器管理生命周期。`r`n- `src/app/layer/` 负责承载 layer 抽象、layer 容器与具体 layer 实现。
-- 持有 `LayerStack`，组织 `OnAttach / OnUpdate / OnRender / OnDetach` 的调用顺序。
+- 作为运行时总调度器管理生命周期。
+- `src/app/layer/` 负责承载 layer 抽象、layer 容器与具体 layer 实现。
 - 在 `Run()` 内创建局部 `LayerContext / Framebuffer / StartupState`。
 - 直接持有 `Window` 并维护主循环、present 与退出流程。
 - 负责调度各 layer，但不拥有 scene/model/render 运行状态本体。
@@ -201,7 +236,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 - 应用标题、窗口宽高。
 - `src/platform` 的窗口、输入和显示能力。
 - `src/app` 内部 layer 提供的逐帧更新与渲染能力。
-- `src/render` 的 `Framebuffer` 和相机数据。
+- `src/render` 的 `Framebuffer`、相机数据和渲染协议。
 
 **输出**
 
@@ -213,8 +248,8 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **边界条件**
 
 - 可以依赖 `platform`、`base`、`resource`、`render`，但不应下沉到 Win32 API。
-- `Application` 负责“调度”，不直接持有具体 `SceneLayer`、`CameraLayer` 或 `RenderLayer`。
-- 相机控制应放在 `CameraLayer::OnUpdate()`，场景装配应放在 `SceneLayer::OnAttach()`，渲染提交应放在 `RenderLayer::OnRender()`。
+- `Application` 负责“调度”，不直接持有具体 `SceneLayer`、`CameraLayer` 或 `RenderLayer` 的实现细节。
+- 相机控制应放在 `CameraLayer::OnUpdate()`，场景装配和环境切换应放在 `SceneLayer::OnAttach()/OnUpdate()`，渲染提交应放在 `RenderLayer::OnRender()`。
 - 不应把 GDI、窗口句柄或资源所有权泄漏到应用接口。
 
 ### 6.3 `src/platform`
@@ -247,29 +282,33 @@ OBJ(v + vt + vn) + mtllib/usemtl
 **职责**
 
 - 持有 CPU 侧渲染核心数据结构与算法。
-- 提供相机、颜色、顶点类型、shader 协议、Program、mesh 容器、Texture2D、无状态 Pipeline 执行器、阶段状态机与 framebuffer。
-- 当前 shader 相关实现集中在 `src/render/shader/`，并以 Lit 渲染链为当前版本唯一保留的材质路径。
+- 提供相机、颜色、顶点类型、shader 协议、Program、mesh 容器、Texture2D、EnvironmentMap、PrefilterEnvironmentMap、无状态 Pipeline 执行器、阶段状态机与 framebuffer。
+- 当前 shader 相关实现集中在 `src/render/shader/`，并保留 `Lit/Blinn-Phong`、`直接光 PBR` 与 `IBL-PBR` 三条材质路径。
+- 负责最小 skybox 渲染与最小 IBL 预计算工具链，包括 `GenerateEnvironmentPreset / ConvoluteDiffuseIrradiance / PrefilterEnvironment / IntegrateBrdfLut`。
+- `SceneLayer -> RenderScenePart / RenderSceneIblResources -> RenderLayer` 构成当前跨层场景协议。
 
 **输入**
 
 - 顶点数据与索引数据。
 - `uniforms` 和 shader 函数指针。
 - `src/base` 提供的向量矩阵运算。
+- 来自 `src/app` 装配的对象材质纹理和场景级 IBL 资源。
 
 **输出**
 
 - 写入 `Framebuffer` 的颜色与深度结果。
+- 面向应用层暴露的环境图采样、skybox 绘制和 IBL 预计算能力。
 
 **边界条件**
 
 - 可以依赖 `base`，不应依赖 `platform` 或 Win32。
 - `Framebuffer` 是渲染结果容器，不负责窗口展示。
 - `Pipeline` 当前是无状态执行器，不负责应用生命周期和消息循环。
-- `Camera / VertexTypes / ShaderTypes / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，shader 相关实现应优先继续收敛在 `src/render/shader/` 内，而不是把材质逻辑写进应用层。
-- `Pipeline` 当前是无状态执行器，不负责应用生命周期和消息循环。
-- `Camera / VertexTypes / ShaderTypes / Texture2D / Program` 共同构成当前渲染层的重要共享协议；其中 `Camera` 负责纯数据和矩阵生成，shader 相关实现应优先继续收敛在 `src/render/shader/` 内，而不是把材质逻辑写进应用层。
+- `Camera / VertexTypes / ShaderTypes / Texture2D / EnvironmentMap / Program` 共同构成当前渲染层的重要共享协议。
+- shader 相关实现应优先继续收敛在 `src/render/shader/` 内，而不是把材质逻辑写进应用层。
 - `PipelineStages` 以固定阶段状态机组织 `Vertex -> Clip -> Raster -> Fragment`，阶段切换参数在 render 内部按固定数据结构传递。
-- 当前实现以三角形列表和模板化 `Pipeline` 为核心；如果未来引入更多图元或阶段，也应尽量保持“渲染层负责渲染，不越界到平台显示”的原则。
+- IBL 预计算目前是最小 CPU 实现，属于渲染层能力的一部分，但不直接承担磁盘资源管理或 UI 配置职责。
+- 当前实现仍以三角形列表和模板化 `Pipeline` 为核心；如果未来引入更多图元或阶段，也应尽量保持“渲染层负责渲染，不越界到平台显示”的原则。
 
 ### 6.5 `src/base`
 
@@ -312,6 +351,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 - 可以依赖 `render` 的顶点/mesh 协议，但不负责窗口显示、主循环或像素写入。
 - 当前只接入最小 OBJ loader、最小 MTL(base color) 解析和 PNG/JPG/JPEG 外部纹理解码。
+- 当前 IBL 资源仍由 `SceneLayer + render::ibl` 在运行时程序生成，尚未形成外部 `.hdr` / 预计算缓存的通用加载链。
 - 如果后续资源种类继续增多，应优先在 `resource` 目录内扩展，而不是把解析逻辑散落到 `app` 或 `render`。
 
 ### 6.7 `assets`
@@ -320,6 +360,7 @@ OBJ(v + vt + vn) + mtllib/usemtl
 
 - 存放模型、纹理、测试数据等静态资产。
 - 当前已提供 `assets/models/cube.obj`、`assets/models/cube.mtl` 和 `assets/textures/cube-basecolor.png` 作为最小外部纹理加载链路的测试资源。
+- `assets/hdr/` 当前仍是为后续真实环境资源预留的位置，当前 IBL 演示主要依赖程序生成环境预设。
 
 **边界条件**
 
@@ -365,8 +406,9 @@ src/base -> 无上层依赖
 - `Framebuffer` 是渲染结果的唯一主容器，窗口显示只消费它，不替代它。
 - 平台显示和软光栅算法分层明确，平台层不实现渲染主线，渲染层不处理消息泵。
 - 数学层保持纯工具属性，为应用装配和渲染执行同时服务。
-- 当前渲染链以 `Camera + VertexTypes + ShaderTypes + Program + Pipeline + PipelineStages + Mesh + Texture2D + Framebuffer` 为基础协议。
-- 当前 viewer 运行时只保留 OBJ 模型加载与渲染路径。
+- 当前渲染链以 `Camera + VertexTypes + ShaderTypes + Program + Pipeline + PipelineStages + Mesh + Texture2D + EnvironmentMap + Framebuffer` 为基础协议。
+- 当前 viewer 运行时保留 OBJ 模型加载路径，并在渲染层提供 `Blinn-Phong / 直接光 PBR / IBL-PBR` 三条材质路径。
+- 当前 IBL 采用“程序环境预设 + 启动期 CPU 预计算 + 运行时切换”的最小闭环，而不是完整外部 HDR 资源工作流。
 
 ## 9. 什么时候必须更新这份架构图
 
@@ -381,10 +423,10 @@ src/base -> 无上层依赖
 
 如果只是以下情况，通常不需要更新本文件：
 
-- 单个函数重命名
-- 模块内部私有实现重构
-- 不影响职责边界的局部性能优化
-- 不改变调用方向的文件拆分
+- 单个函数重命名。
+- 模块内部私有实现重构。
+- 不影响职责边界的局部性能优化。
+- 不改变调用方向的文件拆分。
 
 ## 10. 开发前阅读建议
 
@@ -395,8 +437,3 @@ src/base -> 无上层依赖
 3. 本次功能已有的 `docs/features/<feature-name>.md`，如果它已经存在。
 
 如果发现“代码现状”和“本文档”不一致，应优先指出差异，并在实现或 review 迭代中补齐更新。
-
-
-
-
-

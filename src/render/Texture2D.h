@@ -31,44 +31,12 @@ public:
 
     Color Sample(const math::Vec2& uv) const
     {
-        if (Empty()) {
-            return {};
-        }
+        return SampleImpl(uv, false);
+    }
 
-        const float u = math::Clamp(uv.x, 0.0f, 1.0f);
-        const float v = math::Clamp(uv.y, 0.0f, 1.0f);
-
-        const float texelX = u * static_cast<float>(m_Width - 1);
-        const float texelY = (1.0f - v) * static_cast<float>(m_Height - 1);
-
-        const int x0 = static_cast<int>(texelX);
-        const int y0 = static_cast<int>(texelY);
-        const int x1 = std::min(x0 + 1, m_Width - 1);
-        const int y1 = std::min(y0 + 1, m_Height - 1);
-
-        const float fracX = texelX - static_cast<float>(x0);
-        const float fracY = texelY - static_cast<float>(y0);
-
-        const Color c00 = Texel(x0, y0);
-        const Color c10 = Texel(x1, y0);
-        const Color c01 = Texel(x0, y1);
-        const Color c11 = Texel(x1, y1);
-
-        const float topR = math::Lerp(c00.RedFloat(), c10.RedFloat(), fracX);
-        const float topG = math::Lerp(c00.GreenFloat(), c10.GreenFloat(), fracX);
-        const float topB = math::Lerp(c00.BlueFloat(), c10.BlueFloat(), fracX);
-        const float topA = math::Lerp(c00.AlphaFloat(), c10.AlphaFloat(), fracX);
-
-        const float bottomR = math::Lerp(c01.RedFloat(), c11.RedFloat(), fracX);
-        const float bottomG = math::Lerp(c01.GreenFloat(), c11.GreenFloat(), fracX);
-        const float bottomB = math::Lerp(c01.BlueFloat(), c11.BlueFloat(), fracX);
-        const float bottomA = math::Lerp(c01.AlphaFloat(), c11.AlphaFloat(), fracX);
-
-        return Color::FromFloats(
-            math::Lerp(topR, bottomR, fracY),
-            math::Lerp(topG, bottomG, fracY),
-            math::Lerp(topB, bottomB, fracY),
-            math::Lerp(topA, bottomA, fracY));
+    Color SampleWrapped(const math::Vec2& uv) const
+    {
+        return SampleImpl(uv, true);
     }
 
     static Texture2D MakeDebugUvTexture(int width, int height)
@@ -114,6 +82,77 @@ public:
     }
 
 private:
+    Color SampleImpl(const math::Vec2& uv, bool wrapHorizontal) const
+    {
+        if (Empty()) {
+            return {};
+        }
+
+        float u = uv.x;
+        if (wrapHorizontal) {
+            u = u - std::floor(u);
+            if (u < 0.0f) {
+                u += 1.0f;
+            }
+        } else {
+            u = math::Clamp(u, 0.0f, 1.0f);
+        }
+
+        const float v = math::Clamp(uv.y, 0.0f, 1.0f);
+
+        const float texelX = u * static_cast<float>(m_Width - 1);
+        const float texelY = (1.0f - v) * static_cast<float>(m_Height - 1);
+
+        const int x0 = static_cast<int>(texelX);
+        const int y0 = static_cast<int>(texelY);
+        const int x1 = wrapHorizontal
+            ? WrapX(x0 + 1)
+            : std::min(x0 + 1, m_Width - 1);
+        const int y1 = std::min(y0 + 1, m_Height - 1);
+
+        const float fracX = texelX - static_cast<float>(x0);
+        const float fracY = texelY - static_cast<float>(y0);
+
+        const Color c00 = Texel(WrapOrClampX(x0, wrapHorizontal), y0);
+        const Color c10 = Texel(x1, y0);
+        const Color c01 = Texel(WrapOrClampX(x0, wrapHorizontal), y1);
+        const Color c11 = Texel(x1, y1);
+
+        const float topR = math::Lerp(c00.RedFloat(), c10.RedFloat(), fracX);
+        const float topG = math::Lerp(c00.GreenFloat(), c10.GreenFloat(), fracX);
+        const float topB = math::Lerp(c00.BlueFloat(), c10.BlueFloat(), fracX);
+        const float topA = math::Lerp(c00.AlphaFloat(), c10.AlphaFloat(), fracX);
+
+        const float bottomR = math::Lerp(c01.RedFloat(), c11.RedFloat(), fracX);
+        const float bottomG = math::Lerp(c01.GreenFloat(), c11.GreenFloat(), fracX);
+        const float bottomB = math::Lerp(c01.BlueFloat(), c11.BlueFloat(), fracX);
+        const float bottomA = math::Lerp(c01.AlphaFloat(), c11.AlphaFloat(), fracX);
+
+        return Color::FromFloats(
+            math::Lerp(topR, bottomR, fracY),
+            math::Lerp(topG, bottomG, fracY),
+            math::Lerp(topB, bottomB, fracY),
+            math::Lerp(topA, bottomA, fracY));
+    }
+
+    int WrapX(int x) const
+    {
+        if (m_Width <= 0) {
+            return 0;
+        }
+
+        int wrapped = x % m_Width;
+        if (wrapped < 0) {
+            wrapped += m_Width;
+        }
+        return wrapped;
+    }
+
+    int WrapOrClampX(int x, bool wrapHorizontal) const
+    {
+        return wrapHorizontal ? WrapX(x) : std::clamp(x, 0, m_Width - 1);
+    }
+
     Color Texel(int x, int y) const
     {
         return m_Pixels[static_cast<std::size_t>(y * m_Width + x)];
